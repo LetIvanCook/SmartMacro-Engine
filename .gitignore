@@ -1,0 +1,38 @@
+## ── Build Artifacts ──────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## ── IDE / Editor ────────────────────────────────────────────
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## ── NuGet ────────────────────────────────────────────────────
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## ── Test Results ─────────────────────────────────────────────
+TestResults/
+coverage*.xml
+coverage*.json
+*.trx
+
+## ── OS Files ─────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+## ── Publish / Deployment ─────────────────────────────────────
+publish/
+*.azw
+*.zip
