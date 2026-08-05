@@ -1,0 +1,94 @@
+# ============================================================
+# SmartMacro Engine — .NET 8 CI Pipeline
+# ============================================================
+# Kích hoạt khi có Pull Request vào nhánh main.
+# Pipeline thực hiện: Restore → Build (Release) → Test + Coverage.
+# Nếu bất kỳ bước nào thất bại, toàn bộ workflow sẽ báo lỗi.
+# ============================================================
+
+name: .NET CI
+
+on:
+  pull_request:
+    branches: [main]
+
+# Hủy các run cũ nếu có push mới vào cùng PR — tiết kiệm minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET 8)
+    runs-on: ubuntu-latest
+
+    steps:
+      # ────────────────────────────────────────────────────────
+      # 1. Checkout source code
+      # ────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ────────────────────────────────────────────────────────
+      # 2. Setup .NET 8 SDK
+      # ────────────────────────────────────────────────────────
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # ────────────────────────────────────────────────────────
+      # 3. Restore dependencies
+      # ────────────────────────────────────────────────────────
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # ────────────────────────────────────────────────────────
+      # 4. Build (Release) — thất bại ở đây sẽ dừng pipeline
+      # ────────────────────────────────────────────────────────
+      - name: Build (Release)
+        run: dotnet build --no-restore --configuration Release
+
+      # ────────────────────────────────────────────────────────
+      # 5. Run Unit Tests + Code Coverage (Coverlet)
+      # ────────────────────────────────────────────────────────
+      # --collect:"XPlat Code Coverage"  → Coverlet thu thập coverage
+      # --results-directory              → Gom tất cả output vào 1 thư mục
+      # --logger trx                     → Xuất kết quả test dạng TRX
+      #                                    để upload artifact nếu cần
+      # ────────────────────────────────────────────────────────
+      - name: Run Unit Tests with Coverage
+        run: |
+          dotnet test --no-build --configuration Release \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults \
+            --logger "trx;LogFileName=test-results.trx" \
+            --verbosity normal
+
+      # ────────────────────────────────────────────────────────
+      # 6. Upload Test Results & Coverage (luôn chạy, kể cả fail)
+      # ────────────────────────────────────────────────────────
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ./TestResults
+          retention-days: 14
+
+      # ────────────────────────────────────────────────────────
+      # 7. Tạo Coverage Report dạng Markdown trên PR Summary
+      # ────────────────────────────────────────────────────────
+      - name: Generate Coverage Report Summary
+        if: always()
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ./TestResults/**/coverage.cobertura.xml
+          badge: true
+          format: markdown
+          output: both
+          thresholds: "50 75"
+
+      - name: Publish Coverage to Job Summary
+        if: always()
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
