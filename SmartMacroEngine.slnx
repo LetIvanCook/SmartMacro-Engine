@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SmartMacro.Api/SmartMacro.Api.csproj" />
+  <Project Path="SmartMacro.Tests/SmartMacro.Tests.csproj" />
+</Solution>
