@@ -84,7 +84,13 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IMacroOptimizationEngine, MacroOptimizationEngine>();
 builder.Services.AddScoped<IOptimizationService, OptimizationService>();
 
+// ── Exception Handling ──────────────────────────────────────────
+builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
+app.UseExceptionHandler(); // Phải nằm trên cùng của request pipeline
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
