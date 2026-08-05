@@ -82,6 +82,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IMacroOptimizationEngine, MacroOptimizationEngine>();
+builder.Services.AddScoped<IOptimizationService, OptimizationService>();
 
 var app = builder.Build();
 
