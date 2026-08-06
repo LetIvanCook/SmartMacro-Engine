@@ -50,7 +50,22 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       # ────────────────────────────────────────────────────────
-      # 5. Run Unit Tests + Code Coverage (Coverlet)
+      # 5. Kiểm tra Model đồng bộ với Migration (EF Core guard)
+      # ────────────────────────────────────────────────────────
+      # Fail nếu có ai sửa entity mà quên tạo migration mới.
+      # Phải restore local tool trước vì runner dùng dotnet-tools.json.
+      # ────────────────────────────────────────────────────────
+      - name: Restore .NET local tools
+        run: dotnet tool restore
+
+      - name: Check for pending EF model changes
+        run: |
+          dotnet tool run dotnet-ef migrations has-pending-model-changes \
+            --project SmartMacro.Api \
+            --startup-project SmartMacro.Api
+
+      # ────────────────────────────────────────────────────────
+      # 6. Run Unit Tests + Code Coverage (Coverlet)
       # ────────────────────────────────────────────────────────
       # --collect:"XPlat Code Coverage"  → Coverlet thu thập coverage
       # --results-directory              → Gom tất cả output vào 1 thư mục

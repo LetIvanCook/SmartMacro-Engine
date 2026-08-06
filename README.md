@@ -25,7 +25,7 @@
 | Layer | Technology |
 |---|---|
 | **Framework** | .NET 8 / C# Web API |
-| **Database ORM** | Entity Framework Core 8 (Database-First Approach) |
+| **Database ORM** | Entity Framework Core 8 (Code-First Migrations) |
 | **Database Engine** | SQL Server (via SQL Server Express / SSMS) |
 | **Security** | JWT (JSON Web Tokens) & BCrypt Password Hashing |
 | **Algorithm Engine** | Google.OrTools — GLOP Linear Solver |
@@ -33,6 +33,40 @@
 | **API Documentation** | Swashbuckle (Swagger UI) |
 | **Testing** | xUnit, Moq, FluentAssertions, Coverlet (Code Coverage) |
 | **CI/CD** | GitHub Actions (.NET 8 Build → Test → Coverage Report) |
+
+---
+
+## 🚀 Getting Started (Setup cho Dev mới)
+
+### Yêu cầu
+- .NET 8 SDK
+- SQL Server Express (hoặc bất kỳ SQL Server instance nào)
+- `dotnet-ef` tool (đã có trong `dotnet-tools.json` — tự động restore)
+
+### Các bước
+
+```bash
+# 1. Clone repo
+git clone https://github.com/LetIvanCook/SmartMacro-Engine.git
+cd SmartMacro-Engine
+
+# 2. Restore tools (.NET local tools — bao gồm dotnet-ef)
+dotnet tool restore
+
+# 3. Cấu hình connection string
+# Sửa Server= trong SmartMacro.Api/appsettings.json cho phù hợp môi trường của bạn.
+# Mặc định: Server=.\SQLEXPRESS;Database=SmartMacroEngine
+
+# 4. Tạo database từ migrations (không cần chạy SQL script thủ công)
+dotnet tool run dotnet-ef database update --project SmartMacro.Api --startup-project SmartMacro.Api
+
+# 5. Chạy API
+dotnet run --project SmartMacro.Api
+```
+
+> **Lưu ý:** Sau bước 4, database sẽ được tạo hoàn chỉnh gồm tất cả bảng, index,
+> và constraint. Không cần script SQL bổ sung. Nếu có migration mới sau khi pull code,
+> chạy lại lệnh `database update` là đủ.
 
 ---
 
