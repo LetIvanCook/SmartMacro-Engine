@@ -41,5 +41,23 @@ public class SmartMacroMappingProfile : Profile
         // Mapping 1:1, chỉ giữ lại 4 cột macro — bỏ qua TargetId,
         // UserId, ComputedFromRuleId, CreatedAt.
         CreateMap<DailyTarget, DailyTargetDto>();
+
+        // ──────────────────────────────────────────────────────────────
+        // Food → FoodResponseDto
+        // ──────────────────────────────────────────────────────────────
+        // Hầu hết field map 1:1 theo convention.
+        // CategoryName được project từ navigation property Category
+        // → EF Core sinh LEFT JOIN food_categories, SELECT category_name.
+        CreateMap<Food, FoodResponseDto>()
+            .ForMember(dest => dest.CategoryName,
+                       opt => opt.MapFrom(src => src.Category != null
+                           ? src.Category.CategoryName
+                           : null));
+
+        // ──────────────────────────────────────────────────────────────
+        // FoodCategory → FoodCategoryResponseDto
+        // ──────────────────────────────────────────────────────────────
+        // Mapping 1:1 theo convention — CategoryId, CategoryName.
+        CreateMap<FoodCategory, FoodCategoryResponseDto>();
     }
 }
