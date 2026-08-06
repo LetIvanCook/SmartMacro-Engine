@@ -93,6 +93,24 @@ public class InventoryServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task GetMyInventoryAsync_ReturnsCorrectExpiryDate()
+    {
+        // Arrange
+        SeedUser(1);
+        SeedFood(1, "Ga");
+        var expiry = new DateOnly(2030, 5, 20);
+        SeedInventory(1, 1, 1, 100m, expiry);
+        await _db.SaveChangesAsync();
+
+        // Act
+        var result = await _sut.GetMyInventoryAsync(1);
+
+        // Assert
+        result.Should().HaveCount(1);
+        result[0].ExpiryDate.Should().Be(expiry);
+    }
+
+    [Fact]
     public async Task AddItemAsync_ValidData_CreatesNewRecord()
     {
         // Arrange
