@@ -86,6 +86,7 @@ builder.Services.AddScoped<IOptimizationService, OptimizationService>();
 builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IFoodCategoryService, FoodCategoryService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IDailyTargetService, DailyTargetService>();
 
 // ── Exception Handling ──────────────────────────────────────────
 builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();
