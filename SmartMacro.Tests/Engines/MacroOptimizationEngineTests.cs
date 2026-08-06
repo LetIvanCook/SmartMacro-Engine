@@ -24,9 +24,9 @@ public class MacroOptimizationEngineTests
     private readonly MacroOptimizationEngine _engine = new();
 
     // ══════════════════════════════════════════════════════════════
-    // HELPER: Tạo InventoryItemDto nhanh
+    // HELPER: Tạo InventoryItemResponseDto nhanh
     // ══════════════════════════════════════════════════════════════
-    private static InventoryItemDto CreateFood(
+    private static InventoryItemResponseDto CreateFood(
         long foodId, string name, decimal quantityGrams,
         decimal kcal, decimal protein, decimal carbs, decimal fat)
         => new()
@@ -58,7 +58,7 @@ public class MacroOptimizationEngineTests
             TargetFatG = 66m
         };
 
-        var inventory = new List<InventoryItemDto>
+        var inventory = new List<InventoryItemResponseDto>
         {
             //                          ID   Name             Qty     Kcal  Pro   Carb  Fat
             CreateFood(1, "Ức gà",       5000m, 165m, 31m,  0m,   3.6m),
@@ -121,7 +121,7 @@ public class MacroOptimizationEngineTests
             TargetFatG = 0m
         };
 
-        var inventory = new List<InventoryItemDto>
+        var inventory = new List<InventoryItemResponseDto>
         {
             CreateFood(1, "Whey Protein Isolate", 500m, 360m, 90m, 0m, 0m)
         };
@@ -165,7 +165,7 @@ public class MacroOptimizationEngineTests
             TargetFatG = 0m
         };
 
-        var inventory = new List<InventoryItemDto>
+        var inventory = new List<InventoryItemResponseDto>
         {
             CreateFood(1, "Ức gà", 50m, 165m, 31m, 0m, 3.6m)
         };
@@ -202,7 +202,7 @@ public class MacroOptimizationEngineTests
             TargetFatG = 0m
         };
 
-        var inventory = new List<InventoryItemDto>
+        var inventory = new List<InventoryItemResponseDto>
         {
             CreateFood(1, "Dầu ăn",        1000m, 884m, 0m, 0m, 100m),
             CreateFood(2, "Bơ đậu phộng",  1000m, 588m, 25m, 20m, 50m)
@@ -237,7 +237,7 @@ public class MacroOptimizationEngineTests
             TargetFatG = 66m
         };
 
-        var emptyInventory = new List<InventoryItemDto>();
+        var emptyInventory = new List<InventoryItemResponseDto>();
 
         // ── Act ─────────────────────────────────────────────────
         // Không được ném Exception — phải trả về kết quả an toàn

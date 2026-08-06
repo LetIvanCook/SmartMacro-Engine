@@ -108,7 +108,7 @@ public class OptimizationServiceTests : IDisposable
         _db.UserFoodInventories.Add(inventory);
         await _db.SaveChangesAsync();
 
-        _mockEngine.Setup(e => e.CalculateOptimalMeal(It.IsAny<DailyTargetDto>(), It.IsAny<List<InventoryItemDto>>()))
+        _mockEngine.Setup(e => e.CalculateOptimalMeal(It.IsAny<DailyTargetDto>(), It.IsAny<List<InventoryItemResponseDto>>()))
             .Returns(new OptimizationResult
             {
                 IsSuccessful = false,
@@ -167,7 +167,7 @@ public class OptimizationServiceTests : IDisposable
             }
         };
 
-        _mockEngine.Setup(e => e.CalculateOptimalMeal(It.IsAny<DailyTargetDto>(), It.IsAny<List<InventoryItemDto>>()))
+        _mockEngine.Setup(e => e.CalculateOptimalMeal(It.IsAny<DailyTargetDto>(), It.IsAny<List<InventoryItemResponseDto>>()))
             .Returns(mockEngineResult);
 
         var request = new OptimizationRequestDto();
