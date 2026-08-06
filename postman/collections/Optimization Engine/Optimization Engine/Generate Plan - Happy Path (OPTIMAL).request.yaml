@@ -1,0 +1,56 @@
+$kind: http-request
+name: Generate Plan - Happy Path (OPTIMAL)
+method: POST
+url: '{{baseUrl}}/api/optimizations/generate-plan'
+order: 1000
+description: |-
+  User has a valid DailyTarget + non-empty inventory.
+  Expect 200 OK. SolverStatus should be OPTIMAL (accepts FEASIBLE as also-successful).
+  When successful, AllocatedItems is populated and AchievedMacros fields are non-null.
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{jwt_token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": null,
+      "includeFoodIds": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const body = pm.response.json();
+
+      pm.test("SolverStatus is OPTIMAL or FEASIBLE", function () {
+          pm.expect(body).to.have.property("solverStatus");
+          pm.expect(["OPTIMAL", "FEASIBLE"]).to.include(body.solverStatus);
+      });
+
+      pm.test("AllocatedItems has at least one item", function () {
+          pm.expect(body.allocatedItems).to.be.an("array");
+          pm.expect(body.allocatedItems.length).to.be.above(0);
+      });
+
+      pm.test("AchievedMacros exists with non-null fields", function () {
+          pm.expect(body).to.have.property("achievedMacros");
+          const m = body.achievedMacros;
+          pm.expect(m.kcal, "kcal").to.not.be.null;
+          pm.expect(m.proteinG, "proteinG").to.not.be.null;
+          pm.expect(m.carbsG, "carbsG").to.not.be.null;
+          pm.expect(m.fatG, "fatG").to.not.be.null;
+      });
+
+      pm.test("TargetMacros exists", function () {
+          pm.expect(body).to.have.property("targetMacros");
+      });

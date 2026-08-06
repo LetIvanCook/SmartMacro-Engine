@@ -1,0 +1,9 @@
+# Use this workspace to collaborate
+workspace:
+  id: c0b26f90-9e4b-4bb3-8d29-ad10d1839ec7
+
+localResources:
+  specs:
+    - ../SmartMacro.Api/obj/Debug/net8.0/EndpointInfo/SmartMacro.Api.json
+  documents:
+    - ../README.md

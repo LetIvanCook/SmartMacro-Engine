@@ -1,0 +1,40 @@
+$kind: http-request
+name: Generate Plan - Empty Inventory
+method: POST
+url: '{{baseUrl}}/api/optimizations/generate-plan'
+order: 2000
+description: |-
+  User has a DailyTarget but inventory is empty.
+  VERIFIED: EmptyInventoryException maps to 422 Unprocessable Entity in
+  GlobalExceptionHandler.cs (NOT 400). Response is an RFC7807 ProblemDetails.
+  Set collection variable emptyInventoryTargetId to a DailyTarget id whose user has no inventory,
+  or seed a user with an empty inventory and log in as that user before running.
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{jwt_token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": {{emptyInventoryTargetId}},
+      "includeFoodIds": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 422 Unprocessable Entity (EmptyInventoryException mapping)", function () {
+          pm.response.to.have.status(422);
+      });
+
+      pm.test("Body is RFC7807 ProblemDetails", function () {
+          const body = pm.response.json();
+          pm.expect(body).to.have.property("status", 422);
+          pm.expect(body).to.have.property("title");
+          pm.expect(body).to.have.property("detail");
+      });

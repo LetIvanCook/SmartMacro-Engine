@@ -1,0 +1,12 @@
+$kind: collection
+name: SmartMacro Engine API
+variables:
+  baseUrl: http://localhost:5168
+  authToken: ""
+  userId: ""
+auth:
+  - id: 2227cd52-ce45-461f-9220-3da24dc2bfe4
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: "{{jwt_token}}"

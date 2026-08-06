@@ -1,0 +1,33 @@
+$kind: http-request
+name: Login
+method: POST
+url: "{{baseUrl}}/api/auth/login"
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt_token}}"
+scripts:
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+  - type: afterResponse
+    code: "var response = pm.response.json();\r
+
+      if (response.token) {\r
+
+      \    pm.environment.set(\"jwt_token\", response.token);\r
+
+      \    console.log(\"Đã lưu Token thành công vào Môi trường!\");\r
+
+      }"
+    language: text/javascript
+order: 2000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user4@example.com",
+      "password": "Password123!"
+    }

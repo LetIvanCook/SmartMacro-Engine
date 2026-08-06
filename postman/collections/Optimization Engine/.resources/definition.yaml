@@ -1,0 +1,22 @@
+$kind: collection
+name: Optimization Engine
+description: |-
+  Integration / contract tests for POST /api/optimizations/generate-plan.
+
+  VERIFIED CONTRACT (read from source, not guessed):
+  - userId is taken from the JWT NameIdentifier claim, NOT from the route.
+  - NotFoundException  -> 404 + RFC7807 ProblemDetails (Title "Resource Not Found").
+  - EmptyInventoryException -> 422 Unprocessable Entity (NOT 400) + ProblemDetails.
+  - Unhandled -> 500 (framework default ProblemDetails).
+  - SolverStatus is one of OPTIMAL | FEASIBLE | INFEASIBLE.
+  - INFEASIBLE still returns 200 OK with empty AllocatedItems.
+
+  Tests are plain pm.test / pm.expect so they run in Collection Runner, Postman CLI and CI.
+variables:
+  baseUrl: http://localhost:5168
+  loginEmail: user@example.com
+  loginPassword: Password123!
+  emptyInventoryTargetId: ""
+  noTargetUserToken: ""
+  infeasibleTargetId: ""
+  jwt_token: ""

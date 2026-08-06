@@ -1,0 +1,40 @@
+$kind: http-request
+name: Generate Plan - No Daily Target
+method: POST
+url: '{{baseUrl}}/api/optimizations/generate-plan'
+order: 3000
+description: |-
+  User has no DailyTarget for today (and no matching dailyTargetId).
+  VERIFIED: NotFoundException maps to 404 with RFC7807 ProblemDetails
+  (Title "Resource Not Found").
+  To trigger reliably, log in as a user with no DailyTarget, OR the default
+  (dailyTargetId omitted) path will 404 if no target exists for today.
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{jwt_token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": 999999999,
+      "includeFoodIds": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 404 Not Found", function () {
+          pm.response.to.have.status(404);
+      });
+
+      pm.test("Body is RFC7807 ProblemDetails", function () {
+          const body = pm.response.json();
+          pm.expect(body).to.have.property("status", 404);
+          pm.expect(body).to.have.property("title");
+          pm.expect(body).to.have.property("detail");
+      });

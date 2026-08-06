@@ -1,0 +1,8 @@
+name: Local - Dev
+values:
+  - key: baseUrl
+    value: 'http://localhost:5168'
+  - key: jwt_token
+    value: ''
+  - key: userId
+    value: ''

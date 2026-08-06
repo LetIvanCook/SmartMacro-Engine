@@ -1,0 +1,35 @@
+$kind: http-request
+name: Login - Get Token
+method: POST
+url: '{{baseUrl}}/api/auth/login'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{loginEmail}}",
+      "password": "{{loginPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Login returns 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response contains a JWT token", function () {
+          const body = pm.response.json();
+          pm.expect(body).to.have.property("token").that.is.a("string").and.not.empty;
+          pm.collectionVariables.set("jwt_token", body.token);
+          pm.environment.set("jwt_token", body.token);
+      });
+
+      pm.test("Response contains userId", function () {
+          const body = pm.response.json();
+          pm.expect(body).to.have.property("userId");
+          pm.environment.set("userId", String(body.userId));
+      });

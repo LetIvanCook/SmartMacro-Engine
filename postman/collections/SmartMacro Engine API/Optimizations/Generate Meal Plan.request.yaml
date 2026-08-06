@@ -1,0 +1,25 @@
+$kind: http-request
+name: Generate Meal Plan
+method: POST
+url: "{{baseUrl}}/api/optimizations/generate-plan"
+scripts:
+  - type: afterResponse
+    code: ""
+    language: text/javascript
+  - type: beforeRequest
+    code: ""
+    language: text/javascript
+order: 1000
+auth:
+  type: bearer
+  credentials:
+    token: "{{authToken}}"
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": 1,
+      "includeFoodIds": [1, 2, 3]
+    }

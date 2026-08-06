@@ -1,0 +1,28 @@
+$kind: http-request
+name: Generate Plan - Unauthorized
+method: POST
+url: '{{baseUrl}}/api/optimizations/generate-plan'
+order: 4000
+description: |-
+  No Authorization header sent. The [Authorize] attribute on
+  OptimizationsController rejects the request before the action runs.
+  Expect 401 Unauthorized.
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": null,
+      "includeFoodIds": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 401 Unauthorized", function () {
+          pm.response.to.have.status(401);
+      });

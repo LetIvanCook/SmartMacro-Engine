@@ -1,0 +1,45 @@
+$kind: http-request
+name: Generate Plan - Infeasible Macros
+method: POST
+url: '{{baseUrl}}/api/optimizations/generate-plan'
+order: 5000
+description: |-
+  Data where the solver cannot satisfy the macro constraints.
+  VERIFIED: this is NOT an error path. Service returns 200 OK with
+  SolverStatus "INFEASIBLE" and empty AllocatedItems (engineResult.IsSuccessful == false).
+  Set collection variable infeasibleTargetId to a DailyTarget id whose inventory
+  cannot meet the target. If you cannot seed contradictory data, this request will
+  likely return OPTIMAL/FEASIBLE instead - review rather than trust blindly.
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{jwt_token}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "dailyTargetId": {{infeasibleTargetId}},
+      "includeFoodIds": null
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK (infeasible is not an error)", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const body = pm.response.json();
+
+      pm.test("SolverStatus is INFEASIBLE", function () {
+          pm.expect(body).to.have.property("solverStatus", "INFEASIBLE");
+      });
+
+      pm.test("AllocatedItems is empty or null when INFEASIBLE", function () {
+          const items = body.allocatedItems;
+          pm.expect(items == null || (Array.isArray(items) && items.length === 0)).to.be.true;
+      });
