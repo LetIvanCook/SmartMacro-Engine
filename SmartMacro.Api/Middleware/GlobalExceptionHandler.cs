@@ -13,6 +13,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var (statusCode, title, detail) = exception switch
         {
+            ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             NotFoundException => (StatusCodes.Status404NotFound, "Resource Not Found", exception.Message),
             EmptyInventoryException => (StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity", exception.Message),
             ConflictException => (StatusCodes.Status409Conflict, "Conflict", exception.Message),

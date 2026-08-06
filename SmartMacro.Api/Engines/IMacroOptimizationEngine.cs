@@ -20,5 +20,5 @@ public interface IMacroOptimizationEngine
     /// </returns>
     OptimizationResult CalculateOptimalMeal(
         DailyTargetDto target,
-        List<InventoryItemDto> availableInventory);
+        List<InventoryItemResponseDto> availableInventory);
 }

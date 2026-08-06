@@ -15,13 +15,13 @@ public class SmartMacroMappingProfile : Profile
     public SmartMacroMappingProfile()
     {
         // ──────────────────────────────────────────────────────────────
-        // UserFoodInventory → InventoryItemDto
+        // UserFoodInventory → InventoryItemResponseDto
         // ──────────────────────────────────────────────────────────────
         // Khi dùng ProjectTo, EF Core sẽ sinh JOIN giữa user_food_inventory
         // và foods, rồi SELECT chỉ 5 cột: inventory_id, food_name,
         // quantity_grams, kcal_per_100g, protein_g_per_100g.
         // Không có Include(), không kéo toàn bộ entity lên RAM.
-        CreateMap<UserFoodInventory, InventoryItemDto>()
+        CreateMap<UserFoodInventory, InventoryItemResponseDto>()
             .ForMember(dest => dest.FoodId,
                        opt => opt.MapFrom(src => src.FoodId))
             .ForMember(dest => dest.FoodName,

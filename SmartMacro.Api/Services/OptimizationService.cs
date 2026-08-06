@@ -60,7 +60,7 @@ public class OptimizationService : IOptimizationService
         }
 
         var availableInventory = await inventoryQuery
-            .ProjectTo<InventoryItemDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<InventoryItemResponseDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
         // 3. Nếu inventory rỗng

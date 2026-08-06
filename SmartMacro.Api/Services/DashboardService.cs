@@ -51,11 +51,11 @@ public class DashboardService : IDashboardService
             .FirstOrDefaultAsync();
 
         // Luồng 3: Kho thực phẩm còn hàng (quantity > 0).
-        // ProjectTo<InventoryItemDto> sẽ sinh JOIN foods ON food_id
+        // ProjectTo<InventoryItemResponseDto> sẽ sinh JOIN foods ON food_id
         // và SELECT chỉ 5 cột cần thiết — không kéo toàn bộ Food entity.
         var inventoryTask = _db.UserFoodInventories
             .Where(inv => inv.UserId == userId && inv.QuantityGrams > 0)
-            .ProjectTo<InventoryItemDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<InventoryItemResponseDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
         // Chờ cả 3 task hoàn thành song song.

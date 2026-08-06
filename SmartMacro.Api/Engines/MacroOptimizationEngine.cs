@@ -31,7 +31,7 @@ public class MacroOptimizationEngine : IMacroOptimizationEngine
     /// <inheritdoc />
     public OptimizationResult CalculateOptimalMeal(
         DailyTargetDto target,
-        List<InventoryItemDto> availableInventory)
+        List<InventoryItemResponseDto> availableInventory)
     {
         // ──────────────────────────────────────────────────────────────
         // Guard clauses
@@ -57,7 +57,7 @@ public class MacroOptimizationEngine : IMacroOptimizationEngine
     /// </summary>
     private OptimizationResult SolveLinearProgram(
         DailyTargetDto target,
-        List<InventoryItemDto> inventory)
+        List<InventoryItemResponseDto> inventory)
     {
         // ──────────────────────────────────────────────────────────────
         // 1. Khởi tạo Solver
@@ -213,8 +213,8 @@ public class MacroOptimizationEngine : IMacroOptimizationEngine
     private static void AddMacroConstraint(
         Solver solver,
         Variable[] grams,
-        List<InventoryItemDto> inventory,
-        Func<InventoryItemDto, double> getMacroPer100g,
+        List<InventoryItemResponseDto> inventory,
+        Func<InventoryItemResponseDto, double> getMacroPer100g,
         double targetValue,
         string macroName)
     {

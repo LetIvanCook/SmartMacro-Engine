@@ -4,7 +4,7 @@ namespace SmartMacro.Api.DTOs;
 /// Phẳng hóa dữ liệu từ UserFoodInventory + Food thành một DTO duy nhất.
 /// Mỗi item đại diện cho một dòng trong kho thực phẩm đang còn hàng.
 /// </summary>
-public class InventoryItemDto
+public class InventoryItemResponseDto
 {
     public long InventoryId { get; set; }
 
@@ -48,5 +48,5 @@ public class UserDashboardResponseDto
     public DailyTargetDto? TodayTarget { get; set; }
 
     /// <summary>Danh sách thực phẩm trong kho còn số lượng > 0.</summary>
-    public List<InventoryItemDto> AvailableInventory { get; set; } = new();
+    public List<InventoryItemResponseDto> AvailableInventory { get; set; } = new();
 }
