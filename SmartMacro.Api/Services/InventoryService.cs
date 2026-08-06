@@ -36,9 +36,12 @@ public class InventoryService : IInventoryService
         if (!foodExists)
             throw new NotFoundException($"Thực phẩm với ID {request.FoodId} không tồn tại.");
 
-        // Check for existing item without ExpiryDate to merge, respecting unique constraint on (UserId, FoodId, ExpiryDate)
+        if (request.ExpiryDate.HasValue && request.ExpiryDate.Value < DateOnly.FromDateTime(DateTime.Today))
+            throw new ArgumentException("Hạn sử dụng không được nằm trong quá khứ.");
+
+        // Check for existing item with matching ExpiryDate to merge, respecting unique constraint on (UserId, FoodId, ExpiryDate)
         var existingItem = await _db.UserFoodInventories
-            .FirstOrDefaultAsync(i => i.UserId == userId && i.FoodId == request.FoodId && i.ExpiryDate == null);
+            .FirstOrDefaultAsync(i => i.UserId == userId && i.FoodId == request.FoodId && i.ExpiryDate == request.ExpiryDate);
 
         long inventoryIdToReturn;
 
@@ -55,6 +58,7 @@ public class InventoryService : IInventoryService
                 UserId = userId,
                 FoodId = request.FoodId,
                 QuantityGrams = request.QuantityGrams,
+                ExpiryDate = request.ExpiryDate,
                 UpdatedAt = DateTime.UtcNow
             };
             _db.UserFoodInventories.Add(newItem);
@@ -79,7 +83,21 @@ public class InventoryService : IInventoryService
         if (item == null)
             throw new NotFoundException($"Mục kho với ID {itemId} không tồn tại hoặc không thuộc về người dùng hiện tại.");
 
+        if (request.ExpiryDate.HasValue && request.ExpiryDate.Value < DateOnly.FromDateTime(DateTime.Today))
+            throw new ArgumentException("Hạn sử dụng không được nằm trong quá khứ.");
+
+        // Check for conflicts if ExpiryDate is updated
+        if (item.ExpiryDate != request.ExpiryDate)
+        {
+            var conflictExists = await _db.UserFoodInventories
+                .AnyAsync(i => i.UserId == userId && i.FoodId == item.FoodId && i.ExpiryDate == request.ExpiryDate && i.InventoryId != itemId);
+
+            if (conflictExists)
+                throw new ConflictException("Đã tồn tại một lô thực phẩm khác với cùng hạn sử dụng này trong kho của bạn.");
+        }
+
         item.QuantityGrams = request.QuantityGrams;
+        item.ExpiryDate = request.ExpiryDate;
         item.UpdatedAt = DateTime.UtcNow;
 
         await _db.SaveChangesAsync();

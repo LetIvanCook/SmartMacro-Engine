@@ -15,6 +15,7 @@ public class InventoryItemResponseDto
     public string FoodName { get; set; } = null!;
 
     public decimal QuantityGrams { get; set; }
+    public DateOnly? ExpiryDate { get; set; }
     public decimal KcalPer100g { get; set; }
     public decimal ProteinGPer100g { get; set; }
     public decimal CarbsGPer100g { get; set; }

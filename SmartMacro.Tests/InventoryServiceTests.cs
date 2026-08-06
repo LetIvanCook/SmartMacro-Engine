@@ -66,9 +66,9 @@ public class InventoryServiceTests : IDisposable
         return food;
     }
 
-    private UserFoodInventory SeedInventory(long inventoryId, long userId, long foodId, decimal qty)
+    private UserFoodInventory SeedInventory(long inventoryId, long userId, long foodId, decimal qty, DateOnly? expiry = null)
     {
-        var inv = new UserFoodInventory { InventoryId = inventoryId, UserId = userId, FoodId = foodId, QuantityGrams = qty, UpdatedAt = DateTime.UtcNow };
+        var inv = new UserFoodInventory { InventoryId = inventoryId, UserId = userId, FoodId = foodId, QuantityGrams = qty, ExpiryDate = expiry, UpdatedAt = DateTime.UtcNow };
         _db.UserFoodInventories.Add(inv);
         return inv;
     }
@@ -126,15 +126,67 @@ public class InventoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task AddItemAsync_ExistingFood_MergesQuantity()
+    public async Task AddItemAsync_ExistingFood_SameExpiry_MergesQuantity()
     {
         // Arrange
         SeedUser(1);
         SeedFood(1, "Ga");
-        SeedInventory(1, 1, 1, 100m);
+        var expiry = new DateOnly(2030, 1, 1);
+        SeedInventory(1, 1, 1, 100m, expiry);
         await _db.SaveChangesAsync();
 
-        var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 50m };
+        var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 50m, ExpiryDate = expiry };
+
+        // Act
+        var result = await _sut.AddItemAsync(1, request);
+
+        // Assert
+        result.InventoryId.Should().Be(1); // Same ID
+        result.QuantityGrams.Should().Be(150m); // Merged
+        result.ExpiryDate.Should().Be(expiry);
+
+        var inDb = await _db.UserFoodInventories.ToListAsync();
+        inDb.Should().HaveCount(1);
+        inDb[0].QuantityGrams.Should().Be(150m);
+    }
+
+    [Fact]
+    public async Task AddItemAsync_ExistingFood_DifferentExpiry_CreatesNewRecord()
+    {
+        // Arrange
+        SeedUser(1);
+        SeedFood(1, "Ga");
+        var expiry1 = new DateOnly(2030, 1, 1);
+        SeedInventory(1, 1, 1, 100m, expiry1);
+        await _db.SaveChangesAsync();
+
+        var expiry2 = new DateOnly(2030, 2, 1); // Khác lô
+        var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 50m, ExpiryDate = expiry2 };
+
+        // Act
+        var result = await _sut.AddItemAsync(1, request);
+
+        // Assert
+        result.InventoryId.Should().BeGreaterThan(1); // Mới tạo
+        result.QuantityGrams.Should().Be(50m);
+        result.ExpiryDate.Should().Be(expiry2);
+
+        var inDb = await _db.UserFoodInventories.OrderBy(i => i.InventoryId).ToListAsync();
+        inDb.Should().HaveCount(2); // Giữ được cả 2 lô
+        inDb[0].QuantityGrams.Should().Be(100m);
+        inDb[1].QuantityGrams.Should().Be(50m);
+    }
+
+    [Fact]
+    public async Task AddItemAsync_ExistingFood_BothNullExpiry_MergesQuantity()
+    {
+        // Arrange
+        SeedUser(1);
+        SeedFood(1, "Ga");
+        SeedInventory(1, 1, 1, 100m, null);
+        await _db.SaveChangesAsync();
+
+        var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 50m, ExpiryDate = null };
 
         // Act
         var result = await _sut.AddItemAsync(1, request);
@@ -149,6 +201,18 @@ public class InventoryServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task AddItemAsync_ExpiryDateInPast_ThrowsArgumentException()
+    {
+        SeedUser(1); SeedFood(1, "Ga");
+        await _db.SaveChangesAsync();
+
+        var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 100m, ExpiryDate = new DateOnly(2000, 1, 1) };
+        await _sut.Invoking(s => s.AddItemAsync(1, request))
+            .Should().ThrowAsync<ArgumentException>()
+            .WithMessage("*quá khứ*");
+    }
+
+    [Fact]
     public async Task AddItemAsync_ZeroOrNegativeQuantity_ThrowsArgumentException()
     {
         var request = new CreateInventoryItemRequestDto { FoodId = 1, QuantityGrams = 0m };
@@ -157,19 +221,51 @@ public class InventoryServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task UpdateItemAsync_Valid_UpdatesQuantity()
+    public async Task UpdateItemAsync_Valid_UpdatesQuantityAndExpiry()
     {
         SeedUser(1); SeedFood(1, "Ga");
         SeedInventory(1, 1, 1, 100m);
         await _db.SaveChangesAsync();
 
-        var request = new UpdateInventoryItemRequestDto { QuantityGrams = 120m };
+        var newExpiry = new DateOnly(2030, 1, 1);
+        var request = new UpdateInventoryItemRequestDto { QuantityGrams = 120m, ExpiryDate = newExpiry };
 
         var result = await _sut.UpdateItemAsync(1, 1, request);
 
         result.QuantityGrams.Should().Be(120m);
+        result.ExpiryDate.Should().Be(newExpiry);
         var inDb = await _db.UserFoodInventories.FindAsync(1L);
         inDb!.QuantityGrams.Should().Be(120m);
+        inDb!.ExpiryDate.Should().Be(newExpiry);
+    }
+
+    [Fact]
+    public async Task UpdateItemAsync_ExpiryDateInPast_ThrowsArgumentException()
+    {
+        SeedUser(1); SeedFood(1, "Ga");
+        SeedInventory(1, 1, 1, 100m);
+        await _db.SaveChangesAsync();
+
+        var request = new UpdateInventoryItemRequestDto { QuantityGrams = 120m, ExpiryDate = new DateOnly(2000, 1, 1) };
+        
+        await _sut.Invoking(s => s.UpdateItemAsync(1, 1, request))
+            .Should().ThrowAsync<ArgumentException>()
+            .WithMessage("*quá khứ*");
+    }
+
+    [Fact]
+    public async Task UpdateItemAsync_ConflictsWithExistingExpiry_ThrowsConflictException()
+    {
+        SeedUser(1); SeedFood(1, "Ga");
+        var expiry = new DateOnly(2030, 1, 1);
+        SeedInventory(1, 1, 1, 100m, null); // Item cần sửa
+        SeedInventory(2, 1, 1, 200m, expiry); // Item trùng lô
+        await _db.SaveChangesAsync();
+
+        var request = new UpdateInventoryItemRequestDto { QuantityGrams = 120m, ExpiryDate = expiry };
+
+        await _sut.Invoking(s => s.UpdateItemAsync(1, 1, request))
+            .Should().ThrowAsync<ConflictException>();
     }
 
     [Fact]
