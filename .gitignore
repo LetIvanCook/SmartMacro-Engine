@@ -44,3 +44,8 @@ postman/
 .claude/
 .claude-code-history/
 skills-lock.json
+
+## ── Secrets & Environment ─────────────────────────────────────
+.env
+.env.local
+appsettings.Development.json

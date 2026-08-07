@@ -21,6 +21,10 @@ builder.Services.AddDbContext<SmartMacroDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+// ── Health Checks Configuration ────────────────────────────────
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<SmartMacroDbContext>();
+
 // ── Authentication & JWT ────────────────────────────────────────
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(options =>
@@ -105,11 +109,29 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// IMPORTANT: UseAuthentication phải TRƯỚC UseAuthorization
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
+
+// ── Auto-apply EF Core Migrations on Startup ────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SmartMacroDbContext>();
+    if (db.Database.IsSqlServer())
+    {
+        try
+        {
+            db.Database.Migrate();
+        }
+        catch (Exception ex)
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "Không thể tự động Migrate Database. Hãy đảm bảo SQL Server đang chạy và ConnectionString hợp lệ.");
+        }
+    }
+}
 
 app.Run();
 
