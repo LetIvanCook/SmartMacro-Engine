@@ -10,3 +10,8 @@ public class CreateFoodCategoryRequestDto
 {
     public string CategoryName { get; set; } = null!;
 }
+
+public class UpdateFoodCategoryRequestDto
+{
+    public string CategoryName { get; set; } = null!;
+}

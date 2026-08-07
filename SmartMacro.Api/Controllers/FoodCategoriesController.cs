@@ -31,4 +31,17 @@ public class FoodCategoriesController : ControllerBase
         var category = await _foodCategoryService.CreateCategoryAsync(request);
         return CreatedAtAction(nameof(GetAll), null, category);
     }
+    [HttpPut("{id}")]
+    public async Task<ActionResult<FoodCategoryResponseDto>> Update(short id, [FromBody] UpdateFoodCategoryRequestDto request)
+    {
+        var category = await _foodCategoryService.UpdateCategoryAsync(id, request);
+        return Ok(category);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(short id)
+    {
+        await _foodCategoryService.DeleteCategoryAsync(id);
+        return NoContent();
+    }
 }

@@ -59,5 +59,9 @@ public class SmartMacroMappingProfile : Profile
         // ──────────────────────────────────────────────────────────────
         // Mapping 1:1 theo convention — CategoryId, CategoryName.
         CreateMap<FoodCategory, FoodCategoryResponseDto>();
+        // ──────────────────────────────────────────────────────────────
+        // User → UserDto
+        // ──────────────────────────────────────────────────────────────
+        CreateMap<User, UserDto>();
     }
 }

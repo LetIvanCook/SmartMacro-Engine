@@ -6,6 +6,7 @@ using SmartMacro.Api.DTOs;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
 using SmartMacro.Api.Services;
+using SmartMacro.Api.Exceptions;
 
 namespace SmartMacro.Tests;
 
@@ -137,7 +138,7 @@ public class AuthServiceTests
             .ReturnsAsync(new User { Email = request.Email }); // Giả lập user đã tồn tại
 
         // Act & Assert
-        var exception = await Assert.ThrowsAsync<Exception>(() => _sut.RegisterAsync(request));
+        var exception = await Assert.ThrowsAsync<ConflictException>(() => _sut.RegisterAsync(request));
         exception.Message.Should().Be("Email đã được sử dụng.");
     }
 
@@ -163,7 +164,7 @@ public class AuthServiceTests
             .ReturnsAsync(existingUser);
 
         // Act & Assert
-        var exception = await Assert.ThrowsAsync<Exception>(() => _sut.LoginAsync(request));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => _sut.LoginAsync(request));
         exception.Message.Should().Be("Email hoặc mật khẩu không đúng.");
     }
 }

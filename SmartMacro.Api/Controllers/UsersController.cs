@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartMacro.Api.DTOs;
@@ -12,10 +13,12 @@ namespace SmartMacro.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, IMapper mapper)
     {
         _userService = userService;
+        _mapper = mapper;
     }
 
     [HttpGet("{id}")]
@@ -27,18 +30,7 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        var userDto = new UserDto
-        {
-            UserId = user.UserId,
-            Email = user.Email,
-            FullName = user.FullName,
-            DateOfBirth = user.DateOfBirth,
-            BiologicalSex = user.BiologicalSex,
-            ActivityLevel = user.ActivityLevel,
-            GoalType = user.GoalType,
-            Status = user.Status,
-            CreatedAt = user.CreatedAt
-        };
+        var userDto = _mapper.Map<UserDto>(user);
 
         return Ok(userDto);
     }

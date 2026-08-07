@@ -213,7 +213,7 @@ Mở file `SmartMacro.Api/appsettings.json` (hoặc tạo `appsettings.Developme
 }
 ```
 
-> **Lưu ý:** Dự án sử dụng **Database-First Approach**. Bạn cần tạo database `SmartMacroEngine` trên SQL Server với schema phù hợp trước khi chạy ứng dụng. DbContext được scaffold từ database hiện có.
+> **Lưu ý:** Dự án sử dụng **Code-First Approach** với EF Core Migrations. Chạy lệnh `dotnet ef database update` để tạo database tự động từ migrations. Không cần script SQL bổ sung.
 
 ### 3. Restore & Chạy Ứng Dụng
 

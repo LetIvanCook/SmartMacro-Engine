@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using SmartMacro.Api.DTOs;
+using SmartMacro.Api.Exceptions;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
 
@@ -25,7 +26,7 @@ public class AuthService : IAuthService
         var existingUser = await _userService.GetUserByEmailAsync(request.Email);
         if (existingUser != null)
         {
-            throw new Exception("Email đã được sử dụng.");
+            throw new ConflictException("Email đã được sử dụng.");
         }
 
         // 2. Hash password
@@ -67,14 +68,14 @@ public class AuthService : IAuthService
         var user = await _userService.GetUserByEmailAsync(request.Email);
         if (user == null)
         {
-            throw new Exception("Email hoặc mật khẩu không đúng.");
+            throw new ArgumentException("Email hoặc mật khẩu không đúng.");
         }
 
         // 2. Verify password
         var isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
         if (!isPasswordValid)
         {
-            throw new Exception("Email hoặc mật khẩu không đúng.");
+            throw new ArgumentException("Email hoặc mật khẩu không đúng.");
         }
 
         // 3. Generate token & response

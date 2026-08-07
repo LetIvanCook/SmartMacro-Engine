@@ -70,7 +70,8 @@ public class DailyTargetService : IDailyTargetService
             TargetKcal = request.TargetKcal,
             TargetProteinG = request.TargetProteinG,
             TargetCarbsG = request.TargetCarbsG,
-            TargetFatG = request.TargetFatG
+            TargetFatG = request.TargetFatG,
+            CreatedAt = DateTime.Now
         };
 
         _db.DailyTargets.Add(entity);
