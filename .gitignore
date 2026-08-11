@@ -49,3 +49,5 @@ skills-lock.json
 .env
 .env.local
 appsettings.Development.json
+logs/
+*.log

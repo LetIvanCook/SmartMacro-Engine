@@ -24,3 +24,6 @@ appsettings.Development.json
 SmartMacro.Tests/
 .agents/
 .claude/
+
+logs/
+*.log
