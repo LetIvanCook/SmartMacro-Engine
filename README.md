@@ -330,9 +330,18 @@ This project is licensed under the MIT License.
 
 ## Branching Strategy
 
+Dự án áp dụng quy trình GitFlow đơn giản hóa:
+
 | Branch | Mục đích |
 |--------|----------|
-| `main` | Production-ready code, tự động build & push Docker image |
-| `develop` | Working branch, tích hợp features trước khi merge vào main |
+| `main` | Production-ready code, tự động build & push Docker image lên GHCR |
+| `develop` | Nhánh tích hợp chính (working branch) |
+| `feature/*` | Nhánh phát triển từng tính năng riêng biệt (rẽ nhánh từ `develop`) |
 
-**Workflow**: Phát triển trên `develop` -> PR vào `main` -> CI pass -> Merge -> Docker image tự động được build & push lên ghcr.io
+**Workflow**:
+1. Tạo nhánh `feature/ten-tinh-nang` từ `develop`.
+2. Phát triển & kiểm thử local (`dotnet test`).
+3. Tạo Pull Request vào `develop` -> CI build & test tự động.
+4. Merge vào `develop` -> chuẩn bị release.
+5. Tạo Pull Request từ `develop` vào `main` -> CI build, test & tự động đóng gói Docker image push lên GHCR (`ghcr.io/letivancook/smartmacro-engine`).
+
