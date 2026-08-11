@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +11,14 @@ namespace SmartMacro.Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_schedule_cycle_type",
+                table: "user_training_schedule");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_rules_cycle_type",
+                table: "macro_adjustment_rules");
+
             migrationBuilder.AlterColumn<short>(
                 name: "cycle_type_id",
                 table: "user_training_schedule",
@@ -36,6 +44,20 @@ namespace SmartMacro.Api.Migrations
                 nullable: false,
                 oldClrType: typeof(byte),
                 oldType: "tinyint");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_schedule_cycle_type",
+                table: "user_training_schedule",
+                column: "cycle_type_id",
+                principalTable: "training_cycle_types",
+                principalColumn: "cycle_type_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_rules_cycle_type",
+                table: "macro_adjustment_rules",
+                column: "cycle_type_id",
+                principalTable: "training_cycle_types",
+                principalColumn: "cycle_type_id");
 
             migrationBuilder.CreateTable(
                 name: "refresh_tokens",
@@ -78,6 +100,14 @@ namespace SmartMacro.Api.Migrations
             migrationBuilder.DropTable(
                 name: "refresh_tokens");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_schedule_cycle_type",
+                table: "user_training_schedule");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_rules_cycle_type",
+                table: "macro_adjustment_rules");
+
             migrationBuilder.AlterColumn<byte>(
                 name: "cycle_type_id",
                 table: "user_training_schedule",
@@ -103,6 +133,20 @@ namespace SmartMacro.Api.Migrations
                 nullable: false,
                 oldClrType: typeof(short),
                 oldType: "smallint");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_schedule_cycle_type",
+                table: "user_training_schedule",
+                column: "cycle_type_id",
+                principalTable: "training_cycle_types",
+                principalColumn: "cycle_type_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_rules_cycle_type",
+                table: "macro_adjustment_rules",
+                column: "cycle_type_id",
+                principalTable: "training_cycle_types",
+                principalColumn: "cycle_type_id");
         }
     }
 }

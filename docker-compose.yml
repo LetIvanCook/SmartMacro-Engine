@@ -25,6 +25,8 @@ services:
     container_name: smartmacro-api
     ports:
       - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SmartMacroDb;User Id=sa;Password=${SA_PASSWORD:-YourStrong@Password123};TrustServerCertificate=True;

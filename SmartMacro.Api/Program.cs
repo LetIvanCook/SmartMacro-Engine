@@ -7,8 +7,19 @@ using SmartMacro.Api.Engines;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
 using SmartMacro.Api.Services;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName(),
+    preserveStaticLogger: true);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -107,6 +118,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -133,6 +149,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
 public partial class Program { }

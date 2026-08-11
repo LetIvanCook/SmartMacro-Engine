@@ -327,3 +327,12 @@ SmartMacro Engine được phát triển nhằm giải quyết bài toán thực
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+## Branching Strategy
+
+| Branch | Mục đích |
+|--------|----------|
+| `main` | Production-ready code, tự động build & push Docker image |
+| `develop` | Working branch, tích hợp features trước khi merge vào main |
+
+**Workflow**: Phát triển trên `develop` -> PR vào `main` -> CI pass -> Merge -> Docker image tự động được build & push lên ghcr.io
