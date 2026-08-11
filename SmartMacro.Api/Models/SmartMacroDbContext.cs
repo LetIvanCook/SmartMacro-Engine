@@ -37,6 +37,8 @@ public partial class SmartMacroDbContext : DbContext
 
     public virtual DbSet<UserTrainingSchedule> UserTrainingSchedules { get; set; }
 
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //    => optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
 
@@ -345,6 +347,37 @@ public partial class SmartMacroDbContext : DbContext
                 .HasPrecision(3)
                 .HasDefaultValueSql("(sysdatetime())")
                 .HasColumnName("updated_at");
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.ToTable("refresh_tokens");
+            
+            entity.HasKey(e => e.Id);
+            
+            entity.HasIndex(e => e.TokenHash, "UQ_refresh_tokens_token").IsUnique();
+            
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.TokenHash)
+                .HasMaxLength(128)
+                .IsUnicode(false)
+                .HasColumnName("token");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.CreatedAt)
+                .HasPrecision(3)
+                .HasDefaultValueSql("(sysdatetime())")
+                .HasColumnName("created_at");
+            entity.Property(e => e.ExpiresAt)
+                .HasPrecision(3)
+                .HasColumnName("expires_at");
+            entity.Property(e => e.RevokedAt)
+                .HasPrecision(3)
+                .HasColumnName("revoked_at");
+
+            entity.HasOne(d => d.User).WithMany(p => p.RefreshTokens)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_refresh_tokens_user");
         });
 
         modelBuilder.Entity<UserBodyMetric>(entity =>

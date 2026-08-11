@@ -42,4 +42,6 @@ public partial class User
     public virtual ICollection<UserFoodInventory> UserFoodInventories { get; set; } = new List<UserFoodInventory>();
 
     public virtual ICollection<UserTrainingSchedule> UserTrainingSchedules { get; set; } = new List<UserTrainingSchedule>();
+
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

@@ -19,8 +19,15 @@ public class LoginRequestDto
 
 public class AuthResponseDto
 {
-    public string Token { get; set; } = null!;
+    public string AccessToken { get; set; } = null!;
+    public string RefreshToken { get; set; } = null!;
+    public DateTime AccessTokenExpiry { get; set; }
     public long UserId { get; set; }
     public string Email { get; set; } = null!;
     public string? FullName { get; set; }
+}
+
+public class RefreshTokenRequestDto
+{
+    public string RefreshToken { get; set; } = null!;
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMacro.Api.Models;
 
@@ -11,9 +12,11 @@ using SmartMacro.Api.Models;
 namespace SmartMacro.Api.Migrations
 {
     [DbContext(typeof(SmartMacroDbContext))]
-    partial class SmartMacroDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260811025616_AddRefreshTokens")]
+    partial class AddRefreshTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,7 +395,7 @@ namespace SmartMacro.Api.Migrations
                         .HasColumnType("datetime2(3)")
                         .HasColumnName("revoked_at");
 
-                    b.Property<string>("TokenHash")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
@@ -407,7 +410,7 @@ namespace SmartMacro.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex(new[] { "TokenHash" }, "UQ_refresh_tokens_token")
+                    b.HasIndex(new[] { "Token" }, "UQ_refresh_tokens_token")
                         .IsUnique();
 
                     b.ToTable("refresh_tokens", (string)null);

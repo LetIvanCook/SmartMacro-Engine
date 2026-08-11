@@ -37,7 +37,7 @@ public class FoodIntegrationTests : IClassFixture<CustomWebApplicationFactory>
         };
         var response = await _client.PostAsJsonAsync("/api/auth/register", request);
         var authData = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
-        _token = authData!.Token;
+        _token = authData!.AccessToken;
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
     }
 

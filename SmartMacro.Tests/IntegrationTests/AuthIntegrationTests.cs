@@ -37,7 +37,7 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var responseData = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
         responseData.Should().NotBeNull();
-        responseData!.Token.Should().NotBeNullOrEmpty();
+        responseData!.AccessToken.Should().NotBeNullOrEmpty();
         responseData.Email.Should().Be(request.Email);
     }
 
@@ -66,7 +66,7 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task Login_ValidCredentials_ReturnsOkAndToken()
+    public async Task Login_ValidCredentials_ReturnsOkAndAccessToken()
     {
         // Arrange
         var request = new RegisterRequestDto
@@ -94,7 +94,7 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var responseData = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
         responseData.Should().NotBeNull();
-        responseData!.Token.Should().NotBeNullOrEmpty();
+        responseData!.AccessToken.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -128,7 +128,7 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task ProtectedEndpoint_WithoutToken_ReturnsUnauthorized()
+    public async Task ProtectedEndpoint_WithoutAccessToken_ReturnsUnauthorized()
     {
         // Act
         var response = await _client.GetAsync("/api/food-categories");
@@ -138,7 +138,7 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
     }
 
     [Fact]
-    public async Task ProtectedEndpoint_WithValidToken_ReturnsOk()
+    public async Task ProtectedEndpoint_WithValidAccessToken_ReturnsOk()
     {
         // Arrange
         var email = $"test{Guid.NewGuid()}@example.com";
@@ -156,12 +156,104 @@ public class AuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
         var authData = await authResponse.Content.ReadFromJsonAsync<AuthResponseDto>();
         
         var request = new HttpRequestMessage(HttpMethod.Get, "/api/food-categories");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authData!.Token);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authData!.AccessToken);
 
         // Act
         var response = await _client.SendAsync(request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task Refresh_ValidToken_ReturnsNewTokens()
+    {
+        // Arrange
+        var request = new RegisterRequestDto
+        {
+            Email = $"test{Guid.NewGuid()}@example.com",
+            Password = "Password123!",
+            FullName = "Test User",
+            DateOfBirth = new DateOnly(1990, 1, 1),
+            BiologicalSex = "male",
+            ActivityLevel = "active",
+            GoalType = "cutting"
+        };
+        var response = await _client.PostAsJsonAsync("/api/auth/register", request);
+        var authData = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
+
+        var refreshRequest = new RefreshTokenRequestDto
+        {
+            RefreshToken = authData!.RefreshToken
+        };
+
+        // Act
+        var refreshResponse = await _client.PostAsJsonAsync("/api/auth/refresh", refreshRequest);
+
+        // Assert
+        refreshResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var refreshData = await refreshResponse.Content.ReadFromJsonAsync<AuthResponseDto>();
+        refreshData.Should().NotBeNull();
+        refreshData!.AccessToken.Should().NotBeNullOrEmpty();
+        refreshData.RefreshToken.Should().NotBeNullOrEmpty();
+        refreshData.AccessToken.Should().NotBe(authData.AccessToken);
+        refreshData.RefreshToken.Should().NotBe(authData.RefreshToken);
+    }
+
+    [Fact]
+    public async Task Refresh_InvalidToken_ReturnsNotFound()
+    {
+        // Arrange
+        var refreshRequest = new RefreshTokenRequestDto
+        {
+            RefreshToken = "invalid-token"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/auth/refresh", refreshRequest);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Logout_ValidToken_RevokesToken()
+    {
+        // Arrange
+        var request = new RegisterRequestDto
+        {
+            Email = $"test{Guid.NewGuid()}@example.com",
+            Password = "Password123!",
+            FullName = "Test User",
+            DateOfBirth = new DateOnly(1990, 1, 1),
+            BiologicalSex = "male",
+            ActivityLevel = "active",
+            GoalType = "cutting"
+        };
+        var response = await _client.PostAsJsonAsync("/api/auth/register", request);
+        var authData = await response.Content.ReadFromJsonAsync<AuthResponseDto>();
+
+        var logoutRequest = new RefreshTokenRequestDto
+        {
+            RefreshToken = authData!.RefreshToken
+        };
+
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/auth/logout")
+        {
+            Content = JsonContent.Create(logoutRequest)
+        };
+        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authData.AccessToken);
+
+        // Act
+        var logoutResponse = await _client.SendAsync(requestMessage);
+
+        // Assert
+        logoutResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        // Act 2: Thử refresh lại token đã bị revoke
+        var refreshResponse = await _client.PostAsJsonAsync("/api/auth/refresh", logoutRequest);
+
+        // Assert 2
+        refreshResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }

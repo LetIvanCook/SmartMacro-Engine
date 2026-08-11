@@ -6,6 +6,8 @@ using SmartMacro.Api.DTOs;
 using SmartMacro.Api.Exceptions;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace SmartMacro.Api.Services;
 
@@ -13,11 +15,13 @@ public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
+    private readonly SmartMacroDbContext _dbContext;
 
-    public AuthService(IUserService userService, IConfiguration configuration)
+    public AuthService(IUserService userService, IConfiguration configuration, SmartMacroDbContext dbContext)
     {
         _userService = userService;
         _configuration = configuration;
+        _dbContext = dbContext;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
@@ -50,12 +54,26 @@ public class AuthService : IAuthService
         // 4. Lưu xuống DB
         var createdUser = await _userService.CreateUserAsync(user);
 
-        // 5. Generate token & response
-        var token = GenerateJwtToken(createdUser);
+        // 5. Generate tokens
+        var (accessToken, expiresAt) = GenerateJwtToken(createdUser);
+        var refreshToken = GenerateRefreshToken();
+
+        // 6. Lưu RefreshToken vào DB
+        var refreshTokenEntity = new RefreshToken
+        {
+            TokenHash = HashToken(refreshToken),
+            UserId = createdUser.UserId,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["Jwt:RefreshTokenExpireDays"] ?? "7"))
+        };
+        _dbContext.RefreshTokens.Add(refreshTokenEntity);
+        await _dbContext.SaveChangesAsync();
 
         return new AuthResponseDto
         {
-            Token = token,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            AccessTokenExpiry = expiresAt,
             UserId = createdUser.UserId,
             Email = createdUser.Email,
             FullName = createdUser.FullName
@@ -78,19 +96,33 @@ public class AuthService : IAuthService
             throw new ArgumentException("Email hoặc mật khẩu không đúng.");
         }
 
-        // 3. Generate token & response
-        var token = GenerateJwtToken(user);
+        // 3. Generate tokens
+        var (accessToken, expiresAt) = GenerateJwtToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        // 4. Lưu RefreshToken vào DB
+        var refreshTokenEntity = new RefreshToken
+        {
+            TokenHash = HashToken(refreshToken),
+            UserId = user.UserId,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["Jwt:RefreshTokenExpireDays"] ?? "7"))
+        };
+        _dbContext.RefreshTokens.Add(refreshTokenEntity);
+        await _dbContext.SaveChangesAsync();
 
         return new AuthResponseDto
         {
-            Token = token,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            AccessTokenExpiry = expiresAt,
             UserId = user.UserId,
             Email = user.Email,
             FullName = user.FullName
         };
     }
 
-    private string GenerateJwtToken(User user)
+    private (string token, DateTime expiresAt) GenerateJwtToken(User user)
     {
         var jwtSettings = _configuration.GetSection("Jwt");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
@@ -103,14 +135,92 @@ public class AuthService : IAuthService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
+        var expireMinutes = Convert.ToDouble(jwtSettings["ExpireMinutes"] ?? "15");
+        var expiresAt = DateTime.UtcNow.AddMinutes(expireMinutes);
+
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(Convert.ToDouble(jwtSettings["ExpireDays"])),
+            expires: expiresAt,
             signingCredentials: creds
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return (new JwtSecurityTokenHandler().WriteToken(token), expiresAt);
+    }
+
+    private string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
+    public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
+    {
+        var tokenHash = HashToken(refreshToken);
+        var tokenEntity = await _dbContext.RefreshTokens
+            .Include(rt => rt.User)
+            .FirstOrDefaultAsync(rt => rt.TokenHash == tokenHash);
+
+        if (tokenEntity == null)
+        {
+            throw new NotFoundException("Refresh token không tồn tại.");
+        }
+
+        if (!tokenEntity.IsActive)
+        {
+            throw new UnauthorizedException("Refresh token đã hết hạn hoặc bị thu hồi.");
+        }
+
+        // Token rotation: revoke old token
+        tokenEntity.RevokedAt = DateTime.UtcNow;
+
+        // Generate new tokens
+        var (newAccessToken, expiresAt) = GenerateJwtToken(tokenEntity.User);
+        var newRefreshToken = GenerateRefreshToken();
+
+        var newRefreshTokenEntity = new RefreshToken
+        {
+            TokenHash = HashToken(newRefreshToken),
+            UserId = tokenEntity.UserId,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["Jwt:RefreshTokenExpireDays"] ?? "7"))
+        };
+
+        _dbContext.RefreshTokens.Add(newRefreshTokenEntity);
+        await _dbContext.SaveChangesAsync();
+
+        return new AuthResponseDto
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken,
+            AccessTokenExpiry = expiresAt,
+            UserId = tokenEntity.User.UserId,
+            Email = tokenEntity.User.Email,
+            FullName = tokenEntity.User.FullName
+        };
+    }
+
+    public async Task RevokeTokenAsync(string refreshToken, long userId)
+    {
+        var tokenHash = HashToken(refreshToken);
+        var tokenEntity = await _dbContext.RefreshTokens
+            .FirstOrDefaultAsync(rt => rt.TokenHash == tokenHash && rt.UserId == userId);
+
+        if (tokenEntity == null || !tokenEntity.IsActive)
+        {
+            throw new NotFoundException("Refresh token không tồn tại hoặc không còn hiệu lực.");
+        }
+
+        tokenEntity.RevokedAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private static string HashToken(string token)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(token));
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

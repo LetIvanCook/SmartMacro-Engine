@@ -7,6 +7,7 @@ using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
 using SmartMacro.Api.Services;
 using SmartMacro.Api.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace SmartMacro.Tests;
 
@@ -18,6 +19,7 @@ public class AuthServiceTests
 {
     private readonly Mock<IUserService> _userServiceMock;
     private readonly IConfiguration _configuration;
+    private readonly SmartMacroDbContext _dbContext;
     private readonly AuthService _sut;
 
     public AuthServiceTests()
@@ -36,7 +38,12 @@ public class AuthServiceTests
             .AddInMemoryCollection(inMemorySettings)
             .Build();
 
-        _sut = new AuthService(_userServiceMock.Object, _configuration);
+        var dbOptions = new DbContextOptionsBuilder<SmartMacroDbContext>()
+            .UseInMemoryDatabase(databaseName: "SmartMacroTestDb_" + Guid.NewGuid().ToString())
+            .Options;
+        _dbContext = new SmartMacroDbContext(dbOptions);
+
+        _sut = new AuthService(_userServiceMock.Object, _configuration, _dbContext);
     }
 
     [Fact]
@@ -74,7 +81,8 @@ public class AuthServiceTests
         response.UserId.Should().Be(1);
         response.Email.Should().Be(request.Email);
         response.FullName.Should().Be(request.FullName);
-        response.Token.Should().NotBeNullOrEmpty("vì JWT token phải được sinh ra sau khi đăng ký thành công");
+        response.AccessToken.Should().NotBeNullOrEmpty("vì JWT token phải được sinh ra sau khi đăng ký thành công");
+        response.RefreshToken.Should().NotBeNullOrEmpty("vì Refresh token phải được sinh ra");
 
         // Xác minh rằng hàm CreateUserAsync đã được gọi 1 lần
         _userServiceMock.Verify(x => x.CreateUserAsync(It.Is<User>(u => 
@@ -115,11 +123,12 @@ public class AuthServiceTests
         response.Should().NotBeNull();
         response.UserId.Should().Be(existingUser.UserId);
         response.Email.Should().Be(existingUser.Email);
-        response.Token.Should().NotBeNullOrEmpty("vì đăng nhập thành công phải sinh ra token hợp lệ");
+        response.AccessToken.Should().NotBeNullOrEmpty("vì đăng nhập thành công phải sinh ra token hợp lệ");
+        response.RefreshToken.Should().NotBeNullOrEmpty("vì Refresh token phải được sinh ra");
 
         // Parse token để kiểm tra sơ bộ
         var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(response.Token);
+        var jwtToken = handler.ReadJwtToken(response.AccessToken);
         jwtToken.Issuer.Should().Be("SmartMacroApiTest");
         jwtToken.Audiences.Should().Contain("SmartMacroClientTest");
     }

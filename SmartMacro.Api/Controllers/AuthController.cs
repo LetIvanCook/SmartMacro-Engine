@@ -28,4 +28,24 @@ public class AuthController : ControllerBase
         var response = await _authService.LoginAsync(request);
         return Ok(response);
     }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody] RefreshTokenRequestDto request)
+    {
+        var response = await _authService.RefreshTokenAsync(request.RefreshToken);
+        return Ok(response);
+    }
+
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] RefreshTokenRequestDto request)
+    {
+        var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (long.TryParse(userIdString, out var userId))
+        {
+            await _authService.RevokeTokenAsync(request.RefreshToken, userId);
+            return Ok(new { message = "Đăng xuất thành công." });
+        }
+        return Unauthorized();
+    }
 }
