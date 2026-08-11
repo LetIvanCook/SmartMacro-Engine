@@ -5,7 +5,7 @@ namespace SmartMacro.Api.Models;
 
 public partial class TrainingCycleType
 {
-    public byte CycleTypeId { get; set; }
+    public short CycleTypeId { get; set; }
 
     public string TypeCode { get; set; } = null!;
 

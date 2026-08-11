@@ -11,7 +11,7 @@ public partial class UserTrainingSchedule
 
     public DateOnly ScheduleDate { get; set; }
 
-    public byte CycleTypeId { get; set; }
+    public short CycleTypeId { get; set; }
 
     public bool IsCompleted { get; set; }
 

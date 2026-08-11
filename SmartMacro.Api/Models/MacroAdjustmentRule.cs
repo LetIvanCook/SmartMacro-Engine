@@ -9,7 +9,7 @@ public partial class MacroAdjustmentRule
 
     public long UserId { get; set; }
 
-    public byte CycleTypeId { get; set; }
+    public short CycleTypeId { get; set; }
 
     public decimal KcalMultiplier { get; set; }
 
