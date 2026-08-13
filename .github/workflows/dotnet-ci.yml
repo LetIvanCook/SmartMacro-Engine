@@ -184,6 +184,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Docker registry image references MUST be strictly lowercase
+      - name: Lowercase IMAGE_NAME for Docker and Trivy
+        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
       # ── Setup Buildx với GHA cache backend ───────────────────────────────
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -262,6 +266,8 @@ jobs:
       contents: read
 
     steps:
+      - name: Lowercase IMAGE_NAME
+        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
       # ── Placeholder — thay bằng deploy command thật ──────────────────────
       # Ví dụ: az container create / kubectl set image / ssh deploy script
       - name: Deploy image to staging environment
