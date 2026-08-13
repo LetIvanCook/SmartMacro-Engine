@@ -231,7 +231,7 @@ jobs:
       # ── Trivy: Scan image đã push, output SARIF ──────────────────────────
       # Dùng digest thay vì tag để đảm bảo scan đúng image vừa build
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
           format: sarif
