@@ -1,81 +1,104 @@
+---
 # ============================================================
-# SmartMacro Engine — .NET 8 CI Pipeline
+# SmartMacro Engine — CI/CD Pipeline (v2)
 # ============================================================
-# Kích hoạt khi có Pull Request vào nhánh main.
-# Pipeline thực hiện: Restore → Build (Release) → Test + Coverage.
-# Nếu bất kỳ bước nào thất bại, toàn bộ workflow sẽ báo lỗi.
+# Stages:
+#   1. build-and-test      — Restore, Build, EF guard, Test + Coverage
+#   2. security-scan       — CodeQL C# analysis (SAST)
+#   3. docker-build-push   — GHCR push with 3-style tagging + Trivy image scan
+#   4. deploy-staging      — Placeholder deploy (GitHub Environment: staging)
+#
+# Tagging strategy:
+#   sha-<7-char>   — every push to main / git tag
+#   vX.Y.Z         — when a git tag v*.*.* is pushed
+#   latest         — only on default branch (main)
+#
+# docker-build-push chỉ chạy khi:  push vào main  HOẶC  push git tag v*.*.*
+# Không chạy trên PR hoặc develop.
 # ============================================================
 
-name: .NET CI
+name: SmartMacro CI/CD Pipeline
 
 on:
   push:
     branches: [main, develop]
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches: [main, develop]
+  # Cho phép trigger thủ công để test pipeline
   workflow_dispatch:
 
-# Hủy các run cũ nếu có push mới vào cùng PR — tiết kiệm minutes.
+# Hủy run cũ khi có push mới vào cùng ref — tiết kiệm billed minutes
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  DOTNET_VERSION: '8.0.x'
+  REGISTRY: ghcr.io
+  # github.repository = "LetIvanCook/SmartMacro-Engine" → image name chuẩn
+  IMAGE_NAME: ${{ github.repository }}
+
+# ── Permissions mặc định tối thiểu cho tất cả job ───────────────────────────
+# Mỗi job ghi đè những gì nó thực sự cần.
+permissions:
+  contents: read
+
+# ════════════════════════════════════════════════════════════
+# JOB 1 — build-and-test
+# ════════════════════════════════════════════════════════════
 jobs:
   build-and-test:
     name: Build & Test (.NET 8)
     runs-on: ubuntu-latest
+    # Job này không cần permissions vượt quá default (contents: read)
 
     steps:
-      # ────────────────────────────────────────────────────────
-      # 1. Checkout source code
-      # ────────────────────────────────────────────────────────
+      # ── 1. Checkout ──────────────────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ────────────────────────────────────────────────────────
-      # 2. Setup .NET 8 SDK
-      # ────────────────────────────────────────────────────────
-      - name: Setup .NET 8
+      # ── 2. Setup .NET 8 SDK ──────────────────────────────────────────────
+      - name: Setup .NET ${{ env.DOTNET_VERSION }}
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      # ────────────────────────────────────────────────────────
-      # 3. Restore dependencies
-      # ────────────────────────────────────────────────────────
+      # ── 3. NuGet Cache ───────────────────────────────────────────────────
+      # Key băm theo nội dung tất cả *.csproj — cache được tái dụng
+      # khi không có thay đổi về dependency. Restore key fallback để
+      # dùng cache gần nhất khi key chính miss.
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      # ── 4. Restore ───────────────────────────────────────────────────────
       - name: Restore dependencies
         run: dotnet restore
 
-      # ────────────────────────────────────────────────────────
-      # 4. Build (Release) — thất bại ở đây sẽ dừng pipeline
-      # ────────────────────────────────────────────────────────
+      # ── 5. Build (Release) ───────────────────────────────────────────────
       - name: Build (Release)
         run: dotnet build --no-restore --configuration Release
 
-      # ────────────────────────────────────────────────────────
-      # 5. Kiểm tra Model đồng bộ với Migration (EF Core guard)
-      # ────────────────────────────────────────────────────────
-      # Fail nếu có ai sửa entity mà quên tạo migration mới.
-      # Phải restore local tool trước vì runner dùng dotnet-tools.json.
-      # ────────────────────────────────────────────────────────
+      # ── 6. Restore .NET local tools (dotnet-ef v10 từ dotnet-tools.json) ─
       - name: Restore .NET local tools
         run: dotnet tool restore
 
+      # ── 7. EF Core guard — fail nếu có pending model change ─────────────
+      # Phát hiện sớm trường hợp dev sửa entity mà quên tạo migration.
       - name: Check for pending EF model changes
         run: |
           dotnet tool run dotnet-ef migrations has-pending-model-changes \
             --project SmartMacro.Api \
             --startup-project SmartMacro.Api
 
-      # ────────────────────────────────────────────────────────
-      # 6. Run Unit Tests + Code Coverage (Coverlet)
-      # ────────────────────────────────────────────────────────
-      # --collect:"XPlat Code Coverage"  → Coverlet thu thập coverage
-      # --results-directory              → Gom tất cả output vào 1 thư mục
-      # --logger trx                     → Xuất kết quả test dạng TRX
-      #                                    để upload artifact nếu cần
-      # ────────────────────────────────────────────────────────
-      - name: Run Unit Tests with Coverage
+      # ── 8. Run Unit + Integration Tests + Code Coverage (Coverlet) ───────
+      - name: Run tests with coverage
         run: |
           dotnet test --no-build --configuration Release \
             --collect:"XPlat Code Coverage" \
@@ -83,10 +106,8 @@ jobs:
             --logger "trx;LogFileName=test-results.trx" \
             --verbosity normal
 
-      # ────────────────────────────────────────────────────────
-      # 6. Upload Test Results & Coverage (luôn chạy, kể cả fail)
-      # ────────────────────────────────────────────────────────
-      - name: Upload Test Results
+      # ── 9. Upload TestResults artifact (luôn chạy, kể cả fail) ──────────
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -94,10 +115,8 @@ jobs:
           path: ./TestResults
           retention-days: 14
 
-      # ────────────────────────────────────────────────────────
-      # 7. Tạo Coverage Report dạng Markdown trên PR Summary
-      # ────────────────────────────────────────────────────────
-      - name: Generate Coverage Report Summary
+      # ── 10. Coverage summary lên Job Summary (PR + push) ─────────────────
+      - name: Generate coverage summary
         if: always()
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
@@ -105,44 +124,156 @@ jobs:
           badge: true
           format: markdown
           output: both
-          thresholds: "50 75"
+          thresholds: '50 75'
 
-      - name: Publish Coverage to Job Summary
+      - name: Publish coverage to job summary
         if: always()
-        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+        run: cat code-coverage-results.md >> "$GITHUB_STEP_SUMMARY"
 
-  docker-build-push:
-    name: Build & Push Docker Image (GHCR)
-    needs: build-and-test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # ════════════════════════════════════════════════════════════
+  # JOB 2 — security-scan (CodeQL SAST)
+  # ════════════════════════════════════════════════════════════
+  security-scan:
+    name: CodeQL Security Scan
     runs-on: ubuntu-latest
+    needs: build-and-test
+    # CodeQL cần ghi SARIF lên tab Security
     permissions:
       contents: read
-      packages: write
+      security-events: write
+      # Cần thêm actions: read để CodeQL resolve PR diffs
+      actions: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Log in to GHCR
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+
+      # autobuild tự detect solution file (SmartMacroEngine.slnx) và build
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:csharp
+
+  # ════════════════════════════════════════════════════════════
+  # JOB 3 — docker-build-push
+  # ════════════════════════════════════════════════════════════
+  docker-build-push:
+    name: Build & Push Docker Image (GHCR)
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-scan]
+    # Chỉ chạy khi push lên main HOẶC push git tag v*.*.*
+    # KHÔNG chạy trên PR hoặc develop push
+    if: >
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    permissions:
+      contents: read
+      packages: write
+      # Cần để upload Trivy SARIF lên Security tab
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Docker registry image references MUST be strictly lowercase
+      - name: Lowercase IMAGE_NAME for Docker and Trivy
+        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      # ── Setup Buildx với GHA cache backend ───────────────────────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Login vào GHCR (ghcr.io) ─────────────────────────────────────────
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels)
+      # ── Extract tags & labels ─────────────────────────────────────────────
+      # Tagging strategy (3 loại):
+      #   sha-<7-char>   — luôn có, từ short SHA commit
+      #   vX.Y.Z         — khi push tag git dạng v*.*.*
+      #   latest         — chỉ khi ở default branch (main)
+      - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,prefix=
+            type=sha,prefix=sha-,format=short
+            type=semver,pattern={{version}}
             type=raw,value=latest,enable={{is_default_branch}}
 
+      # ── Build và Push với Docker layer cache (GHA backend) ───────────────
+      # cache-from/to dùng GitHub Actions Cache — không tốn thêm chi phí
+      # Không cần secret riêng, dùng ACTIONS_CACHE_URL tự động
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Ghi provenance để GHCR hiển thị attestation
+          provenance: false
+
+      # ── Trivy: Scan image đã push, output SARIF ──────────────────────────
+      # Dùng digest thay vì tag để đảm bảo scan đúng image vừa build
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+          exit-code: '0'
+
+      # ── Upload SARIF lên GitHub Security tab ────────────────────────────
+      - name: Upload Trivy SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-container
+
+  # ════════════════════════════════════════════════════════════
+  # JOB 4 — deploy-staging (placeholder)
+  # ════════════════════════════════════════════════════════════
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: docker-build-push
+    # Chỉ deploy khi image mới được push (tức là chỉ từ main)
+    if: github.ref == 'refs/heads/main'
+    # GitHub Environment: nếu đã tạo Environment 'staging' trong Settings -> Environments
+    # thì bỏ comment dòng dưới. Để mặc định không báo lỗi khi chưa tạo Environment trên GitHub UI.
+    # environment: staging
+    permissions:
+      contents: read
+
+    steps:
+      - name: Lowercase IMAGE_NAME
+        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+      # ── Placeholder — thay bằng deploy command thật ──────────────────────
+      # Ví dụ: az container create / kubectl set image / ssh deploy script
+      - name: Deploy image to staging environment
+        run: |
+          echo "=== Deploying to staging ==="
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          echo "Image: ${IMAGE}"
+          echo "Triggered by: ${{ github.actor }} @ ${{ github.sha }}"
+          echo "--- Replace this step with actual deploy command ---"
