@@ -6,11 +6,20 @@ namespace SmartMacro.Api.Middleware;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
+    private readonly ILogger<GlobalExceptionHandler> _logger;
+
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+    {
+        _logger = logger;
+    }
+
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken)
     {
+        var correlationId = httpContext.TraceIdentifier;
+
         var (statusCode, title, detail) = exception switch
         {
             ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
@@ -21,13 +30,13 @@ public class GlobalExceptionHandler : IExceptionHandler
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred.")
         };
 
-        // Nếu là lỗi 500 thì để fallback cho default handler xử lý (có thể log lỗi), 
-        // hoặc ta có thể xử lý luôn tại đây. Theo yêu cầu: "fallback exception khác → 500 ProblemDetails mặc định của framework."
-        // Việc return false sẽ nhường quyền cho các IExceptionHandler khác hoặc middleware mặc định.
         if (statusCode == StatusCodes.Status500InternalServerError)
         {
+            _logger.LogError(exception, "Unhandled exception occurred [{CorrelationId}]: {Message}", correlationId, exception.Message);
             return false;
         }
+
+        _logger.LogWarning(exception, "Handled exception [{StatusCode} - {Title}] [{CorrelationId}]: {Detail}", statusCode, title, correlationId, detail);
 
         httpContext.Response.StatusCode = statusCode;
 

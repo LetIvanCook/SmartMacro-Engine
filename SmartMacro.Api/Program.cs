@@ -11,17 +11,18 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
     .Enrich.FromLogContext()
-    .WriteTo.Console()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithProperty("Application", "SmartMacroEngine")
+    .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter())
     .WriteTo.File(
-        "logs/smartmacro-.log",
+        path: "logs/smartmacro-.log",
         rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 14)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
+        retainedFileCountLimit: 14));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -112,7 +113,15 @@ builder.Services.AddProblemDetails();
 var app = builder.Build();
 
 app.UseExceptionHandler(); // Phải nằm trên cùng của request pipeline
-app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier);
+    };
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
