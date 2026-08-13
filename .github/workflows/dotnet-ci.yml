@@ -231,7 +231,7 @@ jobs:
       # ── Trivy: Scan image đã push, output SARIF ──────────────────────────
       # Dùng digest thay vì tag để đảm bảo scan đúng image vừa build
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
           format: sarif
@@ -255,9 +255,9 @@ jobs:
     needs: docker-build-push
     # Chỉ deploy khi image mới được push (tức là chỉ từ main)
     if: github.ref == 'refs/heads/main'
-    # GitHub Environment: kích hoạt protection rules & approval nếu cần
-    environment:
-      name: staging
+    # GitHub Environment: nếu đã tạo Environment 'staging' trong Settings -> Environments
+    # thì bỏ comment dòng dưới. Để mặc định không báo lỗi khi chưa tạo Environment trên GitHub UI.
+    # environment: staging
     permissions:
       contents: read
 
