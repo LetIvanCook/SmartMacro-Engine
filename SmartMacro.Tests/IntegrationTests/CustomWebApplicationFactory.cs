@@ -67,7 +67,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 {"Jwt:Key", "TestSuperSecretKeyForJwtTokens123!@#"},
                 {"Jwt:Issuer", "TestIssuer"},
                 {"Jwt:Audience", "TestAudience"},
-                {"Jwt:ExpireDays", "1"}
+                {"Jwt:ExpireDays", "1"},
+                {"Cors:AllowedOrigins:0", "https://app.smartmacro.example.com"},
+                {"Cors:AllowedOrigins:1", "http://localhost:3000"}
             };
             configBuilder.AddInMemoryCollection(config);
         });
