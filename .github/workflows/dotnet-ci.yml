@@ -26,6 +26,11 @@ on:
       - 'v*.*.*'
   pull_request:
     branches: [main, develop]
+  # pull_request_target: đảm bảo pr-lint chạy được trên PR từ fork
+  # (đọc PR title qua github.event.pull_request, không checkout code)
+  pull_request_target:
+    branches: [main, develop]
+    types: [opened, edited, synchronize, reopened]
   # Cho phép trigger thủ công để test pipeline
   workflow_dispatch:
 
@@ -49,6 +54,51 @@ permissions:
 # JOB 1 — build-and-test
 # ════════════════════════════════════════════════════════════
 jobs:
+  # ════════════════════════════════════════════════════════════
+  # JOB 0 — pr-lint (Lint PR Title — Conventional Commits)
+  # ════════════════════════════════════════════════════════════
+  # Chỉ chạy trên pull_request / pull_request_target — skip trên push/tag.
+  # Lint PR title thay vì từng commit (phù hợp squash-merge strategy:
+  # mỗi PR squash thành 1 commit trên develop, title là commit message).
+  # KHÔNG cần Node.js / npm / husky — action chạy trong container riêng.
+  pr-lint:
+    name: Lint PR Title
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+    permissions:
+      pull-requests: read
+
+    steps:
+      - name: Validate PR title follows Conventional Commits
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Các type được phép (theo CONTRIBUTING.md)
+          types: |
+            feat
+            fix
+            chore
+            docs
+            refactor
+            test
+            ci
+            perf
+            build
+            revert
+          # Scope là optional (không bắt buộc)
+          requireScope: false
+          # Subject (phần sau dấu ':') không được rỗng
+          subjectPattern: .+
+          subjectPatternError: |
+            PR title phải theo format Conventional Commits:
+            <type>(<scope>): <description>
+            Ví dụ: feat(auth): add refresh token endpoint
+            Xem chi tiết: CONTRIBUTING.md
+
+  # ════════════════════════════════════════════════════════════
+  # JOB 1 — build-and-test
+  # ════════════════════════════════════════════════════════════
   build-and-test:
     name: Build & Test (.NET 8)
     runs-on: ubuntu-latest
