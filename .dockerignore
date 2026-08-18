@@ -1,6 +1,7 @@
 **/.classpath
 **/.dockerignore
 **/.env
+**/.env.*
 **/.git
 **/.gitignore
 **/.project
@@ -20,10 +21,11 @@
 **/Secrets
 **/secrets
 **/*.user
-appsettings.Development.json
+**/appsettings.Development.json
+**/coverage
 SmartMacro.Tests/
 .agents/
 .claude/
-
+.claude-code-history/
 logs/
 *.log
