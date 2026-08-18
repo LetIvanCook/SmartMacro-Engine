@@ -38,7 +38,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<SmartMacroDbContext>();
+    .AddDbContextCheck<SmartMacroDbContext>(tags: new[] { "ready" });
 
 // ── Authentication & JWT ────────────────────────────────────────
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -168,7 +168,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => false
+});
+app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 // ── Auto-apply EF Core Migrations on Startup ────────────────────
 using (var scope = app.Services.CreateScope())
