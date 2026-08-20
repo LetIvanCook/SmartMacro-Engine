@@ -34,7 +34,7 @@ builder.Services.AddControllers()
 // ── DbContext & AutoMapper ──────────────────────────────────────
 builder.Services.AddDbContext<SmartMacroDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
