@@ -63,5 +63,16 @@ public class SmartMacroMappingProfile : Profile
         // User → UserDto
         // ──────────────────────────────────────────────────────────────
         CreateMap<User, UserDto>();
+
+        // ──────────────────────────────────────────────────────────────
+        // UpdateUserRequestDto → User (Partial Update)
+        // ──────────────────────────────────────────────────────────────
+        CreateMap<UpdateUserRequestDto, User>(MemberList.Source)
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+            {
+                if (srcMember == null) return false;
+                if (srcMember is DateOnly d && d == default) return src.DateOfBirth.HasValue;
+                return true;
+            }));
     }
 }
