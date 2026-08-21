@@ -29,7 +29,7 @@ public class OptimizationServiceTests : IDisposable
         var mapperConfig = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<SmartMacroMappingProfile>();
-        });
+        }, Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.Instance);
         mapperConfig.AssertConfigurationIsValid();
         _mapper = mapperConfig.CreateMapper();
 
@@ -182,5 +182,43 @@ public class OptimizationServiceTests : IDisposable
         result.AllocatedItems.Should().HaveCount(1);
         result.AllocatedItems[0].QuantityGrams.Should().Be(300m);
         result.AllocatedItems[0].FoodName.Should().Be("Uc Ga");
+    }
+
+    [Fact]
+    public async Task GenerateMealPlanAsync_WhenEngineThrowsSolverUnavailableException_PropagatesException()
+    {
+        // Arrange
+        var userId = 5L;
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var dailyTarget = new DailyTarget
+        {
+            TargetId = 4,
+            UserId = userId,
+            TargetDate = today,
+            TargetKcal = 2000m,
+            TargetProteinG = 150m,
+            TargetCarbsG = 200m,
+            TargetFatG = 70m,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var food = new Food { FoodId = 3, FoodName = "Fish", KcalPer100g = 120m, ProteinGPer100g = 20m, CarbsGPer100g = 0m, FatGPer100g = 4m, Source = "user_submitted", CreatedAt = DateTime.UtcNow };
+        var inventory = new UserFoodInventory { InventoryId = 3, UserId = userId, FoodId = 3, QuantityGrams = 300m, Food = food, UpdatedAt = DateTime.UtcNow };
+
+        _db.DailyTargets.Add(dailyTarget);
+        _db.Foods.Add(food);
+        _db.UserFoodInventories.Add(inventory);
+        await _db.SaveChangesAsync();
+
+        _mockEngine.Setup(e => e.CalculateOptimalMeal(It.IsAny<DailyTargetDto>(), It.IsAny<List<InventoryItemResponseDto>>()))
+            .Throws(new SolverUnavailableException("Native solver failed to initialize"));
+
+        var request = new OptimizationRequestDto();
+
+        // Act & Assert: Exception must NOT be swallowed into INFEASIBLE 200 result
+        await _sut.Invoking(s => s.GenerateMealPlanAsync(userId, request))
+            .Should().ThrowAsync<SolverUnavailableException>()
+            .WithMessage("Native solver failed to initialize");
     }
 }

@@ -1,5 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,21 +9,23 @@ using SmartMacro.Api.Engines;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
 using SmartMacro.Api.Services;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
     .Enrich.FromLogContext()
-    .WriteTo.Console()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithProperty("Application", "SmartMacroEngine")
+    .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter())
     .WriteTo.File(
-        "logs/smartmacro-.log",
+        path: "logs/smartmacro-.log",
         rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 14)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
+        retainedFileCountLimit: 14));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -32,11 +36,18 @@ builder.Services.AddControllers()
 // ── DbContext & AutoMapper ──────────────────────────────────────
 builder.Services.AddDbContext<SmartMacroDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
-    .AddDbContextCheck<SmartMacroDbContext>();
+    .AddDbContextCheck<SmartMacroDbContext>(tags: new[] { "ready" });
+
+// ── Data Protection Configuration ──────────────────────────────
+var dpKeysFolder = builder.Configuration["DataProtection:KeysFolder"]
+    ?? Path.Combine(builder.Environment.ContentRootPath, "dp-keys");
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(dpKeysFolder))
+    .SetApplicationName("SmartMacroEngine");
 
 // ── Authentication & JWT ────────────────────────────────────────
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -109,10 +120,54 @@ builder.Services.AddScoped<IDailyTargetService, DailyTargetService>();
 builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+// ── Rate Limiting ───────────────────────────────────────────────
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("AuthPolicy", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// ── CORS Configuration ──────────────────────────────────────────
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ProductionCors", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// ── Forwarded Headers (Reverse Proxy Support) ───────────────────
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseExceptionHandler(); // Phải nằm trên cùng của request pipeline
-app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging(options =>
+{
+    options.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("CorrelationId", httpContext.TraceIdentifier);
+    };
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -123,11 +178,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("ProductionCors");
+
+app.UseRateLimiter();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => false
+});
+app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 // ── Auto-apply EF Core Migrations on Startup ────────────────────
 using (var scope = app.Services.CreateScope())

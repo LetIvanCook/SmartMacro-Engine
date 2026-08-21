@@ -44,11 +44,7 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        if (request.FullName != null) user.FullName = request.FullName;
-        if (request.DateOfBirth.HasValue) user.DateOfBirth = request.DateOfBirth.Value;
-        if (request.BiologicalSex != null) user.BiologicalSex = request.BiologicalSex;
-        if (request.ActivityLevel != null) user.ActivityLevel = request.ActivityLevel;
-        if (request.GoalType != null) user.GoalType = request.GoalType;
+        _mapper.Map(request, user);
 
         await _userService.UpdateUserAsync(user);
 
