@@ -51,3 +51,6 @@ skills-lock.json
 appsettings.Development.json
 logs/
 *.log
+dp-keys/
+**/dp-keys/*
+!**/dp-keys/.gitkeep

@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -40,6 +41,13 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<SmartMacroDbContext>(tags: new[] { "ready" });
+
+// ── Data Protection Configuration ──────────────────────────────
+var dpKeysFolder = builder.Configuration["DataProtection:KeysFolder"]
+    ?? Path.Combine(builder.Environment.ContentRootPath, "dp-keys");
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(dpKeysFolder))
+    .SetApplicationName("SmartMacroEngine");
 
 // ── Authentication & JWT ────────────────────────────────────────
 var jwtSettings = builder.Configuration.GetSection("Jwt");

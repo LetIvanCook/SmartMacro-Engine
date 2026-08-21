@@ -20,9 +20,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends wget && \
     rm -rf /var/lib/apt/lists/*
 
-# Create non-root user and group, create logs directory with proper ownership
+# Create non-root user and group, create logs and dp-keys directories with proper ownership
 RUN groupadd -r appgroup && useradd -r -g appgroup -d /app appuser && \
-    mkdir -p /app/logs && chown -R appuser:appgroup /app
+    mkdir -p /app/logs /app/dp-keys && chown -R appuser:appgroup /app
 
 # Security note: perl-base and ncurses-base/ncurses-bin are Essential packages
 # in Debian bookworm-slim. Purging Essential packages risks breaking the system
