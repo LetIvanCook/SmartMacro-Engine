@@ -1,5 +1,6 @@
 using Google.OrTools.LinearSolver;
 using SmartMacro.Api.DTOs;
+using SmartMacro.Api.Exceptions;
 
 namespace SmartMacro.Api.Engines;
 
@@ -46,6 +47,22 @@ public class MacroOptimizationEngine : IMacroOptimizationEngine
         {
             return SolveLinearProgram(target, availableInventory);
         }
+        catch (DllNotFoundException ex)
+        {
+            throw new SolverUnavailableException("Native OR-Tools library not found.", ex);
+        }
+        catch (TypeInitializationException ex)
+        {
+            throw new SolverUnavailableException("Failed to initialize OR-Tools native solver.", ex);
+        }
+        catch (BadImageFormatException ex)
+        {
+            throw new SolverUnavailableException("Architecture mismatch loading OR-Tools native library.", ex);
+        }
+        catch (SolverUnavailableException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             return Fail($"Lỗi runtime khi giải bài toán LP: {ex.Message}");
@@ -65,7 +82,7 @@ public class MacroOptimizationEngine : IMacroOptimizationEngine
         // GLOP = Google Linear Optimization Package — chuyên dùng cho LP liên tục.
         Solver solver = Solver.CreateSolver("GLOP");
         if (solver is null)
-            return Fail("Không thể khởi tạo GLOP solver. Kiểm tra cài đặt Google.OrTools.");
+            throw new SolverUnavailableException("Không thể khởi tạo GLOP solver. Kiểm tra cài đặt Google.OrTools.");
 
         int n = inventory.Count;
 
