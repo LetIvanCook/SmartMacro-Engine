@@ -33,10 +33,11 @@ public class GlobalExceptionHandler : IExceptionHandler
         if (statusCode == StatusCodes.Status500InternalServerError)
         {
             _logger.LogError(exception, "Unhandled exception occurred [{CorrelationId}]: {Message}", correlationId, exception.Message);
-            return false;
         }
-
-        _logger.LogWarning(exception, "Handled exception [{StatusCode} - {Title}] [{CorrelationId}]: {Detail}", statusCode, title, correlationId, detail);
+        else
+        {
+            _logger.LogWarning(exception, "Handled exception [{StatusCode} - {Title}] [{CorrelationId}]: {Detail}", statusCode, title, correlationId, detail);
+        }
 
         httpContext.Response.StatusCode = statusCode;
 
