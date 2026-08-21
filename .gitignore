@@ -45,6 +45,12 @@ postman/
 .claude-code-history/
 skills-lock.json
 
+## ── Node & Frontend ──────────────────────────────────────────
+node_modules/
+**/node_modules/*
+dist/
+**/dist/*
+
 ## ── Secrets & Environment ─────────────────────────────────────
 .env
 .env.local
