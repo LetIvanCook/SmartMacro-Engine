@@ -1,0 +1,80 @@
+---
+# ============================================================
+# SmartMacro Engine — k6 Load Testing Workflow
+# ============================================================
+# Workflow này chạy độc lập, CHỈ trigger khi được gọi thủ công
+# qua `workflow_dispatch` (không chạy trên push / pull_request
+# để tiết kiệm tài nguyên và thời gian CI).
+# ============================================================
+
+name: SmartMacro Load Testing (k6)
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Target Base URL to load test'
+        required: true
+        default: 'https://staging.smartmacro.example.com'
+      profile:
+        description: 'Load Profile'
+        required: true
+        type: choice
+        options:
+          - smoke
+          - standard
+          - stress
+        default: 'standard'
+      target_endpoint:
+        description: 'Target endpoint'
+        required: true
+        default: '/api/optimizations/generate-plan'
+      p95_threshold:
+        description: 'p95 latency threshold (ms)'
+        required: true
+        default: '800'
+      max_error_rate:
+        description: 'Max error rate (e.g. 0.01 = 1%)'
+        required: true
+        default: '0.01'
+
+permissions:
+  contents: read
+
+jobs:
+  k6-load-test:
+    name: Execute k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run k6 load test
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: load-tests/dashboard-load-test.js
+          flags: --summary-export=k6-summary.json
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          TARGET_ENDPOINT: ${{ inputs.target_endpoint }}
+          PROFILE: ${{ inputs.profile }}
+          P95_THRESHOLD: ${{ inputs.p95_threshold }}
+          MAX_ERROR_RATE: ${{ inputs.max_error_rate }}
+
+      - name: Publish test summary to Job Summary
+        if: always()
+        run: |
+          echo "## 📊 k6 Load Test Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Target URL:** \`${{ inputs.base_url }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Target Endpoint:** \`${{ inputs.target_endpoint }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Profile:** \`${{ inputs.profile }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **p95 Threshold:** \`${{ inputs.p95_threshold }} ms\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Max Error Rate:** \`${{ inputs.max_error_rate }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f k6-summary.json ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat k6-summary.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi

@@ -37,7 +37,7 @@ public class DashboardServiceTests : IDisposable
         var mapperConfig = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<SmartMacroMappingProfile>();
-        });
+        }, Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.Instance);
         mapperConfig.AssertConfigurationIsValid(); // Fail fast nếu mapping sai
         _mapper = mapperConfig.CreateMapper();
 

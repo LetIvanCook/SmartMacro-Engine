@@ -27,6 +27,10 @@ namespace SmartMacro.Api.Migrations
                 oldClrType: typeof(byte),
                 oldType: "tinyint");
 
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_training_cycle_types",
+                table: "training_cycle_types");
+
             migrationBuilder.AlterColumn<short>(
                 name: "cycle_type_id",
                 table: "training_cycle_types",
@@ -36,6 +40,11 @@ namespace SmartMacro.Api.Migrations
                 oldType: "tinyint")
                 .Annotation("SqlServer:Identity", "1, 1")
                 .OldAnnotation("SqlServer:Identity", "1, 1");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_training_cycle_types",
+                table: "training_cycle_types",
+                column: "cycle_type_id");
 
             migrationBuilder.AlterColumn<short>(
                 name: "cycle_type_id",
@@ -116,6 +125,10 @@ namespace SmartMacro.Api.Migrations
                 oldClrType: typeof(short),
                 oldType: "smallint");
 
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_training_cycle_types",
+                table: "training_cycle_types");
+
             migrationBuilder.AlterColumn<byte>(
                 name: "cycle_type_id",
                 table: "training_cycle_types",
@@ -125,6 +138,11 @@ namespace SmartMacro.Api.Migrations
                 oldType: "smallint")
                 .Annotation("SqlServer:Identity", "1, 1")
                 .OldAnnotation("SqlServer:Identity", "1, 1");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_training_cycle_types",
+                table: "training_cycle_types",
+                column: "cycle_type_id");
 
             migrationBuilder.AlterColumn<byte>(
                 name: "cycle_type_id",
