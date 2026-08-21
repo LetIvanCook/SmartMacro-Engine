@@ -141,6 +141,12 @@ builder.Services.AddCors(options =>
             .GetSection("Cors:AllowedOrigins")
             .Get<string[]>() ?? [];
 
+        // Explicitly ensure Vite dev origin is permitted in development
+        if (allowedOrigins.Length == 0 && builder.Environment.IsDevelopment())
+        {
+            allowedOrigins = new[] { "http://localhost:5173", "http://localhost:3000" };
+        }
+
         policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
               .AllowAnyHeader();
