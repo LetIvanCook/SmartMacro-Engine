@@ -28,6 +28,10 @@ public class GlobalExceptionHandler : IExceptionHandler
             EmptyInventoryException => (StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity", exception.Message),
             ConflictException => (StatusCodes.Status409Conflict, "Conflict", exception.Message),
             SolverUnavailableException => (StatusCodes.Status503ServiceUnavailable, "Service Unavailable", exception.Message),
+            AnthropicApiException anthropicEx when anthropicEx.StatusCode == System.Net.HttpStatusCode.TooManyRequests
+                => (StatusCodes.Status503ServiceUnavailable, "Upstream Service Overloaded", "The AI service is currently overloaded. Please try again later."),
+            AnthropicApiException => (StatusCodes.Status502BadGateway, "Bad Gateway", "Error communicating with upstream AI service."),
+            AnthropicConfigurationException => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred while processing your request."),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred.")
         };
 
