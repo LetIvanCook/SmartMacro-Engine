@@ -155,6 +155,10 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<ITargetUrlValidator, TargetUrlValidator>();
 builder.Services.AddSingleton<IPageContentFetcher, PlaywrightPageContentFetcher>();
 builder.Services.AddScoped<ICompetitorResearchService, CompetitorResearchService>();
+builder.Services.AddSingleton<ICompetitorResearchHistoryStore, CompetitorResearchHistoryStore>();
+builder.Services.AddSingleton<CompetitorResearchBackgroundService>();
+builder.Services.AddHostedService(sp => sp.GetRequiredService<CompetitorResearchBackgroundService>());
+builder.Services.AddSingleton<ICompetitorResearchScheduler>(sp => sp.GetRequiredService<CompetitorResearchBackgroundService>());
 
 // ── Exception Handling ──────────────────────────────────────────
 builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();

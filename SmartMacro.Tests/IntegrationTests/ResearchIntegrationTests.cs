@@ -181,4 +181,100 @@ public class ResearchIntegrationTests : IClassFixture<CustomWebApplicationFactor
         result.IdentifiedFeatures.Should().Contain("Barcode scanner");
         result.ProposedEngineImprovements.Should().ContainSingle().Which.Should().Contain("GLOP LP solver");
     }
+
+    [Fact]
+    public async Task GetReports_WhenAuthorized_ReturnsOkWithReports()
+    {
+        // Arrange
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IOptions<ResearchOptions>>(
+                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = true }));
+            });
+        }).CreateClient();
+
+        var token = await GetUserTokenAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await client.GetAsync("/api/research/reports?count=5");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var reports = await response.Content.ReadFromJsonAsync<List<CompetitorAnalysisResult>>();
+        reports.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetStatus_WhenAuthorized_ReturnsOkWithStatus()
+    {
+        // Arrange
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IOptions<ResearchOptions>>(
+                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = true }));
+            });
+        }).CreateClient();
+
+        var token = await GetUserTokenAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await client.GetAsync("/api/research/status");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var status = await response.Content.ReadFromJsonAsync<CompetitorResearchRunStatus>();
+        status.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Trigger_WhenAuthorizedAndEnabled_ReturnsAccepted202()
+    {
+        // Arrange
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IOptions<ResearchOptions>>(
+                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = true }));
+            });
+        }).CreateClient();
+
+        var token = await GetUserTokenAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await client.PostAsync("/api/research/trigger", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+    }
+
+    [Fact]
+    public async Task Trigger_WhenFeatureDisabled_ReturnsForbidden403()
+    {
+        // Arrange
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IOptions<ResearchOptions>>(
+                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = false }));
+            });
+        }).CreateClient();
+
+        var token = await GetUserTokenAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await client.PostAsync("/api/research/trigger", null);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
 }

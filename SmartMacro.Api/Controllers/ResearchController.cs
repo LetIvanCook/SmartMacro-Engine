@@ -15,15 +15,21 @@ namespace SmartMacro.Api.Controllers;
 public class ResearchController : ControllerBase
 {
     private readonly ICompetitorResearchService _researchService;
+    private readonly ICompetitorResearchHistoryStore _historyStore;
+    private readonly ICompetitorResearchScheduler _scheduler;
     private readonly ResearchOptions _options;
     private readonly ILogger<ResearchController> _logger;
 
     public ResearchController(
         ICompetitorResearchService researchService,
+        ICompetitorResearchHistoryStore historyStore,
+        ICompetitorResearchScheduler scheduler,
         IOptions<ResearchOptions> options,
         ILogger<ResearchController> logger)
     {
         _researchService = researchService;
+        _historyStore = historyStore;
+        _scheduler = scheduler;
         _options = options.Value;
         _logger = logger;
     }
@@ -50,6 +56,72 @@ public class ResearchController : ControllerBase
         }
 
         var result = await _researchService.AnalyzeCompetitorAsync(request, cancellationToken);
+        _historyStore.AddReport(result);
         return Ok(result);
+    }
+
+    [HttpGet("reports")]
+    [ProducesResponseType(typeof(IReadOnlyList<CompetitorAnalysisResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    public IActionResult GetLatestReports([FromQuery] int count = 10)
+    {
+        if (!_options.Enabled)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status403Forbidden,
+                title: "Feature Disabled",
+                detail: "Competitor research feature is currently disabled.");
+        }
+
+        var reports = _historyStore.GetLatestReports(count);
+        return Ok(reports);
+    }
+
+    [HttpGet("status")]
+    [ProducesResponseType(typeof(CompetitorResearchRunStatus), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    public IActionResult GetRunStatus()
+    {
+        if (!_options.Enabled)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status403Forbidden,
+                title: "Feature Disabled",
+                detail: "Competitor research feature is currently disabled.");
+        }
+
+        var status = _historyStore.GetRunStatus();
+        return Ok(status);
+    }
+
+    [HttpPost("trigger")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> TriggerResearchNow(CancellationToken cancellationToken)
+    {
+        if (!_options.Enabled)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status403Forbidden,
+                title: "Feature Disabled",
+                detail: "Competitor research feature is currently disabled.");
+        }
+
+        var queued = await _scheduler.TriggerRunNowAsync(cancellationToken);
+        if (!queued)
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Trigger Failed",
+                Status = StatusCodes.Status400BadRequest,
+                Detail = "Could not queue research cycle. It may already be running or queue is full."
+            });
+        }
+
+        return Accepted(new { message = "Competitor research cycle triggered successfully." });
     }
 }
