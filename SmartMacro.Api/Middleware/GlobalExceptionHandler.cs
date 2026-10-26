@@ -22,6 +22,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var (statusCode, title, detail) = exception switch
         {
+            InvalidResearchTargetException => (StatusCodes.Status400BadRequest, "Invalid Research Target", exception.Message),
             ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             NotFoundException => (StatusCodes.Status404NotFound, "Resource Not Found", exception.Message),
             UnauthorizedException => (StatusCodes.Status401Unauthorized, "Unauthorized", exception.Message),
