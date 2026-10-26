@@ -61,7 +61,7 @@ public class OptimizationServiceTests : IDisposable
     {
         // Arrange
         var userId = 2L;
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.Now);
         
         var dailyTarget = new DailyTarget
         {
@@ -86,7 +86,7 @@ public class OptimizationServiceTests : IDisposable
     {
         // Arrange
         var userId = 3L;
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.Now);
         
         var dailyTarget = new DailyTarget
         {
@@ -131,7 +131,7 @@ public class OptimizationServiceTests : IDisposable
     {
         // Arrange
         var userId = 4L;
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.Now);
         
         var dailyTarget = new DailyTarget
         {
@@ -189,7 +189,7 @@ public class OptimizationServiceTests : IDisposable
     {
         // Arrange
         var userId = 5L;
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = DateOnly.FromDateTime(DateTime.Now);
 
         var dailyTarget = new DailyTarget
         {
