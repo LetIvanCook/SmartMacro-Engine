@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using SmartMacro.Api.Engines;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
+using SmartMacro.Api.Options;
 using SmartMacro.Api.Services;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
@@ -37,6 +38,14 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<SmartMacroDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
+
+// ── Options Configuration ──────────────────────────────────────
+builder.Services.AddOptions<AnthropicOptions>()
+    .Bind(builder.Configuration.GetSection(AnthropicOptions.SectionName))
+    .ValidateDataAnnotations();
+builder.Services.AddOptions<ResearchOptions>()
+    .Bind(builder.Configuration.GetSection(ResearchOptions.SectionName))
+    .ValidateDataAnnotations();
 
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
