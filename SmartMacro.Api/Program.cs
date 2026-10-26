@@ -150,6 +150,12 @@ builder.Services.AddHttpClient<IClaudeService, ClaudeService>((serviceProvider, 
     });
 });
 
+// ── Competitor Research & Caching ──────────────────────────────
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ITargetUrlValidator, TargetUrlValidator>();
+builder.Services.AddSingleton<IPageContentFetcher, PlaywrightPageContentFetcher>();
+builder.Services.AddScoped<ICompetitorResearchService, CompetitorResearchService>();
+
 // ── Exception Handling ──────────────────────────────────────────
 builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -158,6 +164,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("AuthPolicy", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("research", opt =>
     {
         opt.PermitLimit = 5;
         opt.Window = TimeSpan.FromMinutes(1);
