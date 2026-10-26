@@ -22,12 +22,17 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var (statusCode, title, detail) = exception switch
         {
+            InvalidResearchTargetException => (StatusCodes.Status400BadRequest, "Invalid Research Target", exception.Message),
             ArgumentException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             NotFoundException => (StatusCodes.Status404NotFound, "Resource Not Found", exception.Message),
             UnauthorizedException => (StatusCodes.Status401Unauthorized, "Unauthorized", exception.Message),
             EmptyInventoryException => (StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity", exception.Message),
             ConflictException => (StatusCodes.Status409Conflict, "Conflict", exception.Message),
             SolverUnavailableException => (StatusCodes.Status503ServiceUnavailable, "Service Unavailable", exception.Message),
+            AnthropicApiException anthropicEx when anthropicEx.StatusCode == System.Net.HttpStatusCode.TooManyRequests
+                => (StatusCodes.Status503ServiceUnavailable, "Upstream Service Overloaded", "The AI service is currently overloaded. Please try again later."),
+            AnthropicApiException => (StatusCodes.Status502BadGateway, "Bad Gateway", "Error communicating with upstream AI service."),
+            AnthropicConfigurationException => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred while processing your request."),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred.")
         };
 

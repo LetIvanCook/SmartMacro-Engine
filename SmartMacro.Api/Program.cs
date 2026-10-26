@@ -1,4 +1,9 @@
+using System.Net;
 using System.Text;
+using Microsoft.Extensions.Http.Resilience;
+using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Timeout;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -8,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using SmartMacro.Api.Engines;
 using SmartMacro.Api.Interfaces;
 using SmartMacro.Api.Models;
+using SmartMacro.Api.Options;
 using SmartMacro.Api.Services;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
@@ -37,6 +43,14 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<SmartMacroDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
+
+// ── Options Configuration ──────────────────────────────────────
+builder.Services.AddOptions<AnthropicOptions>()
+    .Bind(builder.Configuration.GetSection(AnthropicOptions.SectionName))
+    .ValidateDataAnnotations();
+builder.Services.AddOptions<ResearchOptions>()
+    .Bind(builder.Configuration.GetSection(ResearchOptions.SectionName))
+    .ValidateDataAnnotations();
 
 // ── Health Checks Configuration ────────────────────────────────
 builder.Services.AddHealthChecks()
@@ -115,6 +129,32 @@ builder.Services.AddScoped<IFoodService, FoodService>();
 builder.Services.AddScoped<IFoodCategoryService, FoodCategoryService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IDailyTargetService, DailyTargetService>();
+builder.Services.AddHttpClient<IClaudeService, ClaudeService>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<AnthropicOptions>>().Value;
+    client.BaseAddress = new Uri(options.BaseUrl);
+    client.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
+    client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+})
+.AddResilienceHandler("claude-resilience", pipeline =>
+{
+    pipeline.AddRetry(new HttpRetryStrategyOptions
+    {
+        MaxRetryAttempts = 3,
+        BackoffType = DelayBackoffType.Exponential,
+        UseJitter = true,
+        ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
+            .Handle<HttpRequestException>()
+            .Handle<TimeoutRejectedException>()
+            .HandleResult(response => response.StatusCode == HttpStatusCode.TooManyRequests || (int)response.StatusCode >= 500)
+    });
+});
+
+// ── Competitor Research & Caching ──────────────────────────────
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ITargetUrlValidator, TargetUrlValidator>();
+builder.Services.AddSingleton<IPageContentFetcher, PlaywrightPageContentFetcher>();
+builder.Services.AddScoped<ICompetitorResearchService, CompetitorResearchService>();
 
 // ── Exception Handling ──────────────────────────────────────────
 builder.Services.AddExceptionHandler<SmartMacro.Api.Middleware.GlobalExceptionHandler>();
@@ -124,6 +164,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("AuthPolicy", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("research", opt =>
     {
         opt.PermitLimit = 5;
         opt.Window = TimeSpan.FromMinutes(1);
