@@ -1147,18 +1147,18 @@ def build_report_html():
     <tbody>
         <tr>
             <td><strong>Bước 1: Gọi biến quyết định</strong></td>
-            <td>\(0 \le \text{grams}_i \le \text{QuantityGrams}_i\)<br/>(với \(i = 1 \dots n\) món trong tủ lạnh)</td>
-            <td>Mỗi món ăn thứ \(i\) trong kho được tạo một biến liên tục bằng hàm <code>solver.MakeNumVar(0.0, inventory[i].QuantityGrams)</code>. Nghĩa là số gram lấy ra không thể âm và không được vượt quá số gram đang có trong tủ lạnh.</td>
+            <td><code>0 &le; grams<sub>i</sub> &le; QuantityGrams<sub>i</sub></code><br/>(với <code>i = 1 ... n</code> món trong tủ lạnh)</td>
+            <td>Mỗi món ăn thứ <code>i</code> trong kho được tạo một biến liên tục bằng hàm <code>solver.MakeNumVar(0.0, inventory[i].QuantityGrams)</code>. Nghĩa là số gram lấy ra không thể âm và không được vượt quá số gram đang có trong tủ lạnh.</td>
         </tr>
         <tr>
             <td><strong>Bước 2: Ràng buộc 3 chất P, C, F (&plusmn;5%)</strong></td>
-            <td>\(0.95 \cdot T \le \sum_{i=1}^{n} \text{grams}_i \cdot \frac{\text{MacroPer100g}_i}{100} \le 1.05 \cdot T\)</td>
+            <td><code>0.95 &times; T &le; &Sigma;(grams<sub>i</sub> &times; MacroPer100g<sub>i</sub> / 100) &le; 1.05 &times; T</code></td>
             <td>Hàm <code>AddMacroConstraint()</code> thiết lập ngưỡng dưới (<code>target * 0.95</code>) và ngưỡng trên (<code>target * 1.05</code>) cho cả 3 chất: <strong>Protein, Carbs, Fat</strong>. Ví dụ mục tiêu là 160g Protein thì tổng Protein của các món cộng lại bắt buộc nằm từ 152g đến 168g.</td>
         </tr>
         <tr>
             <td><strong>Bước 3: Hàm mục tiêu (Giảm lệch Calo)</strong></td>
-            <td>\(\text{Minimize } \text{deviation}\)<br/>sao cho \(\text{deviation} \ge |\text{TotalKcal} - \text{TargetKcal}|\)</td>
-            <td>Ta muốn tổng Calo thực tế sát với Calo mục tiêu nhất. Vì Quy hoạch tuyến tính không dùng trực tiếp dấu giá trị tuyệt đối \(|x|\), code dùng 1 biến phụ <code>deviation &ge; 0</code> với 2 ràng buộc kẹp trên và kẹp dưới (<code>kcalUpperDev</code> và <code>kcalLowerDev</code>) rồi gọi <code>objective.SetMinimization()</code>.</td>
+            <td><code>Minimize deviation</code><br/>sao cho <code>deviation &ge; |TotalKcal - TargetKcal|</code></td>
+            <td>Ta muốn tổng Calo thực tế sát với Calo mục tiêu nhất. Vì Quy hoạch tuyến tính không dùng trực tiếp dấu giá trị tuyệt đối <code>|x|</code>, code dùng 1 biến phụ <code>deviation &ge; 0</code> với 2 ràng buộc kẹp trên và kẹp dưới (<code>kcalUpperDev</code> và <code>kcalLowerDev</code>) rồi gọi <code>objective.SetMinimization()</code>.</td>
         </tr>
         <tr>
             <td><strong>Bước 4: Giải &amp; Lọc kết quả</strong></td>
