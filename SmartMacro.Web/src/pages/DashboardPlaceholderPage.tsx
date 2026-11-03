@@ -30,7 +30,7 @@ type ActiveTab = "dashboard" | "inventory" | "optimizer";
 // Danh sách 5 món ăn mẫu quen thuộc dùng cho nút "Nạp dữ liệu mẫu (Demo Seed)"
 const DEMO_FOODS_SEED = [
   {
-    foodName: "Ức gà",
+    foodName: "Ức gà phi lê",
     kcalPer100g: 165,
     proteinGPer100g: 31,
     carbsGPer100g: 0,
@@ -48,7 +48,7 @@ const DEMO_FOODS_SEED = [
     daysToExpiry: 2,
   },
   {
-    foodName: "Trứng gà",
+    foodName: "Trứng gà nguyên quả",
     kcalPer100g: 155,
     proteinGPer100g: 13,
     carbsGPer100g: 1.1,
@@ -57,7 +57,7 @@ const DEMO_FOODS_SEED = [
     daysToExpiry: 10,
   },
   {
-    foodName: "Khoai lang",
+    foodName: "Khoai lang luộc",
     kcalPer100g: 86,
     proteinGPer100g: 1.6,
     carbsGPer100g: 20,
@@ -66,7 +66,7 @@ const DEMO_FOODS_SEED = [
     daysToExpiry: 7,
   },
   {
-    foodName: "Bông cải xanh",
+    foodName: "Bông cải xanh (Súp lơ xanh)",
     kcalPer100g: 34,
     proteinGPer100g: 2.8,
     carbsGPer100g: 7,
@@ -147,7 +147,7 @@ export default function DashboardPlaceholderPage() {
         setTargetProteinG(String(todayRes.targetProteinG));
         setTargetCarbsG(String(todayRes.targetCarbsG));
         setTargetFatG(String(todayRes.targetFatG));
-      } else if (summaryRes.todayTarget) {
+      } else if (summaryRes?.todayTarget) {
         setTargetKcal(String(summaryRes.todayTarget.targetKcal));
         setTargetProteinG(String(summaryRes.todayTarget.targetProteinG));
         setTargetCarbsG(String(summaryRes.todayTarget.targetCarbsG));
@@ -189,7 +189,7 @@ export default function DashboardPlaceholderPage() {
           setTargetProteinG(String(todayRes.targetProteinG));
           setTargetCarbsG(String(todayRes.targetCarbsG));
           setTargetFatG(String(todayRes.targetFatG));
-        } else if (summaryRes.todayTarget) {
+        } else if (summaryRes?.todayTarget) {
           setTargetKcal(String(summaryRes.todayTarget.targetKcal));
           setTargetProteinG(String(summaryRes.todayTarget.targetProteinG));
           setTargetCarbsG(String(summaryRes.todayTarget.targetCarbsG));
@@ -823,6 +823,7 @@ export default function DashboardPlaceholderPage() {
                           </option>
                           {foods.map((f) => (
                             <option key={f.foodId} value={f.foodId}>
+                              {f.categoryName ? `[${f.categoryName}] ` : ""}
                               {f.foodName} ({f.kcalPer100g} kcal | P:{f.proteinGPer100g}g C:
                               {f.carbsGPer100g}g F:{f.fatGPer100g}g /100g)
                             </option>

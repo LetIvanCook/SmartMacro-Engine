@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+import { useAuthStore } from "../stores/auth.store";
 import type {
   CreateDailyTargetRequestDto,
   CreateFoodRequestDto,
@@ -15,9 +16,25 @@ import type {
 
 export const macroApi = {
   // 1. Màn hình 1: Tổng quan & Mục tiêu hôm nay
-  getDashboardSummary: async (): Promise<UserDashboardResponseDto> => {
-    const response = await apiClient.get<UserDashboardResponseDto>("/dashboard/summary");
-    return response.data;
+  getDashboardSummary: async (): Promise<UserDashboardResponseDto | null> => {
+    try {
+      const response = await apiClient.get<UserDashboardResponseDto>("/dashboard/summary");
+      return response.data;
+    } catch {
+      // Fallback sang endpoint /api/dashboard/{userId}/dashboard nếu cần
+      const userId = useAuthStore.getState().user?.userId;
+      if (userId) {
+        try {
+          const fallback = await apiClient.get<UserDashboardResponseDto>(
+            `/dashboard/${userId}/dashboard`
+          );
+          return fallback.data;
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    }
   },
 
   getTodayTarget: async (): Promise<DailyTargetResponseDto | null> => {
@@ -49,7 +66,7 @@ export const macroApi = {
   },
 
   // 2. Màn hình 2: Danh mục món ăn & Kho tủ lạnh cá nhân
-  getFoods: async (keyword = "", pageSize = 50): Promise<PagedResult<FoodResponseDto>> => {
+  getFoods: async (keyword = "", pageSize = 100): Promise<PagedResult<FoodResponseDto>> => {
     const response = await apiClient.get<PagedResult<FoodResponseDto>>("/foods", {
       params: { keyword: keyword || undefined, page: 1, pageSize },
     });
@@ -62,8 +79,12 @@ export const macroApi = {
   },
 
   getInventory: async (): Promise<InventoryItemResponseDto[]> => {
-    const response = await apiClient.get<InventoryItemResponseDto[]>("/inventory");
-    return response.data;
+    try {
+      const response = await apiClient.get<InventoryItemResponseDto[]>("/inventory");
+      return response.data;
+    } catch {
+      return [];
+    }
   },
 
   addInventoryItem: async (

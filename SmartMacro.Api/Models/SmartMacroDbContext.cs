@@ -141,7 +141,6 @@ public partial class SmartMacroDbContext : DbContext
                 .HasColumnName("fiber_g_per_100g");
             entity.Property(e => e.FoodName)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("food_name");
             entity.Property(e => e.IsVerified).HasColumnName("is_verified");
             entity.Property(e => e.KcalPer100g)
@@ -178,7 +177,6 @@ public partial class SmartMacroDbContext : DbContext
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("category_name");
         });
 
@@ -327,7 +325,6 @@ public partial class SmartMacroDbContext : DbContext
                 .HasColumnName("email");
             entity.Property(e => e.FullName)
                 .HasMaxLength(150)
-                .IsUnicode(false)
                 .HasColumnName("full_name");
             entity.Property(e => e.GoalType)
                 .HasMaxLength(20)
