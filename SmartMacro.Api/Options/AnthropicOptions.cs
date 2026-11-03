@@ -13,7 +13,7 @@ public class AnthropicOptions
     public string BaseUrl { get; set; } = "https://api.anthropic.com/";
 
     [Required]
-    public string Model { get; set; } = "claude-sonnet-5-5";
+    public string Model { get; set; } = "claude-3-5-sonnet-20241022";
 
     [Range(1, 100000)]
     public int MaxTokens { get; set; } = 4096;
