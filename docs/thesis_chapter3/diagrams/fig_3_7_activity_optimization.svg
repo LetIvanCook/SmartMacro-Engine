@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="1500" viewBox="0 0 1350 1500">
+  <title>Hình 3-7: Sơ đồ hoạt động (Activity Diagram) giải thuật tối ưu hóa khẩu phần — SmartMacro Engine</title>
+
+  <defs>
+    <!-- Arrow Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1E293B" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="open-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#475569" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <marker id="open-arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <!-- Realization hollow triangle -->
+    <marker id="triangle-hollow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <polygon points="1 1, 13 7, 1 13" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.6" />
+    </marker>
+    <!-- Filter for subtle drop-shadow -->
+    <filter id="card-shadow" x="-3%" y="-3%" width="108%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="callout-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <rect width="1350" height="1500" fill="#F8FAFC" />
+  <text x="675.0" y="38" font-family="Times New Roman, Arial" font-size="21" font-weight="bold" text-anchor="middle" fill="#0F172A">SƠ ĐỒ HOẠT ĐỘNG: GIẢI THUẬT QUY HOẠCH TUYẾN TÍNH &amp; XỬ LÝ NGHIỆM TỐI ƯU</text>
+  <text x="675.0" y="62" font-family="Times New Roman, Arial" font-size="13" font-style="italic" text-anchor="middle" fill="#475569">Mô hình hoạt động (Activity Diagram) thể hiện tiền điều kiện, khởi tạo solver, thiết lập ràng buộc và phân nhánh OPTIMAL / INFEASIBLE</text>
+<circle cx="675" cy="105" r="14" fill="#0F172A" stroke="#334155" stroke-width="2" />
+
+        <g>
+          <line x1="675" y1="119" x2="675" y2="150" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Tiếp_nhận_yêu_cầu_tối_ưu_hóa">
+          <rect x="465.0" y="150.0" width="420" height="50" rx="8" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="168" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Tiếp nhận yêu cầu tối ưu hóa</text>
+          <text x="675" y="188" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">POST /api/optimizations/generate-plan (userId, request)</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="200" x2="675" y2="235" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Truy_vấn_mục_tiêu_dinh_dưỡng_ngày">
+          <rect x="465.0" y="235.0" width="420" height="50" rx="8" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="253" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Truy vấn mục tiêu dinh dưỡng ngày</text>
+          <text x="675" y="273" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Đọc DailyTargets theo userId và TargetDate (hôm nay)</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="285" x2="675" y2="320" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="decision-Tìm_thấy_mục_tiêu?">
+          <polygon points="675,320 795,350 675,380 555,350" fill="#FEF9C3" stroke="#CA8A04" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="675" y="354" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#713F12">Tìm thấy mục tiêu?</text>
+        </g>
+        
+
+    <g>
+      <line x1="795" y1="350" x2="1050" y2="350" stroke="#DC2626" stroke-width="1.6" marker-end="url(#arrow-red)" />
+      <text x="750" y="342" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" fill="#DC2626">[Không]</text>
+    </g>
+    
+
+        <g id="action-NotFoundException">
+          <rect x="1050.0" y="327.0" width="200" height="46" rx="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="1150" y="343" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">NotFoundException</text>
+          <text x="1150" y="363" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Trả về mã HTTP 404</text>
+        </g>
+        
+<line x1="1250" y1="350" x2="1290" y2="350" stroke="#DC2626" stroke-width="1.6" marker-end="url(#arrow-red)" />
+
+        <g>
+          <circle cx="1310" cy="350" r="16" fill="#FFFFFF" stroke="#0F172A" stroke-width="2" />
+          <circle cx="1310" cy="350" r="10" fill="#0F172A" />
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="380" x2="675" y2="420" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          <text x="685" y="400.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" fill="#1E293B">[Có]</text>
+        </g>
+        
+
+        <g id="action-Truy_vấn_kho_thực_phẩm_khả_dụng">
+          <rect x="465.0" y="420.0" width="420" height="50" rx="8" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="438" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Truy vấn kho thực phẩm khả dụng</text>
+          <text x="675" y="458" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Lọc UserFoodInventories có QuantityGrams &gt; 0</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="470" x2="675" y2="505" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="decision-Kho_có_thực_phẩm?">
+          <polygon points="675,505 795,535 675,565 555,535" fill="#FEF9C3" stroke="#CA8A04" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="675" y="539" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#713F12">Kho có thực phẩm?</text>
+        </g>
+        
+
+    <g>
+      <line x1="795" y1="535" x2="1050" y2="535" stroke="#DC2626" stroke-width="1.6" marker-end="url(#arrow-red)" />
+      <text x="750" y="527" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" fill="#DC2626">[Không - Kho rỗng]</text>
+    </g>
+    
+
+        <g id="action-EmptyInventoryException">
+          <rect x="1050.0" y="512.0" width="200" height="46" rx="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="1150" y="528" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">EmptyInventoryException</text>
+          <text x="1150" y="548" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Trả về mã HTTP 400</text>
+        </g>
+        
+<line x1="1250" y1="535" x2="1290" y2="535" stroke="#DC2626" stroke-width="1.6" marker-end="url(#arrow-red)" />
+
+        <g>
+          <circle cx="1310" cy="535" r="16" fill="#FFFFFF" stroke="#0F172A" stroke-width="2" />
+          <circle cx="1310" cy="535" r="10" fill="#0F172A" />
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="565" x2="675" y2="605" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          <text x="685" y="585.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" fill="#1E293B">[Có nguyên liệu]</text>
+        </g>
+        
+
+        <g id="action-Khởi_tạo_Google_OR-Tools_Solver">
+          <rect x="445.0" y="605.0" width="460" height="50" rx="8" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="623" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Khởi tạo Google OR-Tools Solver</text>
+          <text x="675" y="643" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Solver.CreateSolver('GLOP') chuyên giải LP liên tục</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="655" x2="675" y2="690" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Định_nghĩa_Biến_quyết_định_(Decision_Variables)">
+          <rect x="445.0" y="690.0" width="460" height="50" rx="8" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="708" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Định nghĩa Biến quyết định (Decision Variables)</text>
+          <text x="675" y="728" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">grams[i] ∈ [0.0, QuantityGrams[i]] cho từng món i trong kho</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="740" x2="675" y2="775" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Thiết_lập_hệ_ràng_buộc_Macro_(Tolerance_±5%)">
+          <rect x="415.0" y="775.0" width="520" height="60" rx="8" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="798" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Thiết lập hệ ràng buộc Macro (Tolerance ±5%)</text>
+          <text x="675" y="818" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">0.95 × Target ≤ Σ (grams[i] × Macro[i] / 100) ≤ 1.05 × Target
+(Áp dụng cho 3 phương trình: Protein, Carbs, Fat)</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="835" x2="675" y2="875" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Tuyến_tính_hóa_sai_lệch_Kcal_&amp;_Hàm_mục_tiêu">
+          <rect x="415.0" y="875.0" width="520" height="60" rx="8" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="898" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Tuyến tính hóa sai lệch Kcal &amp; Hàm mục tiêu</text>
+          <text x="675" y="918" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Biến phụ deviation ≥ |TotalKcal - TargetKcal|
+Hàm mục tiêu: Minimize (deviation)</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="935" x2="675" y2="975" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Thực_thi_giải_bài_toán:_solver.Solve()">
+          <rect x="445.0" y="975.0" width="460" height="60" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="998" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Thực thi giải bài toán: solver.Solve()</text>
+          <text x="675" y="1018" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Sử dụng thuật toán Primal/Dual Simplex</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="1035" x2="675" y2="1075" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="decision-Kiểm_tra_Solver_Status?">
+          <polygon points="675,1075 815,1110 675,1145 535,1110" fill="#FEF9C3" stroke="#CA8A04" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="675" y="1114" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#713F12">Kiểm tra Solver Status?</text>
+        </g>
+        
+
+    <g>
+      <polyline points="535,1110 320,1110 320,1160" fill="none" stroke="#DC2626" stroke-width="1.6" marker-end="url(#arrow-red)" />
+      <text x="420" y="1102" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#DC2626">[INFEASIBLE / Không khả thi]</text>
+    </g>
+    
+
+        <g id="action-Xử_lý_trạng_thái_Không_khả_thi">
+          <rect x="150.0" y="1167.5" width="340" height="65" rx="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="320" y="1193" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Xử lý trạng thái Không khả thi</text>
+          <text x="320" y="1213" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Gán SolverStatus = 'INFEASIBLE'
+Items = [] (Kho không đủ nguyên liệu đáp ứng ±5%)
+Khuyến nghị bổ sung nguyên liệu protein/carbs</text>
+        </g>
+        
+
+    <g>
+      <polyline points="815,1110 1020,1110 1020,1160" fill="none" stroke="#16A34A" stroke-width="1.6" marker-end="url(#arrow-green)" />
+      <text x="910" y="1102" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#16A34A">[OPTIMAL / FEASIBLE]</text>
+    </g>
+    
+
+        <g id="action-Xử_lý_nghiệm_Tối_ưu_/_Khả_thi">
+          <rect x="830.0" y="1167.5" width="380" height="65" rx="8" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="1020" y="1193" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Xử lý nghiệm Tối ưu / Khả thi</text>
+          <text x="1020" y="1213" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Lọc biến: grams[i] ≥ 0.5g (loại bỏ nhiễu số học)
+Làm tròn 2 chữ số thập phân
+Tính tổng macro và Kcal thực tế đạt được</text>
+        </g>
+        
+
+    <g id="merge-node">
+      <polyline points="320,1233 320,1320 550,1320" fill="none" stroke="#1E293B" stroke-width="1.6" />
+      <polyline points="1020,1233 1020,1320 800,1320" fill="none" stroke="#1E293B" stroke-width="1.6" />
+      <rect x="550" y="1317" width="250" height="6" rx="3" fill="#1E293B" />
+    </g>
+    
+
+        <g>
+          <line x1="675" y1="1323" x2="675" y2="1365" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g id="action-Đóng_gói_OptimizationResultDto">
+          <rect x="445.0" y="1365.0" width="460" height="60" rx="8" fill="#F8FAFC" stroke="#334155" stroke-width="1.6" filter="url(#card-shadow)" />
+          <text x="675" y="1388" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0F172A">Đóng gói OptimizationResultDto</text>
+          <text x="675" y="1408" font-family="Times New Roman, Arial" font-size="11.5" text-anchor="middle" fill="#475569">Bao gồm SolverStatus, TargetMacros, AchievedMacros, AllocatedItems
+Trả về HTTP 200 OK cho Client</text>
+        </g>
+        
+
+        <g>
+          <line x1="675" y1="1425" x2="675" y2="1465" stroke="#1E293B" stroke-width="1.6" marker-end="url(#arrow)" />
+          
+        </g>
+        
+
+        <g>
+          <circle cx="675" cy="1480" r="16" fill="#FFFFFF" stroke="#0F172A" stroke-width="2" />
+          <circle cx="675" cy="1480" r="10" fill="#0F172A" />
+        </g>
+        
+</svg>

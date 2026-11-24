@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>Hình 3-9: Wireframe Màn hình Tổng quan Dinh dưỡng (Dashboard) — SmartMacro Engine</title>
+
+  <defs>
+    <!-- Drop shadows -->
+    <filter id="wf-shadow" x="-3%" y="-3%" width="106%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="modal-shadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="-4" dy="4" stdDeviation="12" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+    <filter id="callout-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <rect width="1440" height="900" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2" />
+  <g id="sidebar">
+    <rect x="0" y="0" width="240" height="900" fill="#0F172A" />
+    <rect x="24" y="24" width="36" height="36" rx="8" fill="#10B981" />
+    <text x="42" y="48" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#FFFFFF">⚡</text>
+    <text x="70" y="42" font-family="Times New Roman, Arial" font-size="18" font-weight="bold" fill="#FFFFFF">SmartMacro</text>
+    <text x="72" y="56" font-family="Arial" font-size="10" fill="#94A3B8" letter-spacing="1">ENGINE v1.0</text>
+    <line x1="24" y1="80" x2="216" y2="80" stroke="#1E293B" stroke-width="1" />
+    <rect x="16" y="100" width="208" height="42" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1" />
+    <text x="36" y="126" font-family="Arial" font-size="14" fill="#10B981">📊</text>
+    <text x="64" y="126" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#FFFFFF">Tổng quan dinh dưỡng</text>
+    <rect x="16" y="152" width="208" height="42" rx="6" fill="transparent" />
+    <text x="36" y="178" font-family="Arial" font-size="14" fill="#94A3B8">🥦</text>
+    <text x="64" y="178" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Tủ lạnh cá nhân</text>
+    <rect x="16" y="204" width="208" height="42" rx="6" fill="transparent" />
+    <text x="36" y="230" font-family="Arial" font-size="14" fill="#94A3B8">⚡</text>
+    <text x="64" y="230" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Tối ưu hóa thực đơn</text>
+    <rect x="16" y="256" width="208" height="42" rx="6" fill="transparent" />
+    <text x="36" y="282" font-family="Arial" font-size="14" fill="#94A3B8">📖</text>
+    <text x="64" y="282" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Nhật ký bữa ăn</text>
+    <rect x="16" y="308" width="208" height="42" rx="6" fill="transparent" />
+    <text x="36" y="334" font-family="Arial" font-size="14" fill="#94A3B8">🏋️</text>
+    <text x="64" y="334" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Lịch chu kỳ tập</text>
+    <rect x="16" y="360" width="208" height="42" rx="6" fill="transparent" />
+    <text x="36" y="386" font-family="Arial" font-size="14" fill="#94A3B8">⚙️</text>
+    <text x="64" y="386" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Hồ sơ &amp; Cài đặt</text>
+    <rect x="16" y="810" width="208" height="66" rx="8" fill="#1E293B" />
+    <circle cx="45" cy="843" r="18" fill="#3B82F6" />
+    <text x="45" y="848" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">AN</text>
+    <text x="75" y="838" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#FFFFFF">Nguyễn Văn An</text>
+    <text x="75" y="854" font-family="Arial" font-size="11" fill="#10B981">● Online (User)</text>
+  </g>
+  <g id="topbar">
+    <rect x="240" y="0" width="1200" height="64" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" />
+    <text x="270" y="36" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#0F172A">Bảng điều khiển Dinh dưỡng (Nutrition Dashboard)</text>
+    <rect x="680" y="14" width="260" height="36" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="700" y="37" font-family="Arial" font-size="13" fill="#334155">◀</text>
+    <text x="810" y="36" font-family="Times New Roman, Arial" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#0F172A">Hôm nay: 07/11/2026</text>
+    <text x="920" y="37" font-family="Arial" font-size="13" fill="#334155">▶</text>
+    <rect x="960" y="14" width="220" height="36" rx="18" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2" />
+    <text x="1070" y="36" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#B45309">🏋️ Hypertrophy (+15% Kcal)</text>
+    <circle cx="1215" cy="32" r="16" fill="#FEE2E2" />
+    <text x="1215" y="37" font-family="Arial" font-size="13" text-anchor="middle" fill="#DC2626">🔔</text>
+    <circle cx="1225" cy="22" r="7" fill="#DC2626" />
+    <text x="1225" y="26" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#FFFFFF">2</text>
+  </g>
+  <g id="kpi-kcal">
+    <rect x="270" y="85" width="265" height="110" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="290" y="112" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#64748B">TỔNG NĂNG LƯỢNG (KCAL)</text>
+    <text x="290" y="145" font-family="Times New Roman, Arial" font-size="24" font-weight="bold" fill="#0F172A">2,196 <tspan font-size="14" font-weight="normal" fill="#64748B">/ 2,200 kcal</tspan></text>
+    <rect x="290" y="165" width="225" height="8" rx="4" fill="#E2E8F0" />
+    <rect x="290" y="165" width="224" height="8" rx="4" fill="#10B981" />
+    <text x="495" y="158" font-family="Arial" font-size="11" font-weight="bold" fill="#10B981">99.8%</text>
+  </g>
+  <g id="kpi-protein">
+    <rect x="555" y="85" width="265" height="110" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="575" y="112" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#64748B">CHẤT ĐẠM (PROTEIN)</text>
+    <text x="575" y="145" font-family="Times New Roman, Arial" font-size="24" font-weight="bold" fill="#0F172A">148.5 <tspan font-size="14" font-weight="normal" fill="#64748B">/ 150.0 g</tspan></text>
+    <rect x="575" y="165" width="225" height="8" rx="4" fill="#E2E8F0" />
+    <rect x="575" y="165" width="222" height="8" rx="4" fill="#2563EB" />
+    <text x="780" y="158" font-family="Arial" font-size="11" font-weight="bold" fill="#2563EB">99.0%</text>
+  </g>
+  <g id="kpi-carbs">
+    <rect x="840" y="85" width="265" height="110" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="860" y="112" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#64748B">TINH BỘT (CARBOHYDRATES)</text>
+    <text x="860" y="145" font-family="Times New Roman, Arial" font-size="24" font-weight="bold" fill="#0F172A">222.0 <tspan font-size="14" font-weight="normal" fill="#64748B">/ 220.0 g</tspan></text>
+    <rect x="860" y="165" width="225" height="8" rx="4" fill="#E2E8F0" />
+    <rect x="860" y="165" width="227" height="8" rx="4" fill="#F59E0B" />
+    <text x="1060" y="158" font-family="Arial" font-size="11" font-weight="bold" fill="#F59E0B">100.9%</text>
+  </g>
+  <g id="kpi-fat">
+    <rect x="1125" y="85" width="265" height="110" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="1145" y="112" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#64748B">CHẤT BÉO (FAT)</text>
+    <text x="1145" y="145" font-family="Times New Roman, Arial" font-size="24" font-weight="bold" fill="#0F172A">54.2 <tspan font-size="14" font-weight="normal" fill="#64748B">/ 55.0 g</tspan></text>
+    <rect x="1145" y="165" width="225" height="8" rx="4" fill="#E2E8F0" />
+    <rect x="1145" y="165" width="221" height="8" rx="4" fill="#EC4899" />
+    <text x="1345" y="158" font-family="Arial" font-size="11" font-weight="bold" fill="#EC4899">98.5%</text>
+  </g>
+  <g id="card-daily-targets-setting">
+    <rect x="270" y="215" width="690" height="310" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="295" y="245" font-family="Times New Roman, Arial" font-size="16" font-weight="bold" fill="#0F172A">Thiết lập Mục tiêu Macro Ngày (DailyTargets)</text>
+    <text x="295" y="266" font-family="Times New Roman, Arial" font-size="12.5" fill="#64748B">Áp dụng công thức tính tự động từ Chu kỳ tập luyện và Chỉ số BMR / TDEE cơ thể.</text>
+    <text x="295" y="298" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#334155">Chọn chu kỳ tập ngày hôm nay:</text>
+    <rect x="295" y="308" width="130" height="32" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="360" y="328" font-family="Times New Roman, Arial" font-size="12" text-anchor="middle" fill="#64748B">Cardio (-10%)</text>
+    <rect x="435" y="308" width="160" height="32" rx="6" fill="#1E293B" stroke="#0F172A" stroke-width="1" />
+    <text x="515" y="328" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">✓ Hypertrophy (+15%)</text>
+    <rect x="605" y="308" width="130" height="32" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="670" y="328" font-family="Times New Roman, Arial" font-size="12" text-anchor="middle" fill="#64748B">Rest Day (-20%)</text>
+    <text x="295" y="370" font-family="Times New Roman, Arial" font-size="12" fill="#475569">Target Kcal:</text>
+    <rect x="295" y="378" width="150" height="36" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="310" y="401" font-family="Arial" font-size="13" font-weight="bold" fill="#0F172A">2,200 kcal</text>
+    <text x="465" y="370" font-family="Times New Roman, Arial" font-size="12" fill="#475569">Target Protein (g):</text>
+    <rect x="465" y="378" width="150" height="36" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="480" y="401" font-family="Arial" font-size="13" font-weight="bold" fill="#0F172A">150.0 g (2.2g/kg)</text>
+    <text x="635" y="370" font-family="Times New Roman, Arial" font-size="12" fill="#475569">Target Carbs (g):</text>
+    <rect x="635" y="378" width="150" height="36" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="650" y="401" font-family="Arial" font-size="13" font-weight="bold" fill="#0F172A">220.0 g (45%)</text>
+    <text x="805" y="370" font-family="Times New Roman, Arial" font-size="12" fill="#475569">Target Fat (g):</text>
+    <rect x="805" y="378" width="135" height="36" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="820" y="401" font-family="Arial" font-size="13" font-weight="bold" fill="#0F172A">55.0 g (25%)</text>
+    <rect x="295" y="450" width="220" height="42" rx="6" fill="#1E293B" />
+    <text x="405" y="476" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">💾 Lưu Cấu hình Mục tiêu</text>
+    <rect x="530" y="450" width="260" height="42" rx="6" fill="#10B981" />
+    <text x="660" y="476" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">⚡ TỐI ƯU THỰC ĐƠN TỪ KHO</text>
+  </g>
+  <g id="card-recent-meals">
+    <rect x="270" y="545" width="690" height="320" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="295" y="575" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#0F172A">Nhật ký Bữa ăn trong ngày (Meal Logs Snapshot)</text>
+    <rect x="295" y="590" width="640" height="30" fill="#F1F5F9" />
+    <text x="310" y="610" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#475569">BỮA ĂN</text>
+    <text x="420" y="610" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#475569">THỰC PHẨM &amp; ĐỊNH LƯỢNG</text>
+    <text x="670" y="610" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#475569">KCAL</text>
+    <text x="760" y="610" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#475569">P / C / F (g)</text>
+    <text x="880" y="610" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#475569">NGUỒN</text>
+    <line x1="295" y1="655" x2="935" y2="655" stroke="#E2E8F0" stroke-width="1" />
+    <text x="310" y="642" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#0F172A">Bữa sáng</text>
+    <text x="420" y="642" font-family="Arial" font-size="12.5" fill="#334155">Trứng gà ta (150g) + Dầu ô liu (6g)</text>
+    <text x="670" y="642" font-family="Arial" font-size="12.5" fill="#334155">268 kcal</text>
+    <text x="760" y="642" font-family="Arial" font-size="12.5" fill="#334155">18.9 / 1.2 / 20.3</text>
+    <text x="880" y="642" font-family="Arial" font-size="11" fill="#10B981">● Auto-LP</text>
+    <line x1="295" y1="710" x2="935" y2="710" stroke="#E2E8F0" stroke-width="1" />
+    <text x="310" y="688" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#0F172A">Bữa trưa</text>
+    <text x="420" y="688" font-family="Arial" font-size="12.5" fill="#334155">Ức gà (200g) + Gạo lứt (150g) + Súp lơ (120g)</text>
+    <text x="670" y="688" font-family="Arial" font-size="12.5" fill="#334155">890 kcal</text>
+    <text x="760" y="688" font-family="Arial" font-size="12.5" fill="#334155">76.2 / 125.4 / 11.2</text>
+    <text x="880" y="688" font-family="Arial" font-size="11" fill="#10B981">● Auto-LP</text>
+    <line x1="295" y1="765" x2="935" y2="765" stroke="#E2E8F0" stroke-width="1" />
+    <text x="310" y="740" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#0F172A">Bữa tối</text>
+    <text x="420" y="740" font-family="Arial" font-size="12.5" fill="#334155">Ức gà (120g) + Gạo lứt (100g) + Súp lơ (80g)</text>
+    <text x="670" y="740" font-family="Arial" font-size="12.5" fill="#334155">638 kcal</text>
+    <text x="760" y="740" font-family="Arial" font-size="12.5" fill="#334155">45.4 / 85.4 / 8.2</text>
+    <text x="880" y="740" font-family="Arial" font-size="11" fill="#10B981">● Auto-LP</text>
+    <rect x="295" y="800" width="180" height="34" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1" />
+    <text x="385" y="822" font-family="Times New Roman, Arial" font-size="12" text-anchor="middle" fill="#334155">+ Ghi món ăn thủ công</text>
+  </g>
+  <g id="card-macro-chart">
+    <rect x="980" y="215" width="410" height="350" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="1005" y="245" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#0F172A">Phân bổ Năng lượng (Macro Ratio)</text>
+    <circle cx="1185" cy="355" r="70" fill="none" stroke="#E2E8F0" stroke-width="26" />
+    <circle cx="1185" cy="355" r="70" fill="none" stroke="#2563EB" stroke-width="26" stroke-dasharray="120 440" stroke-dashoffset="0" />
+    <circle cx="1185" cy="355" r="70" fill="none" stroke="#F59E0B" stroke-width="26" stroke-dasharray="175 440" stroke-dashoffset="-120" />
+    <circle cx="1185" cy="355" r="70" fill="none" stroke="#EC4899" stroke-width="26" stroke-dasharray="145 440" stroke-dashoffset="-295" />
+    <text x="1185" y="352" font-family="Times New Roman, Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#0F172A">2,196</text>
+    <text x="1185" y="370" font-family="Arial" font-size="11" text-anchor="middle" fill="#64748B">KCAL</text>
+    <circle cx="1025" cy="465" r="6" fill="#2563EB" />
+    <text x="1040" y="470" font-family="Times New Roman, Arial" font-size="12" fill="#334155">Protein: 148.5g (27.1%)</text>
+    <circle cx="1025" cy="495" r="6" fill="#F59E0B" />
+    <text x="1040" y="500" font-family="Times New Roman, Arial" font-size="12" fill="#334155">Carbohydrates: 222.0g (40.4%)</text>
+    <circle cx="1025" cy="525" r="6" fill="#EC4899" />
+    <text x="1040" y="530" font-family="Times New Roman, Arial" font-size="12" fill="#334155">Fat: 54.2g (32.5%)</text>
+  </g>
+  <g id="card-fridge-preview">
+    <rect x="980" y="580" width="410" height="285" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <text x="1005" y="610" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#0F172A">Kho Tủ lạnh Cá nhân (Tồn kho)</text>
+    <text x="1005" y="630" font-family="Times New Roman, Arial" font-size="12" fill="#64748B">7 mặt hàng sẵn sàng cho giải thuật tối ưu:</text>
+    <rect x="1005" y="645" width="360" height="36" rx="4" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" />
+    <text x="1020" y="668" font-family="Arial" font-size="12.5" font-weight="bold" fill="#0F172A">Ức gà phi lê</text>
+    <text x="1230" y="668" font-family="Arial" font-size="12" fill="#64748B">650g</text>
+    <text x="1350" y="668" font-family="Arial" font-size="11" text-anchor="end" fill="#10B981">Hạn: 5 ngày</text>
+    <rect x="1005" y="690" width="360" height="36" rx="4" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1" />
+    <text x="1020" y="713" font-family="Arial" font-size="12.5" font-weight="bold" fill="#991B1B">Súp lơ xanh</text>
+    <text x="1230" y="713" font-family="Arial" font-size="12" fill="#991B1B">250g</text>
+    <text x="1350" y="713" font-family="Arial" font-size="11" font-weight="bold" text-anchor="end" fill="#DC2626">⚠️ Hạn hôm nay!</text>
+    <rect x="1005" y="735" width="360" height="36" rx="4" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1" />
+    <text x="1020" y="758" font-family="Arial" font-size="12.5" font-weight="bold" fill="#92400E">Thịt bò nạc</text>
+    <text x="1230" y="758" font-family="Arial" font-size="12" fill="#92400E">300g</text>
+    <text x="1350" y="758" font-family="Arial" font-size="11" font-weight="bold" text-anchor="end" fill="#D97706">⚠️ Còn 1 ngày</text>
+    <rect x="1005" y="795" width="360" height="42" rx="6" fill="#1E293B" />
+    <text x="1185" y="821" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">🥦 QUẢN LÝ TỦ LẠNH CHI TIẾT</text>
+  </g>
+
+    <g id="callout-1" filter="url(#callout-glow)">
+      <circle cx="120" cy="120" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="120" y="125" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">1</text>
+    </g>
+    
+
+    <g id="callout-2" filter="url(#callout-glow)">
+      <circle cx="1070" cy="32" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1070" y="37" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">2</text>
+    </g>
+    
+
+    <g id="callout-3" filter="url(#callout-glow)">
+      <circle cx="420" cy="140" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="420" y="145" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">3</text>
+    </g>
+    
+
+    <g id="callout-4" filter="url(#callout-glow)">
+      <circle cx="660" cy="470" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="660" y="475" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">4</text>
+    </g>
+    
+
+    <g id="callout-5" filter="url(#callout-glow)">
+      <circle cx="1185" cy="355" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1185" y="360" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">5</text>
+    </g>
+    
+
+    <g id="callout-6" filter="url(#callout-glow)">
+      <circle cx="1185" cy="715" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1185" y="720" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">6</text>
+    </g>
+    
+</svg>
