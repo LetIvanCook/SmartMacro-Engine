@@ -29,7 +29,7 @@ public class AuthServiceTests
         // Setup in-memory configuration for JWT settings
         var inMemorySettings = new Dictionary<string, string?>
         {
-            {"Jwt:Key", "SmartMacroSuperSecretKeyForJwtTokens123!@#"},
+            {"Jwt:Key", "TestOnly_DummyJwtSigningKey_AtLeast32BytesLong!"},
             {"Jwt:Issuer", "SmartMacroApiTest"},
             {"Jwt:Audience", "SmartMacroClientTest"},
             {"Jwt:ExpireDays", "1"}
