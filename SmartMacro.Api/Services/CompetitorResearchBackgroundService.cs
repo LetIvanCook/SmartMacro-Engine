@@ -82,7 +82,12 @@ public class CompetitorResearchBackgroundService : BackgroundService, ICompetito
                 var completedTask = await Task.WhenAny(delayTask, triggerTask);
                 cts.Cancel(); // Cancel the other task
 
-                if (completedTask == triggerTask && await _triggerChannel.Reader.WaitToReadAsync(CancellationToken.None))
+                if (stoppingToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                if (completedTask == triggerTask && await _triggerChannel.Reader.WaitToReadAsync(stoppingToken))
                 {
                     while (_triggerChannel.Reader.TryRead(out _)) { }
                     _logger.LogInformation("Competitor research manual trigger received. Executing cycle now...");
