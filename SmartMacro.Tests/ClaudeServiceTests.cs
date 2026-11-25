@@ -56,6 +56,57 @@ public class ClaudeServiceTests
     }
 
     [Fact]
+    public async Task SendPromptAsync_WhenModelIsEmpty_ThrowsAnthropicConfigurationException()
+    {
+        // Arrange
+        var handler = new FakeHttpMessageHandler((_, _) =>
+            Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
+        var service = CreateService(handler, model: "");
+
+        // Act
+        var act = () => service.SendPromptAsync("Hello");
+
+        // Assert
+        await act.Should().ThrowAsync<AnthropicConfigurationException>()
+            .WithMessage("*Anthropic model is not configured*");
+    }
+
+    [Fact]
+    public async Task SendPromptAsync_When404ModelNotFound_ThrowsAnthropicApiExceptionWithNotFoundError()
+    {
+        // Arrange
+        var errorResponse = new AnthropicErrorResponse
+        {
+            Type = "error",
+            Error = new AnthropicErrorDetail
+            {
+                Type = "not_found_error",
+                Message = "model: claude-nonexistent-model"
+            }
+        };
+
+        var handler = new FakeHttpMessageHandler((_, _) =>
+        {
+            var res = new HttpResponseMessage(HttpStatusCode.NotFound)
+            {
+                Content = JsonContent.Create(errorResponse)
+            };
+            return Task.FromResult(res);
+        });
+
+        var service = CreateService(handler, model: "claude-nonexistent-model");
+
+        // Act
+        var act = () => service.SendPromptAsync("Hello");
+
+        // Assert
+        var ex = await act.Should().ThrowAsync<AnthropicApiException>();
+        ex.Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        ex.Which.ErrorType.Should().Be("not_found_error");
+        ex.Which.Message.Should().Contain("claude-nonexistent-model");
+    }
+
+    [Fact]
     public async Task SendPromptAsync_When200SuccessWithMultipleContentBlocks_ConcatenatesTextCorrectly()
     {
         // Arrange
