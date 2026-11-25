@@ -10,6 +10,12 @@
 - Việc ưu tiên cao nhất hiện tại: Vá các lỗ hổng bảo mật mức HIGH trong dependencies của Frontend (`npm`) và Backend (`NuGet`).
 
 
+
 ### 2026-11-25T11:03:00+07:00 | fix/research-background-service-shutdown | FIX-01
 - Khắc phục race condition khi dừng `CompetitorResearchBackgroundService` (thay `CancellationToken.None` bằng `stoppingToken` và kiểm tra `stoppingToken.IsCancellationRequested` ngay sau `Task.WhenAny`).
 - Bổ sung test tái hiện `BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly` (202/202 tests pass 10/10 lần chạy liên tiếp) và thêm `--blame-hang-timeout 60s` vào `.github/workflows/dotnet-ci.yml`.
+
+### 2026-11-25T12:03:00+07:00 | fix/ef-unicode-migration | FIX-02
+- Bổ sung EF Core Migration `SupportUnicodeVietnameseColumns` đồng bộ thay đổi `varchar` -> `nvarchar` cho 3 cột `users.full_name` (`nvarchar(150)`), `foods.food_name` (`nvarchar(200)`), `food_categories.category_name` (`nvarchar(100)`) từ commit `1a175f9`.
+- Vượt qua kiểm tra `dotnet-ef migrations has-pending-model-changes` (exit code 0), `dotnet build` và `201/201` tests.
+

@@ -124,4 +124,8 @@ Việc quan trọng nhất cần làm ngay là vá các lỗ hổng dependency m
 - **Nhánh hiện tại**: `feature/scheduled-competitor-research`
 - **Commit cuối cùng**: `d23b1ec` (`2026-10-27 00:20:04 +0700`) — *"feat(research): implement scheduled automated competitor research background service"*.
 - **Trạng thái công việc gần nhất**: Đã hoàn thành toàn bộ phần lập lịch tự động cho Competitor Research (`CompetitorResearchBackgroundService`, `CompetitorResearchHistoryStore`, các endpoints `GET /api/research/reports`, `GET /api/research/status`, `POST /api/research/trigger`) và viết đầy đủ unit/integration tests (`CompetitorResearchScheduledTests.cs`, `ResearchIntegrationTests.cs` — tất cả 201 tests đều pass). Ngoài ra có tạo script `build_architectural_report.py` để kết xuất file `SmartMacro_Architectural_Report.pdf` (đang nằm ở dạng untracked tại thư mục gốc).
+
 - **Cập nhật FIX-01 (`fix/research-background-service-shutdown`)**: Đã sửa race condition khi shutdown `CompetitorResearchBackgroundService` (loại bỏ `CancellationToken.None` khi chờ `_triggerChannel`, kiểm tra `stoppingToken.IsCancellationRequested` sau `Task.WhenAny`), thêm test `BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly` (202/202 tests pass 10/10 lần liên tiếp) và thêm `--blame-hang-timeout 60s` vào `.github/workflows/dotnet-ci.yml`.
+
+- **Cập nhật FIX-02 (`fix/ef-unicode-migration`)**: Đã bổ sung EF Core Migration `SupportUnicodeVietnameseColumns` cho 3 cột `NVARCHAR` (`users.full_name`, `foods.food_name`, `food_categories.category_name`) từ commit `1a175f9`, giúp `dotnet-ef migrations has-pending-model-changes` sạch hoàn toàn (exit code 0) và 201/201 tests pass.
+
