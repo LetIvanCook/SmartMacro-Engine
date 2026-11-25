@@ -1,0 +1,312 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1150" viewBox="0 0 1700 1150">
+  <title>Hình 3-3: Sơ đồ Use Case chi tiết — SmartMacro Engine</title>
+
+  <defs>
+    <!-- Arrow Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1E293B" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="open-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#475569" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <marker id="open-arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <!-- Realization hollow triangle -->
+    <marker id="triangle-hollow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <polygon points="1 1, 13 7, 1 13" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.6" />
+    </marker>
+    <!-- Filter for subtle drop-shadow -->
+    <filter id="card-shadow" x="-3%" y="-3%" width="108%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="callout-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <rect width="1700" height="1150" fill="#F8FAFC" />
+  <text x="850.0" y="42" font-family="Times New Roman, Arial" font-size="22" font-weight="bold" text-anchor="middle" fill="#0F172A">SƠ ĐỒ USE CASE CHI TIẾT HỆ THỐNG SMARTMACRO ENGINE</text>
+  <text x="850.0" y="68" font-family="Times New Roman, Arial" font-size="13" font-style="italic" text-anchor="middle" fill="#475569">Phân quyền 2 tác nhân chính (User &amp; Admin) với quan hệ liên kết «include» và mở rộng «extend» theo chuẩn UML</text>
+  <g id="system-boundary">
+    <rect x="280" y="95" width="1140" height="1025" rx="16" fill="#FFFFFF" stroke="#334155" stroke-width="2.5" filter="url(#card-shadow)" />
+    <rect x="280" y="95" width="1140" height="42" rx="16" fill="#1E293B" />
+    <rect x="280" y="115" width="1140" height="22" fill="#1E293B" />
+    <text x="310" y="122" font-family="Times New Roman, Arial" font-size="16" font-weight="bold" fill="#F8FAFC">Ranh giới Hệ thống: SMARTMACRO ENGINE CORE SERVICES</text>
+  </g>
+  <g id="packages">
+    <rect x="305" y="150" width="530" height="270" rx="8" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="4,4" />
+    <text x="325" y="172" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#334155">Phân hệ 1: Xác thực &amp; Hồ sơ cá nhân</text>
+    <rect x="305" y="440" width="530" height="330" rx="8" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="4,4" />
+    <text x="325" y="462" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#334155">Phân hệ 2: Quản lý Kho thực phẩm &amp; Dinh dưỡng</text>
+    <rect x="305" y="790" width="1090" height="310" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5" />
+    <text x="325" y="814" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#166534">Phân hệ 3: Tối ưu hóa Khẩu phần ăn Thông minh (Google OR-Tools GLOP Engine)</text>
+    <rect x="860" y="150" width="535" height="620" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5" />
+    <text x="880" y="172" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#991B1B">Phân hệ 4: Quản trị Hệ thống (Admin Management)</text>
+  </g>
+
+        <g id="actor-Người_dùng">
+          <!-- Head -->
+          <circle cx="130" cy="430" r="22" fill="#FFFFFF" stroke="#2563EB" stroke-width="2.5" />
+          <!-- Body -->
+          <line x1="130" y1="452" x2="130" y2="505" stroke="#2563EB" stroke-width="2.5" />
+          <!-- Arms -->
+          <line x1="98" y1="472" x2="162" y2="472" stroke="#2563EB" stroke-width="2.5" />
+          <!-- Left Leg -->
+          <line x1="130" y1="505" x2="104" y2="560" stroke="#2563EB" stroke-width="2.5" />
+          <!-- Right Leg -->
+          <line x1="130" y1="505" x2="156" y2="560" stroke="#2563EB" stroke-width="2.5" />
+          <!-- Labels -->
+          <text x="130" y="582" font-family="Times New Roman, Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#2563EB">Người dùng</text>
+          <text x="130" y="600" font-family="Times New Roman, Arial" font-size="12" font-style="italic" text-anchor="middle" fill="#64748B">&lt;&lt;End User&gt;&gt;</text>
+        </g>
+        
+
+        <g id="actor-Quản_trị_viên">
+          <!-- Head -->
+          <circle cx="1570" cy="370" r="22" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" />
+          <!-- Body -->
+          <line x1="1570" y1="392" x2="1570" y2="445" stroke="#DC2626" stroke-width="2.5" />
+          <!-- Arms -->
+          <line x1="1538" y1="412" x2="1602" y2="412" stroke="#DC2626" stroke-width="2.5" />
+          <!-- Left Leg -->
+          <line x1="1570" y1="445" x2="1544" y2="500" stroke="#DC2626" stroke-width="2.5" />
+          <!-- Right Leg -->
+          <line x1="1570" y1="445" x2="1596" y2="500" stroke="#DC2626" stroke-width="2.5" />
+          <!-- Labels -->
+          <text x="1570" y="522" font-family="Times New Roman, Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#DC2626">Quản trị viên</text>
+          <text x="1570" y="540" font-family="Times New Roman, Arial" font-size="12" font-style="italic" text-anchor="middle" fill="#64748B">&lt;&lt;System Admin&gt;&gt;</text>
+        </g>
+        
+
+        <g id="uc-UC01">
+          <ellipse cx="430" cy="215" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="430" y="208" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC01: Đăng nhập</text>
+          <text x="430" y="228" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Email / Password)</text>
+        </g>
+        
+
+        <g id="uc-UC02">
+          <ellipse cx="710" cy="215" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="710" y="208" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC02: Cấp Access JWT</text>
+          <text x="710" y="228" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(&amp; Rotation RefreshToken)</text>
+        </g>
+        
+
+        <g id="uc-UC03">
+          <ellipse cx="430" cy="290" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="430" y="283" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC03: Đăng ký tài khoản</text>
+          <text x="430" y="303" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Tạo tài khoản mới)</text>
+        </g>
+        
+
+        <g id="uc-UC04">
+          <ellipse cx="430" cy="370" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="430" y="363" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC04: Quản lý hồ sơ</text>
+          <text x="430" y="383" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Chỉ số UserBodyMetrics)</text>
+        </g>
+        
+
+        <g id="uc-UC05">
+          <ellipse cx="710" cy="290" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="710" y="283" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC05: Đăng xuất hệ thống</text>
+          <text x="710" y="303" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Thu hồi RefreshToken)</text>
+        </g>
+        
+
+        <g id="uc-UC06">
+          <ellipse cx="435" cy="510" rx="115" ry="28" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="435" y="503" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC06: Quản lý kho thực phẩm</text>
+          <text x="435" y="523" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(UserFoodInventories CRUD)</text>
+        </g>
+        
+
+        <g id="uc-UC07">
+          <ellipse cx="715" cy="510" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="715" y="503" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC07: Cảnh báo hạn dùng</text>
+          <text x="715" y="523" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Lọc thực phẩm sắp hết hạn)</text>
+        </g>
+        
+
+        <g id="uc-UC08">
+          <ellipse cx="435" cy="600" rx="115" ry="28" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="435" y="593" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC08: Thiết lập mục tiêu ngày</text>
+          <text x="435" y="613" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(DailyTargets Kcal &amp; Macros)</text>
+        </g>
+        
+
+        <g id="uc-UC09">
+          <ellipse cx="715" cy="600" rx="105" ry="26" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="715" y="593" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC09: Tính macro theo chu kỳ</text>
+          <text x="715" y="613" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Áp dụng Adjustment Rule)</text>
+        </g>
+        
+
+        <g id="uc-UC10">
+          <ellipse cx="435" cy="690" rx="115" ry="28" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="435" y="683" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC10: Xem Dashboard Macro</text>
+          <text x="435" y="703" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Tổng quan Kcal / Carbs / Fat)</text>
+        </g>
+        
+
+        <g id="uc-UC11">
+          <ellipse cx="540" cy="885" rx="145" ry="34" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="540" y="878" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC11: Tối ưu hóa khẩu phần ăn</text>
+          <text x="540" y="898" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Google OR-Tools GLOP Solver)</text>
+        </g>
+        
+
+        <g id="uc-UC12">
+          <ellipse cx="940" cy="850" rx="130" ry="28" fill="#FFFFFF" stroke="#059669" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="940" y="843" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC12: Đọc Daily Target ngày</text>
+          <text x="940" y="863" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Mục tiêu Kcal &amp; Macro)</text>
+        </g>
+        
+
+        <g id="uc-UC13">
+          <ellipse cx="940" cy="925" rx="130" ry="28" fill="#FFFFFF" stroke="#059669" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="940" y="918" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC13: Lọc kho thực phẩm còn tồn</text>
+          <text x="940" y="938" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(QuantityGrams &gt; 0)</text>
+        </g>
+        
+
+        <g id="uc-UC14">
+          <ellipse cx="940" cy="1005" rx="130" ry="28" fill="#FEF9C3" stroke="#D97706" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="940" y="998" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC14: Lưu vào MealLog</text>
+          <text x="940" y="1018" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Ghi nhận lịch sử bữa ăn)</text>
+        </g>
+        
+
+        <g id="uc-UC15">
+          <ellipse cx="1020" cy="220" rx="130" ry="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1020" y="213" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC15: Quản lý danh mục món</text>
+          <text x="1020" y="233" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(FoodCategories CRUD)</text>
+        </g>
+        
+
+        <g id="uc-UC16">
+          <ellipse cx="1020" cy="310" rx="130" ry="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1020" y="303" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC16: Quản trị dữ liệu Foods</text>
+          <text x="1020" y="323" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Cơ sở dữ liệu thực phẩm)</text>
+        </g>
+        
+
+        <g id="uc-UC17">
+          <ellipse cx="1250" cy="310" rx="105" ry="26" fill="#FFFFFF" stroke="#B91C1C" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1250" y="303" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC17: Duyệt thực phẩm</text>
+          <text x="1250" y="323" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Set is_verified = true)</text>
+        </g>
+        
+
+        <g id="uc-UC18">
+          <ellipse cx="1020" cy="420" rx="130" ry="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1020" y="413" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC18: Quản lý người dùng</text>
+          <text x="1020" y="433" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(Khóa / Mở tài khoản Users)</text>
+        </g>
+        
+
+        <g id="uc-UC19">
+          <ellipse cx="1020" cy="530" rx="135" ry="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1020" y="523" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC19: Cấu hình quy tắc Macro</text>
+          <text x="1020" y="543" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(MacroAdjustmentRules CRUD)</text>
+        </g>
+        
+
+        <g id="uc-UC20">
+          <ellipse cx="1020" cy="640" rx="135" ry="28" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.8" filter="url(#card-shadow)" />
+          <text x="1020" y="633" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0F172A">UC20: Quản lý loại chu kỳ tập</text>
+          <text x="1020" y="653" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#475569">(TrainingCycleTypes CRUD)</text>
+        </g>
+        
+  <!-- Association Lines -->
+  <line x1="130" y1="420" x2="330" y2="220" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="420" x2="330" y2="290" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="440" x2="330" y2="370" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="450" x2="320" y2="510" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="460" x2="320" y2="600" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="480" x2="320" y2="690" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="130" y1="500" x2="395" y2="885" stroke="#2563EB" stroke-width="1.6" />
+  <line x1="1570" y1="350" x2="1150" y2="220" stroke="#DC2626" stroke-width="1.6" />
+  <line x1="1570" y1="370" x2="1150" y2="310" stroke="#DC2626" stroke-width="1.6" />
+  <line x1="1570" y1="390" x2="1150" y2="420" stroke="#DC2626" stroke-width="1.6" />
+  <line x1="1570" y1="410" x2="1155" y2="530" stroke="#DC2626" stroke-width="1.6" />
+  <line x1="1570" y1="430" x2="1155" y2="640" stroke="#DC2626" stroke-width="1.6" />
+  <line x1="1570" y1="330" x2="815" y2="220" stroke="#DC2626" stroke-width="1.6" />
+
+        <g>
+          <line x1="535" y1="215" x2="605" y2="215" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="534.0" y="195.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="570.0" y="208.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#2563EB">«include»</text>
+        </g>
+        
+
+        <g>
+          <line x1="535" y1="225" x2="615" y2="280" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="539.0" y="232.5" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="575.0" y="245.5" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#D97706">«extend»</text>
+        </g>
+        
+
+        <g>
+          <line x1="550" y1="510" x2="610" y2="510" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="544.0" y="490.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="580.0" y="503.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#D97706">«extend»</text>
+        </g>
+        
+
+        <g>
+          <line x1="550" y1="600" x2="610" y2="600" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="544.0" y="580.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="580.0" y="593.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#2563EB">«include»</text>
+        </g>
+        
+
+        <g>
+          <line x1="1150" y1="310" x2="1145" y2="310" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="1111.5" y="290.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="1147.5" y="303.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#D97706">«extend»</text>
+        </g>
+        
+
+        <g>
+          <line x1="685" y1="875" x2="810" y2="855" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="701.5" y="843.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="737.5" y="856.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#2563EB">«include»</text>
+        </g>
+        
+
+        <g>
+          <line x1="685" y1="895" x2="810" y2="920" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="701.5" y="909.5" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="737.5" y="922.5" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#2563EB">«include»</text>
+        </g>
+        
+
+        <g>
+          <line x1="665" y1="915" x2="815" y2="995" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#open-arrow-dashed)" />
+          <rect x="689.0" y="957.0" width="72" height="18" rx="3" fill="#FFFFFF" fill-opacity="0.9" />
+          <text x="725.0" y="970.0" font-family="Times New Roman, Arial" font-size="11.5" font-weight="bold" font-style="italic" text-anchor="middle" fill="#D97706">«extend»</text>
+        </g>
+        
+
+    <g id="legend" transform="translate(30, 990)">
+      <rect width="230" height="130" rx="8" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2" filter="url(#card-shadow)" />
+      <text x="15" y="24" font-family="Times New Roman, Arial" font-size="12" font-weight="bold" fill="#0F172A">CHÚ GIẢI KÝ HIỆU UML:</text>
+      <line x1="15" y1="46" x2="65" y2="46" stroke="#2563EB" stroke-width="1.6" />
+      <text x="75" y="50" font-family="Times New Roman, Arial" font-size="11" fill="#334155">Liên kết tác nhân (Association)</text>
+      <line x1="15" y1="72" x2="65" y2="72" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5,4" />
+      <text x="75" y="76" font-family="Times New Roman, Arial" font-size="11" fill="#2563EB">&#171;include&#187; (Quan hệ bắt buộc)</text>
+      <line x1="15" y1="98" x2="65" y2="98" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" />
+      <text x="75" y="102" font-family="Times New Roman, Arial" font-size="11" fill="#D97706">&#171;extend&#187; (Quan hệ mở rộng)</text>
+    </g>
+    
+</svg>

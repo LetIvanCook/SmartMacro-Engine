@@ -167,8 +167,7 @@ namespace SmartMacro.Api.Migrations
                     b.Property<string>("FoodName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("food_name");
 
                     b.Property<bool>("IsVerified")
@@ -219,8 +218,7 @@ namespace SmartMacro.Api.Migrations
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("category_name");
 
                     b.HasKey("CategoryId");
@@ -489,8 +487,7 @@ namespace SmartMacro.Api.Migrations
 
                     b.Property<string>("FullName")
                         .HasMaxLength(150)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(150)")
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("full_name");
 
                     b.Property<string>("GoalType")

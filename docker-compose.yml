@@ -35,6 +35,7 @@ services:
       - Jwt__Issuer=SmartMacroApi
       - Jwt__Audience=SmartMacroClient
       - Jwt__ExpireDays=30
+      - Anthropic__ApiKey=${ANTHROPIC_API_KEY:-}
     depends_on:
       sqlserver:
         condition: service_healthy

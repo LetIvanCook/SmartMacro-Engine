@@ -345,3 +345,23 @@ Dự án áp dụng quy trình GitFlow đơn giản hóa:
 4. Merge vào `develop` -> chuẩn bị release.
 5. Tạo Pull Request từ `develop` vào `main` -> CI build, test & tự động đóng gói Docker image push lên GHCR (`ghcr.io/letivancook/smartmacro-engine`).
 
+---
+
+## 🛠️ Local Setup — Playwright & AI Research
+
+Khi kích hoạt tính năng **AI Competitor Research** ở môi trường Local/Development, cần cài đặt browser Chromium cho Playwright:
+
+```powershell
+pwsh SmartMacro.Api/bin/Debug/net8.0/playwright.ps1 install chromium
+# Hoặc trên PowerShell 5.1 (Windows PowerShell):
+powershell -File SmartMacro.Api/bin/Debug/net8.0/playwright.ps1 install chromium
+```
+
+> **Lưu ý:**
+> - Tính năng này mặc định **TẮT** ở môi trường Production (`Research:Enabled = false`) và được bật ở `appsettings.Development.json`.
+> - API Key Anthropic được cấu hình an toàn bằng User Secrets (không commit vào source code):
+>   ```powershell
+>   cd SmartMacro.Api
+>   dotnet user-secrets set "Anthropic:ApiKey" "<your-api-key>"
+>   ```
+

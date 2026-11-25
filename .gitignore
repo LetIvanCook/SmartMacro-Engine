@@ -54,6 +54,8 @@ dist/
 ## ── Secrets & Environment ─────────────────────────────────────
 .env
 .env.local
+secrets.json
+**/secrets.json
 appsettings.Development.json
 logs/
 *.log

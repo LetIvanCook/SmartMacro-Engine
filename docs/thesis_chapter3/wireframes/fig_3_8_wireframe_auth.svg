@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>Hình 3-8: Wireframe Màn hình Đăng nhập &amp; Đăng ký — SmartMacro Engine</title>
+
+  <defs>
+    <!-- Drop shadows -->
+    <filter id="wf-shadow" x="-3%" y="-3%" width="106%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="modal-shadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="-4" dy="4" stdDeviation="12" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+    <filter id="callout-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <rect width="1440" height="900" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2" />
+  <g id="hero-brand-panel">
+    <rect x="0" y="0" width="580" height="900" fill="#0F172A" />
+    <circle cx="120" cy="180" r="280" fill="#1E293B" fill-opacity="0.4" />
+    <circle cx="500" cy="750" r="220" fill="#1E293B" fill-opacity="0.4" />
+    <rect x="70" y="80" width="46" height="46" rx="10" fill="#10B981" />
+    <text x="93" y="110" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#FFFFFF">⚡</text>
+    <text x="130" y="105" font-family="Times New Roman, Arial" font-size="26" font-weight="bold" fill="#FFFFFF">SmartMacro Engine</text>
+    <text x="132" y="125" font-family="Arial, sans-serif" font-size="12" fill="#94A3B8" letter-spacing="1">NUTRITION &amp; INVENTORY OPTIMIZER</text>
+    <text x="70" y="210" font-family="Times New Roman, Arial" font-size="28" font-weight="bold" fill="#F8FAFC">Tối ưu hóa Khẩu phần ăn</text>
+    <text x="70" y="246" font-family="Times New Roman, Arial" font-size="28" font-weight="bold" fill="#34D399">Theo Chu kỳ Tập luyện</text>
+    <text x="70" y="285" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">Ứng dụng giải thuật Quy hoạch tuyến tính (Google OR-Tools GLOP)</text>
+    <text x="70" y="305" font-family="Times New Roman, Arial" font-size="14" fill="#94A3B8">kết hợp quản lý kho thực phẩm tủ lạnh cá nhân chống lãng phí.</text>
+    <rect x="70" y="350" width="440" height="90" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1.2" />
+    <circle cx="105" cy="395" r="20" fill="#047857" />
+    <text x="105" y="401" font-family="Arial" font-size="16" text-anchor="middle" fill="#FFFFFF">🎯</text>
+    <text x="140" y="385" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#FFFFFF">Tính toán Macro chính xác đến từng gram</text>
+    <text x="140" y="408" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">Giải bài toán LP đa ràng buộc Protein, Carbs, Fat (±5%)</text>
+    <text x="140" y="425" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">và tối thiểu hóa sai lệch Calo mục tiêu.</text>
+    <rect x="70" y="460" width="440" height="90" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1.2" />
+    <circle cx="105" cy="505" r="20" fill="#0369A1" />
+    <text x="105" y="511" font-family="Arial" font-size="16" text-anchor="middle" fill="#FFFFFF">🥦</text>
+    <text x="140" y="495" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#FFFFFF">Tủ lạnh thông minh &amp; Cảnh báo hạn dùng</text>
+    <text x="140" y="518" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">Theo dõi chính xác hạn sử dụng của từng thực phẩm,</text>
+    <text x="140" y="535" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">ưu tiên đưa nguyên liệu sắp hết hạn vào thực đơn nấu.</text>
+    <rect x="70" y="570" width="440" height="90" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1.2" />
+    <circle cx="105" cy="615" r="20" fill="#7C3AED" />
+    <text x="105" y="621" font-family="Arial" font-size="16" text-anchor="middle" fill="#FFFFFF">🔒</text>
+    <text x="140" y="605" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" fill="#FFFFFF">Bảo mật chuẩn JWT &amp; Refresh Token Rotation</text>
+    <text x="140" y="628" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">Mã hóa mật khẩu BCrypt, phòng chống tấn công dò quét</text>
+    <text x="140" y="645" font-family="Times New Roman, Arial" font-size="12.5" fill="#94A3B8">bằng chính sách Rate Limiting tại tầng API Middleware.</text>
+    <text x="70" y="820" font-family="Times New Roman, Arial" font-size="12" fill="#64748B">ĐỒ ÁN TỐT NGHIỆP / THỰC TẬP CHUYÊN NGÀNH CNTT</text>
+    <text x="70" y="840" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#94A3B8">TRƯỜNG ĐẠI HỌC CÔNG NGHỆ SÀI GÒN (STU) — KHOA CNTT</text>
+  </g>
+  <g id="auth-form-container">
+    <rect x="730" y="70" width="540" height="760" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#wf-shadow)" />
+    <g id="tab-switcher">
+      <rect x="760" y="105" width="480" height="46" rx="8" fill="#F1F5F9" />
+      <rect x="764" y="109" width="236" height="38" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" filter="url(#wf-shadow)" />
+      <text x="882" y="133" font-family="Times New Roman, Arial" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#0F172A">Đăng nhập tài khoản</text>
+      <text x="1122" y="133" font-family="Times New Roman, Arial" font-size="14.5" font-weight="normal" text-anchor="middle" fill="#64748B">Đăng ký thành viên</text>
+    </g>
+    <text x="760" y="185" font-family="Times New Roman, Arial" font-size="18" font-weight="bold" fill="#0F172A">Chào mừng quay trở lại!</text>
+    <text x="760" y="208" font-family="Times New Roman, Arial" font-size="13" fill="#64748B">Vui lòng nhập email và mật khẩu của bạn để truy cập hệ thống.</text>
+    <g id="field-email">
+      <text x="760" y="248" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#334155">Địa chỉ Email <tspan fill="#DC2626">*</tspan></text>
+      <rect x="760" y="258" width="480" height="44" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2" />
+      <text x="775" y="285" font-family="Arial, sans-serif" font-size="13.5" fill="#0F172A">nguyen.van.an@smartmacro.vn</text>
+      <circle cx="1215" cy="280" r="9" fill="#10B981" />
+      <text x="1215" y="284" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#FFFFFF">✓</text>
+    </g>
+    <g id="field-password">
+      <text x="760" y="332" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" fill="#334155">Mật khẩu <tspan fill="#DC2626">*</tspan></text>
+      <rect x="760" y="342" width="480" height="44" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2" />
+      <text x="775" y="370" font-family="Arial, sans-serif" font-size="16" fill="#0F172A">••••••••••••••••</text>
+      <text x="1215" y="369" font-family="Arial" font-size="14" text-anchor="middle" fill="#64748B">👁</text>
+    </g>
+    <g id="options-row">
+      <rect x="760" y="405" width="16" height="16" rx="3" fill="#2563EB" />
+      <text x="768" y="417" font-family="Arial" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF">✓</text>
+      <text x="785" y="418" font-family="Times New Roman, Arial" font-size="13" fill="#334155">Duy trì đăng nhập (Refresh Token 7 ngày)</text>
+      <text x="1240" y="418" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="end" fill="#2563EB">Quên mật khẩu?</text>
+    </g>
+    <g id="btn-login-submit">
+      <rect x="760" y="445" width="480" height="48" rx="6" fill="#1E293B" stroke="#0F172A" stroke-width="1" filter="url(#wf-shadow)" />
+      <text x="1000" y="475" font-family="Times New Roman, Arial" font-size="15" font-weight="bold" text-anchor="middle" fill="#FFFFFF">ĐĂNG NHẬP VÀO HỆ THỐNG</text>
+    </g>
+    <line x1="760" y1="520" x2="1240" y2="520" stroke="#E2E8F0" stroke-width="1" />
+    <rect x="910" y="511" width="180" height="18" fill="#FFFFFF" />
+    <text x="1000" y="524" font-family="Times New Roman, Arial" font-size="12" text-anchor="middle" fill="#94A3B8">HOẶC THÔNG TIN ĐĂNG KÝ MỚI</text>
+    <g id="register-fields-preview">
+      <rect x="760" y="545" width="480" height="215" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" />
+      <text x="775" y="568" font-family="Times New Roman, Arial" font-size="12.5" font-weight="bold" fill="#475569">Thông số nhân trắc học khởi tạo (Dành cho thành viên mới):</text>
+      <text x="775" y="595" font-family="Times New Roman, Arial" font-size="11.5" fill="#64748B">Họ và tên:</text>
+      <rect x="775" y="602" width="220" height="32" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+      <text x="785" y="623" font-family="Arial" font-size="12" fill="#0F172A">Nguyễn Văn An</text>
+      <text x="1015" y="595" font-family="Times New Roman, Arial" font-size="11.5" fill="#64748B">Giới tính sinh học:</text>
+      <rect x="1015" y="602" width="210" height="32" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+      <text x="1025" y="623" font-family="Arial" font-size="12" fill="#0F172A">Nam (Male) ▾</text>
+      <text x="775" y="655" font-family="Times New Roman, Arial" font-size="11.5" fill="#64748B">Mức độ vận động (Activity Level):</text>
+      <rect x="775" y="662" width="220" height="32" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+      <text x="785" y="683" font-family="Arial" font-size="12" fill="#0F172A">Moderate (3-5 buổi/tuần) ▾</text>
+      <text x="1015" y="655" font-family="Times New Roman, Arial" font-size="11.5" fill="#64748B">Mục tiêu thể hình (Goal Type):</text>
+      <rect x="1015" y="662" width="210" height="32" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+      <text x="1025" y="683" font-family="Arial" font-size="12" fill="#0F172A">Tăng cơ (Hypertrophy) ▾</text>
+      <rect x="775" y="710" width="450" height="36" rx="5" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.5" />
+      <text x="1000" y="733" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#2563EB">+ ĐĂNG KÝ TÀI KHOẢN MỚI &amp; THIẾT LẬP HỒ SƠ</text>
+    </g>
+    <text x="1000" y="795" font-family="Times New Roman, Arial" font-size="11" text-anchor="middle" fill="#94A3B8">Hệ thống áp dụng chính sách Rate Limit 5 req/phút tại /api/auth/login để ngăn chặn Brute-force.</text>
+  </g>
+
+    <g id="callout-1" filter="url(#callout-glow)">
+      <circle cx="290" cy="115" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="290" y="120" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">1</text>
+    </g>
+    
+
+    <g id="callout-2" filter="url(#callout-glow)">
+      <circle cx="882" cy="110" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="882" y="115" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">2</text>
+    </g>
+    
+
+    <g id="callout-3" filter="url(#callout-glow)">
+      <circle cx="1215" cy="275" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1215" y="280" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">3</text>
+    </g>
+    
+
+    <g id="callout-4" filter="url(#callout-glow)">
+      <circle cx="770" cy="415" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="770" y="420" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">4</text>
+    </g>
+    
+
+    <g id="callout-5" filter="url(#callout-glow)">
+      <circle cx="1000" cy="465" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1000" y="470" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">5</text>
+    </g>
+    
+
+    <g id="callout-6" filter="url(#callout-glow)">
+      <circle cx="1210" cy="615" r="15" fill="#E11D48" stroke="#FFFFFF" stroke-width="2.5" />
+      <text x="1210" y="620" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">6</text>
+    </g>
+    
+</svg>

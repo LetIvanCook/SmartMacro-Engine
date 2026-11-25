@@ -1,0 +1,355 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1300" viewBox="0 0 1800 1300">
+  <title>Hình 3-4: Sơ đồ lớp (Class Diagram) 3 tầng — SmartMacro Engine</title>
+
+  <defs>
+    <!-- Arrow Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1E293B" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="open-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#475569" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <marker id="open-arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#2563EB" stroke-width="1.6" stroke-linecap="round" />
+    </marker>
+    <!-- Realization hollow triangle -->
+    <marker id="triangle-hollow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <polygon points="1 1, 13 7, 1 13" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.6" />
+    </marker>
+    <!-- Filter for subtle drop-shadow -->
+    <filter id="card-shadow" x="-3%" y="-3%" width="108%" height="108%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="callout-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <rect width="1800" height="1300" fill="#F8FAFC" />
+  <text x="900.0" y="40" font-family="Times New Roman, Arial" font-size="22" font-weight="bold" text-anchor="middle" fill="#0F172A">SƠ ĐỒ LỚP KIẾN TRÚC 3 TẦNG (THREE-TIER CLASS DIAGRAM) — SMARTMACRO ENGINE</text>
+  <text x="900.0" y="66" font-family="Times New Roman, Arial" font-size="13" font-style="italic" text-anchor="middle" fill="#475569">Tuân thủ nguyên lý Dependency Inversion: Controller → Service Interface/Impl → Optimization Engine (OR-Tools) → EF Core DbContext</text>
+  <rect x="40" y="90" width="1720" height="240" rx="10" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" />
+  <text x="60" y="115" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#92400E">TẦNG 1: PRESENTATION / API CONTROLLERS (ASP.NET Core Web API 8.0 - RESTful endpoints)</text>
+  <rect x="40" y="355" width="1720" height="340" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5" />
+  <text x="60" y="380" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#1E40AF">TẦNG 2: BUSINESS LOGIC / SERVICE ABSTRACTION &amp; IMPLEMENTATION (DTO Mapping &amp; Business Rules)</text>
+  <rect x="40" y="720" width="860" height="540" rx="10" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.5" />
+  <text x="60" y="745" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#166534">TẦNG 3A: ALGORITHMIC OPTIMIZATION ENGINE (Google OR-Tools GLOP Linear Solver)</text>
+  <rect x="920" y="720" width="840" height="540" rx="10" fill="#FAF5FF" stroke="#E9D5FF" stroke-width="1.5" />
+  <text x="940" y="745" font-family="Times New Roman, Arial" font-size="14" font-weight="bold" fill="#6B21A8">TẦNG 3B: DATA ACCESS LAYER (Entity Framework Core 8.0 &amp; SQL Server Persistence)</text>
+<g id="class-AuthController">
+  <rect x="60" y="135" width="300" height="157" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,177 L60,141 Q60,135 66,135 L354,135 Q360,135 360,141 L360,177 Z" fill="#B45309" />
+  <text x="210.0" y="150" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;Controller&gt;&gt;</text>
+  <text x="210.0" y="167" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">AuthController</text>
+  <text x="70" y="192" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _authService : IAuthService</text>
+  <line x1="60" y1="204" x2="360" y2="204" stroke="#B45309" stroke-width="1" />
+  <text x="70" y="217" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Register(req) : Task&lt;ActionResult&gt;</text>
+  <text x="70" y="234" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Login(req) : Task&lt;ActionResult&gt;</text>
+  <text x="70" y="251" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Refresh(req) : Task&lt;ActionResult&gt;</text>
+  <text x="70" y="268" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Logout(req) : Task&lt;IActionResult&gt;</text>
+</g>
+<g id="class-InventoryController">
+  <rect x="390" y="135" width="310" height="157" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M390,177 L390,141 Q390,135 396,135 L694,135 Q700,135 700,141 L700,177 Z" fill="#B45309" />
+  <text x="545.0" y="150" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;Controller&gt;&gt;</text>
+  <text x="545.0" y="167" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">InventoryController</text>
+  <text x="400" y="192" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _inventoryService : IInventoryService</text>
+  <line x1="390" y1="204" x2="700" y2="204" stroke="#B45309" stroke-width="1" />
+  <text x="400" y="217" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyInventory() : Task&lt;ActionResult&gt;</text>
+  <text x="400" y="234" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ AddItem(req) : Task&lt;ActionResult&gt;</text>
+  <text x="400" y="251" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateItem(id, req) : Task&lt;ActionResult&gt;</text>
+  <text x="400" y="268" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ DeleteItem(id) : Task&lt;IActionResult&gt;</text>
+</g>
+<g id="class-OptimizationsController">
+  <rect x="730" y="135" width="330" height="106" rx="6" fill="#FFFFFF" stroke="#047857" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M730,177 L730,141 Q730,135 736,135 L1054,135 Q1060,135 1060,141 L1060,177 Z" fill="#047857" />
+  <text x="895.0" y="150" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;Controller&gt;&gt;</text>
+  <text x="895.0" y="167" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">OptimizationsController</text>
+  <text x="740" y="192" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _optimizationService : IOptimizationService</text>
+  <line x1="730" y1="204" x2="1060" y2="204" stroke="#047857" stroke-width="1" />
+  <text x="740" y="217" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GeneratePlan(req) : Task&lt;ActionResult&lt;OptimizationResultDto&gt;&gt;</text>
+</g>
+<g id="class-DailyTargetsController">
+  <rect x="1090" y="135" width="320" height="157" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1090,177 L1090,141 Q1090,135 1096,135 L1404,135 Q1410,135 1410,141 L1410,177 Z" fill="#B45309" />
+  <text x="1250.0" y="150" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;Controller&gt;&gt;</text>
+  <text x="1250.0" y="167" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">DailyTargetsController</text>
+  <text x="1100" y="192" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _dailyTargetService : IDailyTargetService</text>
+  <line x1="1090" y1="204" x2="1410" y2="204" stroke="#B45309" stroke-width="1" />
+  <text x="1100" y="217" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyTargets() : Task&lt;ActionResult&gt;</text>
+  <text x="1100" y="234" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetTodayTarget() : Task&lt;ActionResult&gt;</text>
+  <text x="1100" y="251" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateTarget(req) : Task&lt;ActionResult&gt;</text>
+  <text x="1100" y="268" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateTarget(id, req) : Task&lt;ActionResult&gt;</text>
+</g>
+<g id="class-FoodsController">
+  <rect x="1440" y="135" width="300" height="174" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1440,177 L1440,141 Q1440,135 1446,135 L1734,135 Q1740,135 1740,141 L1740,177 Z" fill="#B45309" />
+  <text x="1590.0" y="150" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;Controller&gt;&gt;</text>
+  <text x="1590.0" y="167" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">FoodsController</text>
+  <text x="1450" y="192" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _foodService : IFoodService</text>
+  <line x1="1440" y1="204" x2="1740" y2="204" stroke="#B45309" stroke-width="1" />
+  <text x="1450" y="217" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Search(req) : Task&lt;ActionResult&gt;</text>
+  <text x="1450" y="234" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetById(id) : Task&lt;ActionResult&gt;</text>
+  <text x="1450" y="251" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Create(req) : Task&lt;ActionResult&gt;</text>
+  <text x="1450" y="268" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Update(id, req) : Task&lt;ActionResult&gt;</text>
+  <text x="1450" y="285" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Delete(id) : Task&lt;IActionResult&gt;</text>
+</g>
+<g id="class-IAuthService">
+  <rect x="60" y="400" width="300" height="130" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,442 L60,406 Q60,400 66,400 L354,400 Q360,400 360,406 L360,442 Z" fill="#1D4ED8" />
+  <text x="210.0" y="415" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="210.0" y="432" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IAuthService</text>
+  <text x="70" y="457" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ RegisterAsync(req) : Task&lt;AuthResponseDto&gt;</text>
+  <text x="70" y="474" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ LoginAsync(req) : Task&lt;AuthResponseDto&gt;</text>
+  <text x="70" y="491" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ RefreshTokenAsync(token) : Task&lt;AuthResponseDto&gt;</text>
+  <text x="70" y="508" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ RevokeTokenAsync(token, userId) : Task</text>
+</g>
+<g id="class-AuthService">
+  <rect x="60" y="530" width="300" height="170" rx="6" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,568 L60,536 Q60,530 66,530 L354,530 Q360,530 360,536 L360,568 Z" fill="#3B82F6" />
+  <text x="210.0" y="545" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="210.0" y="562" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">AuthService</text>
+  <text x="70" y="583" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _userService : IUserService</text>
+  <text x="70" y="600" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _dbContext : SmartMacroDbContext</text>
+  <line x1="60" y1="612" x2="360" y2="612" stroke="#3B82F6" stroke-width="1" />
+  <text x="70" y="625" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ RegisterAsync(...) : Task</text>
+  <text x="70" y="642" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ LoginAsync(...) : Task</text>
+  <text x="70" y="659" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GenerateJwtToken(...) : (string, DateTime)</text>
+  <text x="70" y="676" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ HashToken(token) : string</text>
+</g>
+<g id="class-IInventoryService">
+  <rect x="390" y="400" width="310" height="130" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M390,442 L390,406 Q390,400 396,400 L694,400 Q700,400 700,406 L700,442 Z" fill="#1D4ED8" />
+  <text x="545.0" y="415" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="545.0" y="432" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IInventoryService</text>
+  <text x="400" y="457" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyInventoryAsync(userId) : Task&lt;List&gt;</text>
+  <text x="400" y="474" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ AddItemAsync(userId, req) : Task&lt;ItemDto&gt;</text>
+  <text x="400" y="491" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateItemAsync(userId, id, req) : Task</text>
+  <text x="400" y="508" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ DeleteItemAsync(userId, id) : Task</text>
+</g>
+<g id="class-InventoryService">
+  <rect x="390" y="530" width="310" height="170" rx="6" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M390,568 L390,536 Q390,530 396,530 L694,530 Q700,530 700,536 L700,568 Z" fill="#3B82F6" />
+  <text x="545.0" y="545" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="545.0" y="562" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">InventoryService</text>
+  <text x="400" y="583" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _db : SmartMacroDbContext</text>
+  <text x="400" y="600" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _mapper : IMapper</text>
+  <line x1="390" y1="612" x2="700" y2="612" stroke="#3B82F6" stroke-width="1" />
+  <text x="400" y="625" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyInventoryAsync(...) : Task</text>
+  <text x="400" y="642" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ AddItemAsync(...) : Task</text>
+  <text x="400" y="659" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateItemAsync(...) : Task</text>
+  <text x="400" y="676" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ DeleteItemAsync(...) : Task</text>
+</g>
+<g id="class-IOptimizationService">
+  <rect x="730" y="400" width="330" height="79" rx="6" fill="#FFFFFF" stroke="#047857" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M730,442 L730,406 Q730,400 736,400 L1054,400 Q1060,400 1060,406 L1060,442 Z" fill="#047857" />
+  <text x="895.0" y="415" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="895.0" y="432" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IOptimizationService</text>
+  <text x="740" y="457" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GenerateMealPlanAsync(userId, req) : Task&lt;OptimizationResultDto&gt;</text>
+</g>
+<g id="class-OptimizationService">
+  <rect x="730" y="515" width="330" height="136" rx="6" fill="#FFFFFF" stroke="#047857" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M730,553 L730,521 Q730,515 736,515 L1054,515 Q1060,515 1060,521 L1060,553 Z" fill="#10B981" />
+  <text x="895.0" y="530" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="895.0" y="547" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">OptimizationService</text>
+  <text x="740" y="568" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _db : SmartMacroDbContext</text>
+  <text x="740" y="585" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _mapper : IMapper</text>
+  <text x="740" y="602" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _engine : IMacroOptimizationEngine</text>
+  <line x1="730" y1="614" x2="1060" y2="614" stroke="#047857" stroke-width="1" />
+  <text x="740" y="627" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GenerateMealPlanAsync(userId, req) : Task&lt;OptimizationResultDto&gt;</text>
+</g>
+<g id="class-IDailyTargetService">
+  <rect x="1090" y="400" width="320" height="130" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1090,442 L1090,406 Q1090,400 1096,400 L1404,400 Q1410,400 1410,406 L1410,442 Z" fill="#1D4ED8" />
+  <text x="1250.0" y="415" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="1250.0" y="432" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IDailyTargetService</text>
+  <text x="1100" y="457" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyTargetsAsync(userId) : Task&lt;List&gt;</text>
+  <text x="1100" y="474" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetTodayTargetAsync(userId) : Task&lt;TargetDto&gt;</text>
+  <text x="1100" y="491" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateTargetAsync(userId, req) : Task</text>
+  <text x="1100" y="508" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateTargetAsync(userId, id, req) : Task</text>
+</g>
+<g id="class-DailyTargetService">
+  <rect x="1090" y="530" width="320" height="170" rx="6" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1090,568 L1090,536 Q1090,530 1096,530 L1404,530 Q1410,530 1410,536 L1410,568 Z" fill="#3B82F6" />
+  <text x="1250.0" y="545" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="1250.0" y="562" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">DailyTargetService</text>
+  <text x="1100" y="583" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _db : SmartMacroDbContext</text>
+  <text x="1100" y="600" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _mapper : IMapper</text>
+  <line x1="1090" y1="612" x2="1410" y2="612" stroke="#3B82F6" stroke-width="1" />
+  <text x="1100" y="625" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetMyTargetsAsync(...) : Task</text>
+  <text x="1100" y="642" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetTodayTargetAsync(...) : Task</text>
+  <text x="1100" y="659" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateTargetAsync(...) : Task</text>
+  <text x="1100" y="676" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateTargetAsync(...) : Task</text>
+</g>
+<g id="class-IFoodService">
+  <rect x="1440" y="400" width="300" height="147" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1440,442 L1440,406 Q1440,400 1446,400 L1734,400 Q1740,400 1740,406 L1740,442 Z" fill="#1D4ED8" />
+  <text x="1590.0" y="415" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="1590.0" y="432" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IFoodService</text>
+  <text x="1450" y="457" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ SearchFoodsAsync(req) : Task&lt;PagedResult&gt;</text>
+  <text x="1450" y="474" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetFoodByIdAsync(id) : Task&lt;FoodDto&gt;</text>
+  <text x="1450" y="491" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateFoodAsync(req) : Task&lt;FoodDto&gt;</text>
+  <text x="1450" y="508" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UpdateFoodAsync(id, req) : Task</text>
+  <text x="1450" y="525" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ DeleteFoodAsync(id) : Task</text>
+</g>
+<g id="class-FoodService">
+  <rect x="1440" y="545" width="300" height="153" rx="6" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1440,583 L1440,551 Q1440,545 1446,545 L1734,545 Q1740,545 1740,551 L1740,583 Z" fill="#3B82F6" />
+  <text x="1590.0" y="560" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="1590.0" y="577" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">FoodService</text>
+  <text x="1450" y="598" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _db : SmartMacroDbContext</text>
+  <text x="1450" y="615" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- _mapper : IMapper</text>
+  <line x1="1440" y1="627" x2="1740" y2="627" stroke="#3B82F6" stroke-width="1" />
+  <text x="1450" y="640" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ SearchFoodsAsync(...) : Task</text>
+  <text x="1450" y="657" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ GetFoodByIdAsync(...) : Task</text>
+  <text x="1450" y="674" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateFoodAsync(...) : Task</text>
+</g>
+<g id="class-IMacroOptimizationEngine">
+  <rect x="60" y="770" width="380" height="79" rx="6" fill="#FFFFFF" stroke="#065F46" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,812 L60,776 Q60,770 66,770 L434,770 Q440,770 440,776 L440,812 Z" fill="#065F46" />
+  <text x="250.0" y="785" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;interface&gt;&gt;</text>
+  <text x="250.0" y="802" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">IMacroOptimizationEngine</text>
+  <text x="70" y="827" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CalculateOptimalMeal(target, inventory) : OptimizationResult</text>
+</g>
+<g id="class-MacroOptimizationEngine">
+  <rect x="60" y="890" width="380" height="170" rx="6" fill="#FFFFFF" stroke="#059669" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,928 L60,896 Q60,890 66,890 L434,890 Q440,890 440,896 L440,928 Z" fill="#059669" />
+  <text x="250.0" y="905" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="250.0" y="922" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">MacroOptimizationEngine</text>
+  <text x="70" y="943" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- const Tolerance : double = 0.05</text>
+  <text x="70" y="960" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- const MinGramsThreshold : double = 0.5</text>
+  <line x1="60" y1="972" x2="440" y2="972" stroke="#059669" stroke-width="1" />
+  <text x="70" y="985" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CalculateOptimalMeal(target, inventory) : OptimizationResult</text>
+  <text x="70" y="1002" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- SolveLinearProgram(target, inventory) : OptimizationResult</text>
+  <text x="70" y="1019" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- AddMacroConstraint(solver, grams, inv, selector, target, name)</text>
+  <text x="70" y="1036" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">- Fail(message : string) : OptimizationResult</text>
+</g>
+<g id="class-Google.OrTools.LinearSolver.Solver">
+  <rect x="60" y="1080" width="380" height="157" rx="6" fill="#FFFFFF" stroke="#0F766E" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M60,1122 L60,1086 Q60,1080 66,1080 L434,1080 Q440,1080 440,1086 L440,1122 Z" fill="#0F766E" />
+  <text x="250.0" y="1095" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;external library&gt;&gt;</text>
+  <text x="250.0" y="1112" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Google.OrTools.LinearSolver.Solver</text>
+  <text x="70" y="1137" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CreateSolver(solverType : string) : Solver</text>
+  <line x1="60" y1="1149" x2="440" y2="1149" stroke="#0F766E" stroke-width="1" />
+  <text x="70" y="1162" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ MakeNumVar(lb, ub, name) : Variable</text>
+  <text x="70" y="1179" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ MakeConstraint(lb, ub, name) : Constraint</text>
+  <text x="70" y="1196" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Objective() : Objective</text>
+  <text x="70" y="1213" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Solve() : ResultStatus</text>
+</g>
+<g id="class-OptimizationResult">
+  <rect x="480" y="770" width="390" height="177" rx="6" fill="#FFFFFF" stroke="#15803D" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M480,808 L480,776 Q480,770 486,770 L864,770 Q870,770 870,776 L870,808 Z" fill="#15803D" />
+  <text x="675.0" y="785" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="675.0" y="802" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">OptimizationResult</text>
+  <text x="490" y="823" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ IsSuccessful : bool</text>
+  <text x="490" y="840" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Message : string</text>
+  <text x="490" y="857" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TotalKcal : decimal</text>
+  <text x="490" y="874" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TotalProtein : decimal</text>
+  <text x="490" y="891" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TotalCarbs : decimal</text>
+  <text x="490" y="908" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TotalFat : decimal</text>
+  <text x="490" y="925" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Items : List&lt;OptimizedFoodItem&gt;</text>
+  <line x1="480" y1="937" x2="870" y2="937" stroke="#15803D" stroke-width="1" />
+</g>
+<g id="class-OptimizedFoodItem">
+  <rect x="480" y="980" width="390" height="109" rx="6" fill="#FFFFFF" stroke="#15803D" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M480,1018 L480,986 Q480,980 486,980 L864,980 Q870,980 870,986 L870,1018 Z" fill="#15803D" />
+  <text x="675.0" y="995" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;class&gt;&gt;</text>
+  <text x="675.0" y="1012" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">OptimizedFoodItem</text>
+  <text x="490" y="1033" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodId : long</text>
+  <text x="490" y="1050" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodName : string</text>
+  <text x="490" y="1067" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CalculatedGrams : decimal</text>
+  <line x1="480" y1="1079" x2="870" y2="1079" stroke="#15803D" stroke-width="1" />
+</g>
+<g id="class-SmartMacroDbContext">
+  <rect x="940" y="770" width="430" height="259" rx="6" fill="#FFFFFF" stroke="#6B21A8" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M940,812 L940,776 Q940,770 946,770 L1364,770 Q1370,770 1370,776 L1370,812 Z" fill="#6B21A8" />
+  <text x="1155.0" y="785" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;DbContext&gt;&gt;</text>
+  <text x="1155.0" y="802" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">SmartMacroDbContext</text>
+  <text x="950" y="827" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Users : DbSet&lt;User&gt;</text>
+  <text x="950" y="844" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ RefreshTokens : DbSet&lt;RefreshToken&gt;</text>
+  <text x="950" y="861" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ Foods : DbSet&lt;Food&gt;</text>
+  <text x="950" y="878" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodCategories : DbSet&lt;FoodCategory&gt;</text>
+  <text x="950" y="895" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UserFoodInventories : DbSet&lt;UserFoodInventory&gt;</text>
+  <text x="950" y="912" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ DailyTargets : DbSet&lt;DailyTarget&gt;</text>
+  <text x="950" y="929" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ MacroAdjustmentRules : DbSet&lt;MacroAdjustmentRule&gt;</text>
+  <text x="950" y="946" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TrainingCycleTypes : DbSet&lt;TrainingCycleType&gt;</text>
+  <text x="950" y="963" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UserTrainingSchedules : DbSet&lt;UserTrainingSchedule&gt;</text>
+  <line x1="940" y1="975" x2="1370" y2="975" stroke="#6B21A8" stroke-width="1" />
+  <text x="950" y="988" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ OnModelCreating(modelBuilder : ModelBuilder) : void</text>
+  <text x="950" y="1005" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ SaveChangesAsync(cancellationToken) : Task&lt;int&gt;</text>
+</g>
+<g id="class-UserFoodInventory">
+  <rect x="1410" y="770" width="330" height="160" rx="6" fill="#FFFFFF" stroke="#7E22CE" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1410,808 L1410,776 Q1410,770 1416,770 L1734,770 Q1740,770 1740,776 L1740,808 Z" fill="#7E22CE" />
+  <text x="1575.0" y="785" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;entity&gt;&gt;</text>
+  <text x="1575.0" y="802" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">UserFoodInventory</text>
+  <text x="1420" y="823" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ InventoryId : long  {PK}</text>
+  <text x="1420" y="840" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UserId : long  {FK}</text>
+  <text x="1420" y="857" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodId : long  {FK}</text>
+  <text x="1420" y="874" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ QuantityGrams : decimal(8,2)</text>
+  <text x="1420" y="891" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ ExpiryDate : DateOnly</text>
+  <text x="1420" y="908" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UnitNote : string</text>
+  <line x1="1410" y1="920" x2="1740" y2="920" stroke="#7E22CE" stroke-width="1" />
+</g>
+<g id="class-DailyTarget">
+  <rect x="1410" y="960" width="330" height="194" rx="6" fill="#FFFFFF" stroke="#7E22CE" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1410,998 L1410,966 Q1410,960 1416,960 L1734,960 Q1740,960 1740,966 L1740,998 Z" fill="#7E22CE" />
+  <text x="1575.0" y="975" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;entity&gt;&gt;</text>
+  <text x="1575.0" y="992" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">DailyTarget</text>
+  <text x="1420" y="1013" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetId : long  {PK}</text>
+  <text x="1420" y="1030" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ UserId : long  {FK}</text>
+  <text x="1420" y="1047" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetDate : DateOnly</text>
+  <text x="1420" y="1064" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetKcal : decimal(7,2)</text>
+  <text x="1420" y="1081" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetProteinG : decimal(6,2)</text>
+  <text x="1420" y="1098" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetCarbsG : decimal(6,2)</text>
+  <text x="1420" y="1115" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ TargetFatG : decimal(6,2)</text>
+  <text x="1420" y="1132" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ ComputedFromRuleId : short?  {FK}</text>
+  <line x1="1410" y1="1144" x2="1740" y2="1144" stroke="#7E22CE" stroke-width="1" />
+</g>
+<g id="class-Food">
+  <rect x="1410" y="1145" width="330" height="177" rx="6" fill="#FFFFFF" stroke="#7E22CE" stroke-width="1.5" filter="url(#card-shadow)" />
+  <path d="M1410,1183 L1410,1151 Q1410,1145 1416,1145 L1734,1145 Q1740,1145 1740,1151 L1740,1183 Z" fill="#7E22CE" />
+  <text x="1575.0" y="1160" font-family="Times New Roman, Arial" font-size="11" font-style="italic" text-anchor="middle" fill="#FFFFFF" fill-opacity="0.85">&lt;&lt;entity&gt;&gt;</text>
+  <text x="1575.0" y="1177" font-family="Times New Roman, Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Food</text>
+  <text x="1420" y="1198" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodId : long  {PK}</text>
+  <text x="1420" y="1215" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FoodName : string</text>
+  <text x="1420" y="1232" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CategoryId : short?  {FK}</text>
+  <text x="1420" y="1249" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ KcalPer100g : decimal(6,2)</text>
+  <text x="1420" y="1266" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ ProteinGPer100g : decimal(6,2)</text>
+  <text x="1420" y="1283" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ CarbsGPer100g : decimal(6,2)</text>
+  <text x="1420" y="1300" font-family="Consolas, Courier, monospace" font-size="11" fill="#1E293B">+ FatGPer100g : decimal(6,2)</text>
+  <line x1="1410" y1="1312" x2="1740" y2="1312" stroke="#7E22CE" stroke-width="1" />
+</g>
+  <!-- UML Dependency & Realization Connectors -->
+  <line x1="210" y1="530" x2="210" y2="485" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="545" y1="530" x2="545" y2="485" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="895" y1="515" x2="895" y2="465" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="1250" y1="530" x2="1250" y2="485" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="1590" y1="545" x2="1590" y2="485" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="250" y1="890" x2="250" y2="835" stroke="#2563EB" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#triangle-hollow)" />
+  <line x1="210" y1="260" x2="210" y2="400" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <line x1="545" y1="260" x2="545" y2="400" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <line x1="895" y1="220" x2="895" y2="400" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <line x1="1250" y1="260" x2="1250" y2="400" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <line x1="1590" y1="260" x2="1590" y2="400" stroke="#B45309" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <path d="M 730 560 L 250 560 L 250 770" fill="none" stroke="#047857" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#open-arrow)" />
+  <text x="360" y="552" font-family="Times New Roman, Arial" font-size="11" font-weight="bold" fill="#047857">&#171;uses engine&#187;</text>
+  <path d="M 1060 560 L 1150 560 L 1150 770" fill="none" stroke="#6B21A8" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#open-arrow)" />
+  <text x="1160" y="650" font-family="Times New Roman, Arial" font-size="11" font-weight="bold" fill="#6B21A8">&#171;injects context&#187;</text>
+  <line x1="250" y1="1025" x2="250" y2="1080" stroke="#059669" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#open-arrow)" />
+  <line x1="440" y1="920" x2="480" y2="920" stroke="#15803D" stroke-width="1.6" marker-end="url(#arrow-green)" />
+  <text x="445" y="910" font-family="Times New Roman, Arial" font-size="10.5" fill="#15803D">returns</text>
+  <line x1="675" y1="920" x2="675" y2="980" stroke="#15803D" stroke-width="1.6" marker-end="url(#arrow-green)" />
+  <text x="685" y="955" font-family="Times New Roman, Arial" font-size="11" font-weight="bold" fill="#15803D">1..*</text>
+  <line x1="1370" y1="840" x2="1410" y2="840" stroke="#6B21A8" stroke-width="1.6" marker-end="url(#arrow)" />
+  <line x1="1370" y1="980" x2="1410" y2="980" stroke="#6B21A8" stroke-width="1.6" marker-end="url(#arrow)" />
+</svg>
