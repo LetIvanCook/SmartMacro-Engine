@@ -1,7 +1,7 @@
 ---
-last_run: 2026-10-31T18:41:18+07:00
+last_run: 2026-10-31T18:13:00+07:00
 last_commit: d23b1ec36ef2812c3309ae93ee2ba572ea339702
-run_type: no-change
+run_type: first
 health: YELLOW
 ---
 # Trạng thái dự án: SmartMacro Engine
@@ -13,19 +13,15 @@ Sức khỏe hiện tại đạt mức **YELLOW**: toàn bộ lệnh build, lint
 Tuy nhiên, hệ thống đang tồn tại lỗ hổng bảo mật mức HIGH trong cả gói npm của `SmartMacro.Web` (5 gói: `axios`, `vite`, `zod`, `follow-redirects`, `source-map-js`) lẫn gói NuGet bắc cầu (transitive) của `.NET` (`System.Formats.Asn1` 5.0.0 ở `SmartMacro.Api`), cùng với 5 file tạo báo cáo PDF chưa được theo dõi (untracked) trong working tree [ĐÃ XÁC MINH: `npm audit`, `dotnet list package --vulnerable --include-transitive`, `git status`].
 Việc quan trọng nhất cần làm ngay là vá các lỗ hổng dependency mức HIGH (`npm audit fix` và ghim phiên bản gói NuGet bắc cầu an toàn), dọn dẹp working tree, và mở PR hợp nhất nhánh `feature/scheduled-competitor-research` (đang vượt trước `develop` 8 commits) [ĐÃ XÁC MINH: `git log develop..HEAD --oneline`].
 
-## 2. Thay đổi từ lần chạy trước
-- **Không có thay đổi về mã nguồn và lịch sử Git**: `HEAD` giữ nguyên tại commit `d23b1ec36ef2812c3309ae93ee2ba572ea339702` (`2026-10-27 00:20:04 +0700`), không có file tracked nào bị chỉnh sửa (`git diff --stat` rỗng, `git stash list` rỗng) kể từ lần chạy trước (`2026-10-31T18:13:00+07:00`) [ĐÃ XÁC MINH: `git rev-parse HEAD`, `git status --short`].
-- **Kiểm tra lại các mục rủi ro cũ**: Tất cả các mục rủi ro và công việc đang dở từ lần chạy trước vẫn giữ nguyên trạng thái `[VẪN TỒN TẠI]` (5 lỗ hổng HIGH trên npm, 3 gói NuGet transitive có CVE trên `SmartMacro.Api`, và 5 file untracked xuất báo cáo PDF ở thư mục gốc) [ĐÃ XÁC MINH: `npm audit`, `dotnet list package --vulnerable --include-transitive`].
-
 ## 3. Sức khỏe kỹ thuật
 
 | Hạng mục | Trạng thái | Kết quả chi tiết | Bằng chứng thực tế |
 |---|---|---|---|
-| **Build (Backend)** | ✅ PASS | Thành công, `0 Warning(s)`, `0 Error(s)` (1.31s) | [ĐÃ XÁC MINH] `dotnet build SmartMacroEngine.slnx --configuration Release --no-restore` (exit code 0) |
+| **Build (Backend)** | ✅ PASS | Thành công, `0 Warning(s)`, `0 Error(s)` (10.39s) | [ĐÃ XÁC MINH] `dotnet build SmartMacroEngine.slnx --configuration Release` (exit code 0) |
 | **Build / Typecheck (Frontend)** | ✅ PASS | Thành công, `0 Error(s)` | [ĐÃ XÁC MINH] `npx tsc -b --noEmit` tại `SmartMacro.Web` (exit code 0) |
 | **Test (Backend)** | ✅ PASS | `201 Passed`, `0 Failed`, `0 Skipped` (2m 18s) | [ĐÃ XÁC MINH] `dotnet test SmartMacroEngine.slnx --configuration Release --no-build` |
 | **Test (Frontend)** | ⚠️ N/A | Không xác định được lệnh test trong `SmartMacro.Web` | [ĐÃ XÁC MINH] `SmartMacro.Web/package.json:6-11` chỉ có `dev`, `build`, `lint`, `preview` |
-| **Lint (Frontend)** | ✅ PASS | `0 warnings and 0 errors` trên 18 files (116 rules, 15ms) | [ĐÃ XÁC MINH] `npm run lint` (`oxlint`) tại `SmartMacro.Web` |
+| **Lint (Frontend)** | ✅ PASS | `0 warnings and 0 errors` trên 18 files (116 rules, 86ms) | [ĐÃ XÁC MINH] `npm run lint` (`oxlint`) tại `SmartMacro.Web` |
 | **Dependency (Backend NuGet)** | ⚠️ WARN | **3 gói transitive có CVE ở `SmartMacro.Api`** (`System.Formats.Asn1` `5.0.0` **HIGH** `GHSA-447r-wph3-92pm`; `Azure.Identity` `1.10.3` Moderate; `Microsoft.Identity.Client` `4.56.0` Moderate/Low) và **6 gói transitive ở `SmartMacro.Tests`** (thêm `SQLitePCLRaw.lib.e_sqlite3` `2.1.6` HIGH, `System.Net.Http` `4.3.0` HIGH, `System.Text.RegularExpressions` `4.3.0` HIGH). Có 8 gói top-level có bản mới hơn (như `System.IdentityModel.Tokens.Jwt` `8.14.0` -> `8.23.0`). | [ĐÃ XÁC MINH] `dotnet list SmartMacro.Api/SmartMacro.Api.csproj package --vulnerable --include-transitive --no-restore` & `--outdated` |
 | **Dependency (Frontend npm)** | ❌ HIGH VULN | **5 lỗ hổng mức HIGH** (`axios` `1.19.0`, `vite` `8.2.2`, `zod` `4.4.3`, `follow-redirects`, `source-map-js`). Có 20 gói npm có bản cập nhật mới hơn. | [ĐÃ XÁC MINH] `npm audit` (exit code 1) & `npm outdated` tại `SmartMacro.Web` |
 | **TODO / FIXME / HACK / XXX** | ✅ CLEAN | **0 mục** trong mã nguồn chính (`SmartMacro.Api`, `SmartMacro.Tests`, `SmartMacro.Web/src`), **0 test bị skip** | [ĐÃ XÁC MINH] Quét regex `\b(TODO|FIXME|HACK|XXX|NotImplementedException)\b` trên toàn bộ `*.cs`, `*.ts`, `*.tsx` (loại trừ `bin/`, `obj/`, `node_modules/`) |
@@ -54,27 +50,27 @@ Việc quan trọng nhất cần làm ngay là vá các lỗ hổng dependency m
   - Xây dựng `CompetitorResearchBackgroundService` chạy định kỳ hoặc kích hoạt thủ công qua `Channel<bool>`, lưu lịch sử vào `CompetitorResearchHistoryStore`, và mở các endpoints `POST /api/research/analyze`, `GET /api/research/reports`, `GET /api/research/status`, `POST /api/research/trigger` kèm bộ 201 unit/integration tests pass 100% [ĐÃ XÁC MINH: `SmartMacro.Api/Controllers/ResearchController.cs:37-126`, `SmartMacro.Api/Services/CompetitorResearchBackgroundService.cs:11-165`, commit `d23b1ec`].
 
 ### Đang dở dang
-- **[VẪN TỒN TẠI] Nhánh đang làm việc (`feature/scheduled-competitor-research`)**:
+- **Nhánh đang làm việc (`feature/scheduled-competitor-research`)**:
   - Commit cuối: `d23b1ec36ef2812c3309ae93ee2ba572ea339702` (`2026-10-27 00:20:04 +0700` — cách đây **4 ngày** không có commit mới) [ĐÃ XÁC MINH: `git log -1`].
   - Nhánh `feature/scheduled-competitor-research` (cùng nhánh tiền nhiệm `feature/ai-competitor-research` ở `7d28b33`) đang vượt trước `develop` (`97cf1b8`, commit cuối ngày `2026-08-21`) **8 commits** nhưng chưa được merge vào `develop` [ĐÃ XÁC MINH: `git log develop..HEAD --oneline`, `git branch -a -v`].
   - Nhánh `main` ở local (`a2bfc8b`) đang chậm hơn `origin/main` (`63123c9` - "Add MIT License to the project") 1 commit [ĐÃ XÁC MINH: `git branch -a -v`].
-- **[VẪN TỒN TẠI] Thay đổi chưa commit trong Working Tree**:
-  - Không có file tracked nào bị sửa (`git diff --stat` trống, `git stash list` trống), nhưng vẫn còn **5 file untracked** ở thư mục gốc phục vụ việc xuất báo cáo kiến trúc PDF (`build_architectural_report.py`, `report_content.html`, `SmartMacro_Architectural_Report.pdf`, `test_chrome.pdf`, `test_render.pdf`) cùng thư mục `docs/` [ĐÃ XÁC MINH: `git status`, `build_architectural_report.py:1-5`].
-- **[VẪN TỒN TẠI] Frontend Sprints 2, 3, 4 (`SmartMacro.Web`)**:
+- **Thay đổi chưa commit trong Working Tree**:
+  - Không có file tracked nào bị sửa (`git diff --stat` trống, `git stash list` trống), nhưng có **5 file untracked** ở thư mục gốc phục vụ việc xuất báo cáo kiến trúc PDF: `build_architectural_report.py`, `report_content.html`, `SmartMacro_Architectural_Report.pdf`, `test_chrome.pdf`, `test_render.pdf` [ĐÃ XÁC MINH: `git status`, `build_architectural_report.py:1-5`].
+- **Frontend Sprints 2, 3, 4 (`SmartMacro.Web`)**:
   - Sau khi đăng nhập, route `/dashboard` hiện vẫn đang trỏ tới trang stub `DashboardPlaceholderPage.tsx` hiển thị lộ trình dự kiến cho Sprint 2 (Food Catalog & Inventory), Sprint 3 (Daily Targets & Chu kỳ tập luyện), và Sprint 4 (Flagship Optimization Dashboard) [ĐÃ XÁC MINH: `SmartMacro.Web/src/routes/AppRoutes.tsx:28-30`, `SmartMacro.Web/src/pages/DashboardPlaceholderPage.tsx:70-103`].
-- **[VẪN TỒN TẠI] Tích hợp CI/CD & Docker cho các thành phần mới**:
+- **Tích hợp CI/CD & Docker cho các thành phần mới**:
   - Job `deploy-staging` trong `.github/workflows/dotnet-ci.yml:306-329` vẫn là bước placeholder (`echo "--- Replace this step with actual deploy command ---"`).
   - `SmartMacro.Web` chưa có job build/lint/test trong `.github/workflows/dotnet-ci.yml` và chưa có service trong `docker-compose.yml` [ĐÃ XÁC MINH: `.github/workflows/dotnet-ci.yml`, `docker-compose.yml:1-45`].
 
 ### Bị hỏng hoặc rủi ro
-- **[VẪN TỒN TẠI] [RỦI RO BẢO MẬT - CAO] Lỗ hổng Dependency trên cả Frontend và Backend**:
+- **[RỦI RO BẢO MẬT - CAO] Lỗ hổng Dependency trên cả Frontend và Backend**:
   - `SmartMacro.Web`: 5 gói báo lỗ hổng mức **HIGH** qua `npm audit`, đáng chú ý nhất là `axios` (`1.19.0` - SSRF/Prototype Pollution/Header Injection), `zod` (`4.4.3` - DoS memory exhaustion), `vite` (`8.2.2`), `follow-redirects`, `source-map-js` [ĐÃ XÁC MINH: `npm audit`].
   - `SmartMacro.Api`: Gói transitive `System.Formats.Asn1` `5.0.0` có lỗ hổng mức **HIGH** (`GHSA-447r-wph3-92pm`), kéo theo từ `Microsoft.EntityFrameworkCore.SqlServer` `8.0.10` / `Microsoft.Data.SqlClient` [ĐÃ XÁC MINH: `dotnet list SmartMacro.Api/SmartMacro.Api.csproj package --vulnerable --include-transitive --no-restore`].
-- **[VẪN TỒN TẠI] [RỦI RO VẬN HÀNH - TRUNG BÌNH] Cấu hình Model ID của Anthropic và Playwright trong Docker**:
+- **[RỦI RO VẬN HÀNH - TRUNG BÌNH] Cấu hình Model ID của Anthropic và Playwright trong Docker**:
   - Giá trị mặc định `AnthropicOptions.Model` đang đặt là `"claude-sonnet-5-5"` trong `SmartMacro.Api/Options/AnthropicOptions.cs:16` và `SmartMacro.Api/appsettings.json:37` [ĐÃ XÁC MINH]. Nếu tên model này không khớp với model ID hợp lệ trên Anthropic API thực tế, các lời gọi thật sẽ trả lỗi 400/404 [SUY ĐOÁN].
   - `Dockerfile` hiện dùng ảnh nền `mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim` và chỉ cài `wget` [ĐÃ XÁC MINH: `Dockerfile:15-21`], chưa cài đặt trình duyệt Chromium và thư viện hệ thống cho Playwright. Mặc dù `Research:Enabled` đang tắt (`false`) ở Production [ĐÃ XÁC MINH: `SmartMacro.Api/appsettings.json:42`], nếu bật `Research:Enabled=true` trong container Docker thì `PlaywrightPageContentFetcher` sẽ lỗi khi khởi chạy Chromium [SUY ĐOÁN].
   - `CompetitorResearchHistoryStore` lưu kết quả hoàn toàn trên bộ nhớ RAM (`List<CompetitorAnalysisResult>`, tối đa 100 bản ghi) [ĐÃ XÁC MINH: `SmartMacro.Api/Services/CompetitorResearchHistoryStore.cs:8-10`], nên lịch sử phân tích sẽ mất khi restart container/ứng dụng.
-- **[VẪN TỒN TẠI] [LƯU Ý BẢO MẬT CẤU HÌNH] File cấu hình môi trường phát triển trong Git**:
+- **[LƯU Ý BẢO MẬT CẤU HÌNH] File cấu hình môi trường phát triển trong Git**:
   - File `.env` ở thư mục gốc đang có trên ổ đĩa nhưng đã được ignore an toàn trong `.gitignore` (không bị commit) [ĐÃ XÁC MINH: `git status`, `git ls-files`].
   - Tuy nhiên, repo có commit khóa JWT mẫu dùng cho môi trường dev/local tại `SmartMacro.Api/appsettings.Development.json:22`, giá trị fallback của `JWT_SECRET` và `SA_PASSWORD` trong `docker-compose.yml:9,34`, và token mẫu trong `postman/environments/Local - Dev.environment.yaml` [ĐÃ XÁC MINH: `git ls-files`]. Cần đảm bảo tuyệt đối không dùng các giá trị fallback này ở môi trường staging/production.
 
@@ -124,8 +120,6 @@ Việc quan trọng nhất cần làm ngay là vá các lỗ hổng dependency m
 - **Nhánh hiện tại**: `feature/scheduled-competitor-research`
 - **Commit cuối cùng**: `d23b1ec` (`2026-10-27 00:20:04 +0700`) — *"feat(research): implement scheduled automated competitor research background service"*.
 - **Trạng thái công việc gần nhất**: Đã hoàn thành toàn bộ phần lập lịch tự động cho Competitor Research (`CompetitorResearchBackgroundService`, `CompetitorResearchHistoryStore`, các endpoints `GET /api/research/reports`, `GET /api/research/status`, `POST /api/research/trigger`) và viết đầy đủ unit/integration tests (`CompetitorResearchScheduledTests.cs`, `ResearchIntegrationTests.cs` — tất cả 201 tests đều pass). Ngoài ra có tạo script `build_architectural_report.py` để kết xuất file `SmartMacro_Architectural_Report.pdf` (đang nằm ở dạng untracked tại thư mục gốc).
-
-- **Cập nhật FIX-01 (`fix/research-background-service-shutdown`)**: Đã sửa race condition khi shutdown `CompetitorResearchBackgroundService` (loại bỏ `CancellationToken.None` khi chờ `_triggerChannel`, kiểm tra `stoppingToken.IsCancellationRequested` sau `Task.WhenAny`), thêm test `BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly` (202/202 tests pass 10/10 lần liên tiếp) và thêm `--blame-hang-timeout 60s` vào `.github/workflows/dotnet-ci.yml`.
-
-- **Cập nhật FIX-02 (`fix/ef-unicode-migration`)**: Đã bổ sung EF Core Migration `SupportUnicodeVietnameseColumns` cho 3 cột `NVARCHAR` (`users.full_name`, `foods.food_name`, `food_categories.category_name`) từ commit `1a175f9`, giúp `dotnet-ef migrations has-pending-model-changes` sạch hoàn toàn (exit code 0) và 201/201 tests pass.
-
+- **Cập nhật FIX-01 (`fix/research-background-service-shutdown` — PR #24 đã merge vào `develop`)**: Đã sửa race condition khi shutdown `CompetitorResearchBackgroundService` (loại bỏ `CancellationToken.None` khi chờ `_triggerChannel`, kiểm tra `stoppingToken.IsCancellationRequested` sau `Task.WhenAny`), thêm test `BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly` (202/202 tests pass 10/10 lần liên tiếp) và thêm `--blame-hang-timeout 60s` vào `.github/workflows/dotnet-ci.yml`.
+- **Cập nhật FIX-02 (`fix/ef-unicode-migration` — PR #25 đã merge vào `develop`)**: Đã bổ sung EF Core Migration `SupportUnicodeVietnameseColumns` cho 3 cột `NVARCHAR` (`users.full_name`, `foods.food_name`, `food_categories.category_name`) từ commit `1a175f9`, giúp `dotnet-ef migrations has-pending-model-changes` sạch hoàn toàn (exit code 0).
+- **Cập nhật P0-00 (`feature/p0-00-sync-state`)**: Nâng `AutoMapper` từ `15.1.1` lên `15.1.4` trong `SmartMacro.Api.csproj` (xử lý dứt điểm cảnh báo `NU1903`, đạt `0 Warning(s)` khi build), bổ sung `AGENTS.md` và `audit_report.md` vào repo, đồng thời đồng bộ lại `PROJECT_STATUS.md` và `HISTORY.md`.
