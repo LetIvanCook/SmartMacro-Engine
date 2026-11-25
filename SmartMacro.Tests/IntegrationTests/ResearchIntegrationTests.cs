@@ -240,8 +240,7 @@ public class ResearchIntegrationTests : IClassFixture<CustomWebApplicationFactor
         {
             builder.ConfigureTestServices(services =>
             {
-                services.AddSingleton<IOptions<ResearchOptions>>(
-                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = true }));
+                services.Configure<ResearchOptions>(o => o.Enabled = true);
             });
         }).CreateClient();
 
