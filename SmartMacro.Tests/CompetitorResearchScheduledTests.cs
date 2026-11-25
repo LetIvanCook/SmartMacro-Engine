@@ -193,4 +193,40 @@ public class CompetitorResearchScheduledTests
         // Assert
         triggered.Should().BeFalse();
     }
+
+    [Fact]
+    public async Task BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly()
+    {
+        // Arrange
+        var mockScopeFactory = new Mock<IServiceScopeFactory>();
+        var mockHistoryStore = new Mock<ICompetitorResearchHistoryStore>();
+        var mockLogger = new Mock<ILogger<CompetitorResearchBackgroundService>>();
+
+        var options = new ResearchOptions
+        {
+            Enabled = false,
+            AutoResearchEnabled = false,
+            InitialDelaySeconds = 0,
+            IntervalMinutes = 60
+        };
+
+        var mockOptions = new Mock<IOptionsMonitor<ResearchOptions>>();
+        mockOptions.Setup(o => o.CurrentValue).Returns(options);
+
+        // Repeat a few rapid start/stop cycles to reliably catch shutdown race conditions
+        for (int i = 0; i < 5; i++)
+        {
+            using var service = new CompetitorResearchBackgroundService(
+                mockScopeFactory.Object,
+                mockOptions.Object,
+                mockHistoryStore.Object,
+                mockLogger.Object);
+
+            await service.StartAsync(CancellationToken.None);
+            await Task.Delay(20);
+
+            // Act & Assert: service must stop promptly without hanging on trigger channel
+            await service.StopAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(2));
+        }
+    }
 }
