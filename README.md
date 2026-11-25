@@ -193,27 +193,32 @@ git clone https://github.com/LetIvanCook/SmartMacro-Engine.git
 cd SmartMacro-Engine
 ```
 
-### 2. Cấu Hình Database & JWT
+### 2. Cấu Hình Biến Môi Trường (`.env`) & `dotnet user-secrets`
 
-Mở file `SmartMacro.Api/appsettings.json` (hoặc tạo `appsettings.Development.json` để override) và cập nhật:
+Tuyệt đối **không commit** mật khẩu, khóa JWT thật hoặc API key vào Git.
 
-```jsonc
-{
-  "ConnectionStrings": {
-    // Thay đổi Server name phù hợp với môi trường của bạn
-    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=SmartMacroEngine;Trusted_Connection=True;TrustServerCertificate=True;"
-  },
-  "Jwt": {
-    // ⚠️ QUAN TRỌNG: Thay bằng secret key riêng, tối thiểu 32 ký tự
-    "Key": "YOUR_SUPER_SECRET_KEY_AT_LEAST_32_CHARS_LONG",
-    "Issuer": "SmartMacroApi",
-    "Audience": "SmartMacroClient",
-    "ExpireDays": 30
-  }
-}
+#### a) Môi trường Local Development (`.NET User Secrets` & `appsettings.Development.json`)
+1. Tạo file cấu hình local từ file mẫu (file này đã được `.gitignore` bỏ qua):
+   ```powershell
+   Copy-Item SmartMacro.Api/appsettings.Development.example.json SmartMacro.Api/appsettings.Development.json
+   ```
+2. Lưu các khóa nhạy cảm bằng `dotnet user-secrets` (hoặc biến môi trường):
+   ```powershell
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=.\SQLEXPRESS;Database=SmartMacroEngine;Trusted_Connection=True;TrustServerCertificate=True;" --project SmartMacro.Api
+   dotnet user-secrets set "Jwt:Key" "<your-jwt-secret-at-least-32-chars>" --project SmartMacro.Api
+   dotnet user-secrets set "Anthropic:ApiKey" "<your-anthropic-api-key>" --project SmartMacro.Api
+   dotnet user-secrets set "Anthropic:Model" "claude-3-5-sonnet-20241022" --project SmartMacro.Api
+   ```
+
+#### b) Môi trường Docker Compose (`.env`)
+Khi chạy bằng `docker compose`, copy `.env.example` thành `.env` và điền các biến bắt buộc (`docker-compose.yml` dùng `${VAR:?message}` nên sẽ báo lỗi rõ ràng nếu thiếu `SA_PASSWORD` hoặc `JWT_SECRET`):
+```powershell
+Copy-Item .env.example .env
+# Sửa SA_PASSWORD, JWT_SECRET, ANTHROPIC_API_KEY, ANTHROPIC_MODEL trong file .env
+docker compose up --build -d
 ```
 
-> **Lưu ý:** Dự án sử dụng **Code-First Approach** với EF Core Migrations. Chạy lệnh `dotnet ef database update` để tạo database tự động từ migrations. Không cần script SQL bổ sung.
+> **Lưu ý:** Dự án sử dụng **Code-First Approach** với EF Core Migrations. Chạy lệnh `dotnet tool run dotnet-ef database update --project SmartMacro.Api --startup-project SmartMacro.Api` để tạo database tự động từ migrations. Không cần script SQL bổ sung.
 
 ### 3. Restore & Chạy Ứng Dụng
 
