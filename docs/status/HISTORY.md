@@ -8,3 +8,8 @@
 ### 2026-10-31T18:41:18+07:00 | d23b1ec | health: YELLOW
 - Không có thay đổi kể từ lần chạy trước (`HEAD` giữ nguyên tại `d23b1ec`, toàn bộ rủi ro bảo mật dependency và 5 file untracked vẫn giữ nguyên trạng thái `[VẪN TỒN TẠI]`).
 - Việc ưu tiên cao nhất hiện tại: Vá các lỗ hổng bảo mật mức HIGH trong dependencies của Frontend (`npm`) và Backend (`NuGet`).
+
+
+### 2026-11-25T11:03:00+07:00 | fix/research-background-service-shutdown | FIX-01
+- Khắc phục race condition khi dừng `CompetitorResearchBackgroundService` (thay `CancellationToken.None` bằng `stoppingToken` và kiểm tra `stoppingToken.IsCancellationRequested` ngay sau `Task.WhenAny`).
+- Bổ sung test tái hiện `BackgroundService_StopAsync_WhenWaitingOnIntervalOrTrigger_StopsPromptly` (202/202 tests pass 10/10 lần chạy liên tiếp) và thêm `--blame-hang-timeout 60s` vào `.github/workflows/dotnet-ci.yml`.
