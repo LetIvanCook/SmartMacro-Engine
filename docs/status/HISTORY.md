@@ -8,3 +8,8 @@
 ### 2026-10-31T18:41:18+07:00 | d23b1ec | health: YELLOW
 - Không có thay đổi kể từ lần chạy trước (`HEAD` giữ nguyên tại `d23b1ec`, toàn bộ rủi ro bảo mật dependency và 5 file untracked vẫn giữ nguyên trạng thái `[VẪN TỒN TẠI]`).
 - Việc ưu tiên cao nhất hiện tại: Vá các lỗ hổng bảo mật mức HIGH trong dependencies của Frontend (`npm`) và Backend (`NuGet`).
+
+
+### 2026-11-25T12:03:00+07:00 | fix/ef-unicode-migration | FIX-02
+- Bổ sung EF Core Migration `SupportUnicodeVietnameseColumns` đồng bộ thay đổi `varchar` -> `nvarchar` cho 3 cột `users.full_name` (`nvarchar(150)`), `foods.food_name` (`nvarchar(200)`), `food_categories.category_name` (`nvarchar(100)`) từ commit `1a175f9`.
+- Vượt qua kiểm tra `dotnet-ef migrations has-pending-model-changes` (exit code 0), `dotnet build` và `201/201` tests.
