@@ -31,6 +31,8 @@ public class GlobalExceptionHandler : IExceptionHandler
             SolverUnavailableException => (StatusCodes.Status503ServiceUnavailable, "Service Unavailable", exception.Message),
             AnthropicApiException anthropicEx when anthropicEx.StatusCode == System.Net.HttpStatusCode.TooManyRequests
                 => (StatusCodes.Status503ServiceUnavailable, "Upstream Service Overloaded", "The AI service is currently overloaded. Please try again later."),
+            AnthropicApiException anthropicEx when IsAnthropicModelUnavailable(anthropicEx)
+                => (StatusCodes.Status502BadGateway, "AI Model Unavailable", "The configured Anthropic AI model does not exist or is no longer available. Please verify the 'Anthropic:Model' configuration or 'Anthropic__Model' environment variable."),
             AnthropicApiException => (StatusCodes.Status502BadGateway, "Bad Gateway", "Error communicating with upstream AI service."),
             AnthropicConfigurationException => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred while processing your request."),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred.")
@@ -57,5 +59,22 @@ public class GlobalExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
+    }
+
+    private static bool IsAnthropicModelUnavailable(AnthropicApiException ex)
+    {
+        if (ex.StatusCode == System.Net.HttpStatusCode.NotFound ||
+            string.Equals(ex.ErrorType, "not_found_error", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (ex.StatusCode == System.Net.HttpStatusCode.BadRequest &&
+            ex.Message.Contains("model", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

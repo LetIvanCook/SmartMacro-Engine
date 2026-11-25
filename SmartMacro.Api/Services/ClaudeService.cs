@@ -35,6 +35,11 @@ public class ClaudeService : IClaudeService
             throw new AnthropicConfigurationException("Anthropic API key is not configured.");
         }
 
+        if (string.IsNullOrWhiteSpace(_options.Model))
+        {
+            throw new AnthropicConfigurationException("Anthropic model is not configured.");
+        }
+
         var requestDto = new ClaudeRequestDto
         {
             Model = _options.Model,

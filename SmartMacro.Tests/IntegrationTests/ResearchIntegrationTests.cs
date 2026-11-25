@@ -240,8 +240,7 @@ public class ResearchIntegrationTests : IClassFixture<CustomWebApplicationFactor
         {
             builder.ConfigureTestServices(services =>
             {
-                services.AddSingleton<IOptions<ResearchOptions>>(
-                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions { Enabled = true }));
+                services.Configure<ResearchOptions>(o => o.Enabled = true);
             });
         }).CreateClient();
 
@@ -276,5 +275,51 @@ public class ResearchIntegrationTests : IClassFixture<CustomWebApplicationFactor
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task Analyze_WhenAnthropicModelNotFoundOrRemoved_ReturnsBadGatewayWithClearProblemDetails()
+    {
+        // Arrange
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IOptions<ResearchOptions>>(
+                    Microsoft.Extensions.Options.Options.Create(new ResearchOptions
+                    {
+                        Enabled = true,
+                        AllowedHosts = ["cronometer.com"]
+                    }));
+
+                var mockService = new Mock<ICompetitorResearchService>();
+                mockService.Setup(s => s.AnalyzeCompetitorAsync(It.IsAny<CompetitorAnalysisRequest>(), It.IsAny<CancellationToken>()))
+                    .ThrowsAsync(new AnthropicApiException(
+                        HttpStatusCode.NotFound,
+                        "Anthropic API returned 404 (NotFound): model: claude-removed-model",
+                        "not_found_error"));
+                services.AddScoped(_ => mockService.Object);
+            });
+        }).CreateClient();
+
+        var token = await GetUserTokenAsync(client);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var request = new CompetitorAnalysisRequest
+        {
+            TargetUrl = "https://cronometer.com/",
+            FocusTopic = "Macro tracking"
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/research/analyze", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadGateway);
+        var problem = await response.Content.ReadFromJsonAsync<Microsoft.AspNetCore.Mvc.ProblemDetails>();
+        problem.Should().NotBeNull();
+        problem!.Status.Should().Be(502);
+        problem.Title.Should().Be("AI Model Unavailable");
+        problem.Detail.Should().Contain("Anthropic:Model");
     }
 }

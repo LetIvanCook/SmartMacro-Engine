@@ -6,7 +6,7 @@ services:
     container_name: smartmacro-sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${SA_PASSWORD:-YourStrong@Password123}
+      - SA_PASSWORD=${SA_PASSWORD:?SA_PASSWORD is required in .env}
     ports:
       - "1433:1433"
     volumes:
@@ -30,12 +30,13 @@ services:
       - dp-keys:/app/dp-keys
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SmartMacroDb;User Id=sa;Password=${SA_PASSWORD:-YourStrong@Password123};TrustServerCertificate=True;
-      - Jwt__Key=${JWT_SECRET:-SmartMacroSuperSecretKeyForJwtTokens123!@#}
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SmartMacroDb;User Id=sa;Password=${SA_PASSWORD:?SA_PASSWORD is required in .env};TrustServerCertificate=True;
+      - Jwt__Key=${JWT_SECRET:?JWT_SECRET is required in .env}
       - Jwt__Issuer=SmartMacroApi
       - Jwt__Audience=SmartMacroClient
       - Jwt__ExpireDays=30
       - Anthropic__ApiKey=${ANTHROPIC_API_KEY:-}
+      - Anthropic__Model=${ANTHROPIC_MODEL:-claude-3-5-sonnet-20241022}
     depends_on:
       sqlserver:
         condition: service_healthy

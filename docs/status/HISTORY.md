@@ -23,3 +23,11 @@
 ### 2026-11-25T14:30:00+07:00 | feature/p0-00-sync-state | P0-00
 - Nâng `AutoMapper` từ `15.1.1` lên `15.1.4` trong `SmartMacro.Api.csproj` để xử lý dứt điểm cảnh báo bảo mật `NU1903` (`GHSA-6vhm-j9h7-f9gh`, `GHSA-gpwp-5797-mjff`), giúp `dotnet build` đạt `0 Warning(s)`.
 - Đưa `AGENTS.md` (kèm quy tắc EF migration và Git/PR mới) và `audit_report.md` vào quản lý phiên bản; giải quyết xung đột và đồng bộ `docs/status/PROJECT_STATUS.md` cùng `docs/status/HISTORY.md` sau khi merge PR #25 (`FIX-02`) và PR #24 (`FIX-01`).
+
+
+### 2026-11-25T18:20:00+07:00 | feature/p0-01-cleanup-config | P0-01
+- Thay thế mật khẩu SQL và khóa JWT cố định trong `.env.example` và `docker-compose.yml` bằng placeholder rõ ràng (`CHANGE_ME_...`) và cú pháp bắt buộc `${VAR:?message}` không dùng fallback cố định.
+- Gỡ `SmartMacro.Api/appsettings.Development.json` khỏi Git tracking (`git rm --cached`, giữ nguyên file trên đĩa), xác nhận `.gitignore` có hiệu lực và tạo file mẫu `SmartMacro.Api/appsettings.Development.example.json`.
+- Quét toàn bộ file tracked tìm tiền tố `sk-ant-` (chỉ có ví dụ minh họa tại `AGENTS.md:61`).
+- Bỏ giá trị model hardcode trong `AnthropicOptions.cs` (đọc từ `appsettings.json` hoặc biến môi trường `Anthropic__Model`), bổ sung xử lý lỗi `502 Bad Gateway` (`AI Model Unavailable`) trong `GlobalExceptionHandler` khi model không tồn tại/bị gỡ, thêm 3 unit/integration tests (`205/205` tests pass) và bổ sung hướng dẫn `.env` + `dotnet user-secrets` vào `README.md`.
+- Sửa test `Trigger_WhenAuthorizedAndEnabled_ReturnsAccepted202` trong `ResearchIntegrationTests.cs` từ `AddSingleton<IOptions<ResearchOptions>>` sang `services.Configure<ResearchOptions>(o => o.Enabled = true)` để đồng bộ cả `IOptions` và `IOptionsMonitor` khi chạy trên CI (nơi không có `appsettings.Development.json`).
