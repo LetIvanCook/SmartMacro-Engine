@@ -71,6 +71,7 @@ Chủ dự án phải hiểu và bảo vệ được từng quyết định, nê
 - Mọi thay đổi trong `Models/` hoặc `SmartMacroDbContext.cs` PHẢI đi kèm EF migration trong CÙNG nhánh và CÙNG task. Trước khi commit, chạy `dotnet tool run dotnet-ef migrations has-pending-model-changes` (phải sạch) và đọc file migration sinh ra để chắc không có lệnh `Drop` ngoài ý muốn.
 - Không thêm NuGet/npm package mới nếu chưa nêu lý do và được chấp thuận.
 - Tên model Anthropic phải nằm trong config, không hardcode trong code. Mọi lỗi từ API Claude (model không tồn tại, hết quota, timeout) phải được xử lý và trả lỗi rõ ràng.
+- Test không được phụ thuộc vào file bị gitignore (như `appsettings.Development.json`). Mọi giá trị cấu hình cần cho test phải đặt trong chính test, ưu tiên `services.Configure<T>(...)`.
 
 **Frontend**
 - Không thêm logic vào `DashboardPlaceholderPage.tsx`. Khi chạm vào nó, ưu tiên tách vào `components/dashboard`, `inventory`, `optimization`, `targets`, `layout`.
@@ -119,3 +120,22 @@ Trọng tâm luận văn, theo thứ tự ưu tiên:
 4. Đánh giá thực nghiệm (so sánh với baseline, khảo sát người dùng)
 
 AI Competitor Research là module phụ: không mở rộng thêm nếu chưa được yêu cầu.
+
+## 12. Báo cáo kết thúc phiên (walkthrough)
+
+Cuối MỖI phiên làm việc, kể cả khi task chưa xong, bị chặn hoặc CI fail,
+agent PHẢI tạo file `docs/walkthroughs/<YYYY-MM-DD>_<mã-task>.md`
+theo mẫu `docs/walkthroughs/_TEMPLATE.md`, commit cùng nhánh và push.
+
+Nguyên tắc:
+1. Chỉ ghi điều đã thực sự xảy ra. Kết quả lệnh phải là kết quả thật,
+   trích nguyên văn, cắt tối đa 30 dòng mỗi lệnh. Không viết "đã pass"
+   cho lệnh chưa chạy; ghi "CHƯA CHẠY" kèm lý do.
+2. Không đưa secret, nội dung .env, token hay giá trị mật khẩu vào file.
+3. Phải có mục "Điều chưa chắc chắn" và "Cần chủ dự án quyết định/kiểm tra".
+   Để trống thì ghi "Không có", không bỏ mục.
+4. Nếu CI fail, đính kèm dòng lỗi đầu tiên của log.
+5. Nếu có migration, đính kèm nội dung Up() và Down().
+6. Ghi lệnh đã chạy trên máy chủ dự án (nếu có) và những việc agent
+   KHÔNG làm vì quy tắc cấm.
+7. Cuối phiên, in nội dung file ra màn hình để chủ dự án sao chép.
