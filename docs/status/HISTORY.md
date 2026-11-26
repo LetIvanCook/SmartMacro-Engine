@@ -31,3 +31,10 @@
 - Quét toàn bộ file tracked tìm tiền tố `sk-ant-` (chỉ có ví dụ minh họa tại `AGENTS.md:61`).
 - Bỏ giá trị model hardcode trong `AnthropicOptions.cs` (đọc từ `appsettings.json` hoặc biến môi trường `Anthropic__Model`), bổ sung xử lý lỗi `502 Bad Gateway` (`AI Model Unavailable`) trong `GlobalExceptionHandler` khi model không tồn tại/bị gỡ, thêm 3 unit/integration tests (`205/205` tests pass) và bổ sung hướng dẫn `.env` + `dotnet user-secrets` vào `README.md`.
 - Sửa test `Trigger_WhenAuthorizedAndEnabled_ReturnsAccepted202` trong `ResearchIntegrationTests.cs` từ `AddSingleton<IOptions<ResearchOptions>>` sang `services.Configure<ResearchOptions>(o => o.Enabled = true)` để đồng bộ cả `IOptions` và `IOptionsMonitor` khi chạy trên CI (nơi không có `appsettings.Development.json`).
+
+
+### 2026-11-26T20:20:00+07:00 | feature/s0-02-frontend-ci | S0-02
+- Commit quy tắc báo cáo kết thúc phiên (`AGENTS.md` mục 12), mẫu `docs/walkthroughs/_TEMPLATE.md`, và bổ sung quy tắc Backend test không phụ thuộc file bị gitignore (ưu tiên `services.Configure<T>(...)`) vào `AGENTS.md` mục 7.
+- Thêm job `Frontend` chạy độc lập vào `.github/workflows/dotnet-ci.yml` (Node.js 22 LTS, bật npm cache, chạy `npm ci`, `npm run lint`, `npx tsc -b --noEmit`, `npm run build` tại `SmartMacro.Web`).
+- Đồng bộ tên model gợi ý `claude-sonnet-5-5` trong `.env.example` và `SmartMacro.Api/appsettings.json`, bỏ fallback cố định trong `docker-compose.yml` (`${ANTHROPIC_MODEL:-}`), và bổ sung lưu ý cần xác nhận tên model trên tài liệu chính thức của Anthropic trong `README.md` (`205/205` tests pass, không có test nào nhắc tên model cũ).
+- Ghi nhận mục tồn kỹ thuật: còn 7 chỗ dùng `services.AddSingleton<IOptions<ResearchOptions>>(...)` trong `SmartMacro.Tests/IntegrationTests/ResearchIntegrationTests.cs` (dòng `71`, `103`, `151`, `193`, `218`, `265`, `288`) cần đồng bộ sang `services.Configure<ResearchOptions>(...)`.
