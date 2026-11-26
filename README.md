@@ -207,8 +207,9 @@ Tuyệt đối **không commit** mật khẩu, khóa JWT thật hoặc API key v
    dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=.\SQLEXPRESS;Database=SmartMacroEngine;Trusted_Connection=True;TrustServerCertificate=True;" --project SmartMacro.Api
    dotnet user-secrets set "Jwt:Key" "<your-jwt-secret-at-least-32-chars>" --project SmartMacro.Api
    dotnet user-secrets set "Anthropic:ApiKey" "<your-anthropic-api-key>" --project SmartMacro.Api
-   dotnet user-secrets set "Anthropic:Model" "claude-3-5-sonnet-20241022" --project SmartMacro.Api
+   dotnet user-secrets set "Anthropic:Model" "claude-sonnet-5-5" --project SmartMacro.Api
    ```
+   > **Lưu ý về tên model Anthropic:** Giá trị gợi ý `claude-sonnet-5-5` trong các file cấu hình mẫu cần được xác nhận lại trên tài liệu chính thức của Anthropic (Models overview) trước khi gọi API thật.
 
 #### b) Môi trường Docker Compose (`.env`)
 Khi chạy bằng `docker compose`, copy `.env.example` thành `.env` và điền các biến bắt buộc (`docker-compose.yml` dùng `${VAR:?message}` nên sẽ báo lỗi rõ ràng nếu thiếu `SA_PASSWORD` hoặc `JWT_SECRET`):
